@@ -2,10 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAmazon } from "@fortawesome/free-brands-svg-icons";
 import { faBookmark, faClock } from "@fortawesome/free-regular-svg-icons";
 import Header from "./Header";
-import {
-  faBriefcase,
-  faLocationDot,
-} from "@fortawesome/free-regular-svg-icons";
+import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 function Shpallja() {
   return (
