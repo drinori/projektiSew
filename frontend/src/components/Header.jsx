@@ -7,7 +7,7 @@ import { faAtlassian } from "@fortawesome/free-brands-svg-icons/faAtlassian";
 function Header() {
   return (
     <header>
-      <div className="bg-white shadow-md py-7 px-6 max-w-7xl mx-auto flex justify-between items-center">
+      <div className="bg-white shadow-md py-7 px-6  mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <FontAwesomeIcon icon={faAtlassian} className="text-2xl" />
         </Link>
