@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+
 function Kerkimi() {
   return (
-    <div className="flex justify-center items-center border border-gray-200 mx-auto my-8 rounded-lg shadow-xl w-fit  ">
-      <div className="kerkimi flex justify-center items-center bg-white my-2 ">
+    <div className="flex justify-center items-center border border-gray-200 mx-auto my-8 rounded-lg shadow-xl w-fit">
+      <div className="flex justify-center items-center bg-white my-2">
         <form action="">
           <div className="inline ">
             <FontAwesomeIcon

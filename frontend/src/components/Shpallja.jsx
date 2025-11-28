@@ -9,8 +9,8 @@ function Shpallja() {
   return (
     <div>
       <Header />
-      <div className="flex flex-col items-center">
-        <div className="flex justify-center bg-[#E3E3E3] w-7xl my-2 rounded-2xl">
+      <div className="relative grid grid-cols-2 place-items-center">
+        <div className="bg-[#E3E3E3] w-7xl my-2 rounded-2xl col-span-2">
           <div className="flex justify-around gap-100 my-20 max-w-7xl">
             <div>
               <div className="grid grid-cols-4 grid-rows-2">
@@ -38,11 +38,28 @@ function Shpallja() {
             <FontAwesomeIcon icon={faBookmark} className="text-xl" />
           </div>
         </div>
-        <p className="py-20 max-w-2xl">
+        {/* Duhet me ndreq */}
+        <p className="relative left-35 top-20 max-w-xl">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius amet,
           cumque iure dicta exercitationem saepe! Amet sunt blanditiis ut
           similique fuga saepe velit, et molestiae delectus eos aliquid quam
-          modi.
+          modi. modi. modi. modi. modi. Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Nesciunt excepturi laboriosam, quam atque saepe
+          totam fuga, molestiae assumenda aliquam velit ratione cupiditate illo
+          reiciendis nihil, quos commodi quis hic deserunt. Lorem ipsum dolor
+          sit amet consectetur adipisicing elit. Nesciunt excepturi laboriosam,
+          quam atque saepe totam fuga, molestiae assumenda aliquam velit ratione
+          cupiditate illo reiciendis nihil, quos commodi quis hic deserunt.
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
+          excepturi laboriosam, quam atque saepe totam fuga, molestiae assumenda
+          aliquam velit ratione cupiditate illo reiciendis nihil, quos commodi
+          quis hic deserunt. Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Nesciunt excepturi laboriosam, quam atque saepe totam fuga,
+          molestiae assumenda aliquam velit ratione cupiditate illo reiciendis
+          nihil, quos commodi quis hic deserunt. Lorem ipsum dolor sit amet
+          consectetur adipisicing elit. Nesciunt excepturi laboriosam, quam
+          atque saepe totam fuga, molestiae assumenda aliquam velit ratione
+          cupiditate illo reiciendis nihil, quos commodi quis hic deserunt.
         </p>
       </div>
     </div>
