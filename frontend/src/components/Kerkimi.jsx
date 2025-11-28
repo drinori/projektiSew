@@ -6,22 +6,18 @@ import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 function Kerkimi() {
   return (
-    <div className="h-150px flex justify-center items-center max-w-3xl mx-auto my-8 rounded-lg shadow-xl">
-      <div className="kerkimi flex justify-center items-center my-5.5 bg-white">
+    <div className="flex justify-center items-center border border-gray-200 mx-auto my-8 rounded-lg shadow-xl w-fit  ">
+      <div className="kerkimi flex justify-center items-center bg-white my-2 ">
         <form action="">
-          <div className="inline">
+          <div className="inline ">
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               className="flex justify-center items-center mx-4"
             />
-            <input
-              type="text"
-              placeholder="Kerko"
-              className="px-2 h-14 w-auto"
-            />
+            <input type="text" placeholder="Kerko" className=" w-auto" />
           </div>
 
-          <div className="inline m-5">
+          <div className="inline ">
             <FontAwesomeIcon icon={faLocationDot} />
             <select
               name="qyteti"
@@ -37,7 +33,7 @@ function Kerkimi() {
             </select>
           </div>
 
-          <div className="inline m-5">
+          <div className="inline">
             <FontAwesomeIcon icon={faBriefcase} />
             <select
               name="kategoria"

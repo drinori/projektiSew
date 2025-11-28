@@ -10,7 +10,7 @@ function Shpallja() {
     <div>
       <Header />
       <div className="flex flex-col items-center">
-        <div className="flex justify-center bg-[#E3E3E3] w-screen my-2">
+        <div className="flex justify-center bg-[#E3E3E3] w-7xl my-2 rounded-2xl">
           <div className="flex justify-around gap-100 my-20 max-w-7xl">
             <div>
               <div className="grid grid-cols-4 grid-rows-2">

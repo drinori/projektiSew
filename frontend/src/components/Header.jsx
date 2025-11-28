@@ -3,12 +3,14 @@ import "../App.css";
 import "../index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAtlassian } from "@fortawesome/free-brands-svg-icons/faAtlassian";
-
 function Header() {
   return (
     <header>
-      <div className="bg-white shadow-md py-7 px-6  mx-auto flex justify-between items-center">
-        <Link to="/" className="flex items-center">
+      <div
+        className="bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center ml-auto text-l rounded-2xl
+        "
+      >
+        <Link to="/" className="flex items-center mr-8">
           <FontAwesomeIcon icon={faAtlassian} className="text-2xl" />
         </Link>
         <nav className="hidden md:flex space-x-8">
@@ -25,7 +27,8 @@ function Header() {
             Rreth Nesh
           </Link>
         </nav>
-        <div>
+
+        <div className="flex space-x-4 ml-auto">
           <Link to="/kycja" className="kycja">
             Kycu/Regjistrohu
           </Link>

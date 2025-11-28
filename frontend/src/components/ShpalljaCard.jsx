@@ -11,7 +11,7 @@ function ShpalljaCard() {
 
   return (
     <div
-      className="flex justify-center gap-7 border px-5 py-5 my-10 w-fit h-fit cursor-pointer"
+      className="flex justify-center gap-7 border border-gray-200 hover:bg-gray-200 shadow-xl px-5 py-5 my-10 w-fit h-fit cursor-pointer mx-5"
       onClick={() => navigate("/shpallja")}
     >
       <FontAwesomeIcon icon={faAmazon} className="text-5xl" />
