@@ -18,7 +18,7 @@ function ShpalljaCard() {
       <div className="px-5">
         <p className="font-bold text-xl">Vendi Punes</p>
         <p>
-          <FontAwesomeIcon icon={faBriefcase} />
+          <FontAwesomeIcon icon={byPrefixAndName.fat['briefcase']} />
           Shitje
         </p>
         <p>
