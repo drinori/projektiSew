@@ -29,8 +29,32 @@ function Kerkimi() {
               <option value="" disabled hidden>
                 Qyteti
               </option>
-              <option value="koretin">Koretin</option>
-              <option value="kamenica">Kamenica</option>
+              <option value="Decan">Decan</option>
+              <option value="Drenas">Drenas</option>
+              <option value="Gjakove">Gjakove</option>
+              <option value="Gjilan">Gjilan</option>
+              <option value="Dragash">Dragash</option>
+              <option value="Kacanik">Kacanik</option>
+              <option value="Kline">kline</option>
+              <option value="Fushe Kosove">Fushe Kosove</option>
+              <option value="Kamenice">Kamenice</option>
+              <option value="Mitrovica">Mitrovica</option>
+              <option value="Lipjan">Lipjan</option>
+              <option value="Obiliq">Obiliq</option>
+              <option value="Rahovec">Rahovec</option>
+              <option value="Peje">Peje</option>
+              <option value="Podujeve">Podujeve</option>
+              <option value="Prishtine">Prishtine</option>
+              <option value="Prizren">Prizren</option>
+              <option value="Skenderaj">Skenderaj</option>
+              <option value="Shtime">Shtime</option>
+              <option value="Suhareke">Suhareke</option>
+              <option value="Ferizaj">Ferizaj</option>
+              <option value="Viti">Viti</option>
+              <option value="Vushtrri">Vushtrri</option>
+		          <option value="Malisheve">Malisheve</option>
+		          <option value="Junik">Junik</option>
+		          <option value="Hani I Elezit">Hani I Elezit</option>
             </select>
           </div>
 
