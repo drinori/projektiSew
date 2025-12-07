@@ -16,7 +16,7 @@ function Kycja() {
 
   const [data, setData] = useState({
     email: "",
-    password: "",
+    fjalekalimi: "",
   });
 
   const handleSubmit = async (e) => {
@@ -24,7 +24,7 @@ function Kycja() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/kycja",
+        "http://localhost:3000/api/kycja/perdoruesi",
         data,
       );
       console.log("success", response.data);

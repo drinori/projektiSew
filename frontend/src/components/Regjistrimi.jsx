@@ -28,6 +28,10 @@ function Regjistrimi() {
     try {
       let dataToSend;
 
+      if (!tipiPerdoruesit) {
+        alert("Zgjedh tipin");
+      }
+
       if (tipiPerdoruesit === "aplikant") {
         dataToSend = {
           tipi: "aplikant",
@@ -51,11 +55,14 @@ function Regjistrimi() {
       );
 
       if (response.data.success) {
-        alert("BERI!");
+        alert("Perdoruesi u regjistrua me sukses!");
 
         navigate("/");
       }
     } catch (err) {
+      if (err.response.data.error.includes("ekziston")) {
+        alert("Perdoruesi ekziston!");
+      }
       console.log("err: ", err);
     }
   };
@@ -63,7 +70,7 @@ function Regjistrimi() {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div
-        class="flex justify-center items-center w-full sm:w-[500px] md:w-[600px] lg:w-[650px]
+        className="flex justify-center items-center w-full sm:w-[500px] md:w-[600px] lg:w-[650px]
                       transition-all duration-300 ease-in-out
                       bg-white rounded-lg shadow-2xl p-6 sm:p-8 md:p-10"
       >

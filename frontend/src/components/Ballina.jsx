@@ -12,7 +12,20 @@ function Ballina() {
       </div>
 
       <Kerkimi />
-      <ShpalljaCard />
+      <div className="grid grid-cols-4 place-items-center">
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+        <ShpalljaCard />
+      </div>
     </div>
   );
 }
