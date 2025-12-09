@@ -7,7 +7,8 @@ router.post("/perdoruesi", async (req, res) => {
     console.log(req.body);
 
     let savedUser;
-    const { tipi, email, fjalekalimi, emri, mbiemri, kompania } = req.body;
+    const { tipiPerdoruesit, email, fjalekalimi, emri, mbiemri, kompania } =
+      req.body;
 
     const user = await User.findOne({ email });
 
@@ -17,7 +18,7 @@ router.post("/perdoruesi", async (req, res) => {
       });
     }
 
-    if (tipi === "aplikant") {
+    if (tipiPerdoruesit === "aplikant") {
       if (!emri) {
         return res.status(400).json({
           error: "Nuk e keni shenuar emrin",
@@ -44,11 +45,11 @@ router.post("/perdoruesi", async (req, res) => {
         mbiemri,
         email,
         fjalekalimi,
-        tipi,
+        tipiPerdoruesit,
       });
 
       savedUser = await aplikant.save();
-    } else if (tipi === "punedhenes") {
+    } else if (tipiPerdoruesit === "punedhenes") {
       if (!kompania) {
         return res.status(400).json({
           error: "Nuk e keni shenuar emrin e kompanise",
@@ -69,7 +70,7 @@ router.post("/perdoruesi", async (req, res) => {
         kompania,
         email,
         fjalekalimi,
-        tipi,
+        tipiPerdoruesit,
       });
 
       savedUser = await punedhenes.save();
@@ -79,11 +80,12 @@ router.post("/perdoruesi", async (req, res) => {
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: `${
-        tipi === "aplikant" ? "Aplikanti" : "Punëdhënësi"
+        tipiPerdoruesit === "aplikant" ? "Aplikanti" : "Punëdhënësi"
       } u regjistrua me sukses!`,
+      user: savedUser,
     });
   } catch (error) {
     console.error(error);

@@ -6,24 +6,28 @@ import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import "../index.css";
 import { useNavigate } from "react-router-dom";
 
-function ShpalljaCard() {
+function ShpalljaCard({ shpallja }) {
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/shpallja/${shpallja._id}`);
+  };
 
   return (
     <div
       className="flex justify-center gap-7 border border-gray-200 hover:bg-gray-200 shadow-xl px-5 py-5 my-10 w-fit h-fit cursor-pointer mx-5"
-      onClick={() => navigate("/shpallja")}
+      onClick={handleClick}
     >
       <FontAwesomeIcon icon={faAmazon} className="text-5xl" />
       <div className="px-5">
-        <p className="font-bold text-xl">Vendi Punes</p>
+        <p className="font-bold text-xl">{shpallja.pozitaPunes}</p>
         <p>
           <FontAwesomeIcon icon={faBriefcase} />
-          Shitje
+          {shpallja.kategoriaPunes}
         </p>
         <p>
           <FontAwesomeIcon icon={faLocationDot} />
-          Koretin
+          {shpallja.lokacioniPunes}
         </p>
       </div>
       <FontAwesomeIcon icon={faBookmark} />

@@ -32,18 +32,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  tipi: {
-    type: String,
-    required: true,
-    default: function () {
-      if (this.tipiPerdoruesit === "aplikant") {
-        return "aplikant";
-      }
-      return "punedhenes";
-    },
-  },
 });
 
 const User = mongoose.model("User", userSchema);
-
 module.exports = User;

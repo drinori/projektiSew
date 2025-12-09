@@ -64,6 +64,7 @@ function Kycja() {
                 Email
               </label>
               <input
+                id="email"
                 type="text"
                 placeholder="Email"
                 className="border rounded-sm p-1 w-full sm:w-80 md:w-95 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
@@ -74,6 +75,7 @@ function Kycja() {
               <label htmlFor="fjalekalimi">Fjalekalimi</label>
               <div className="relative">
                 <input
+                  id="fjalekalimi"
                   type={showPassword ? "text" : "password"}
                   placeholder="Fjalekalimi"
                   className="border rounded-sm p-1 w-full sm:w-80 md:w-95 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"

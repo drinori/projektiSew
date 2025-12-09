@@ -4,8 +4,43 @@ import { faBookmark, faClock } from "@fortawesome/free-regular-svg-icons";
 import Header from "./Header";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function Shpallja() {
+  const [shpallja, setShpallja] = useState(null);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/shpallja/${id}`,
+        );
+        setShpallja(response.data.data);
+      } catch (error) {
+        console.log("Error:", error);
+        setShpallja([]);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
+
+  if (!shpallja) {
+    return (
+      <div>
+        <Header />
+        <div className="text-center p-10">
+          <p>Diqka shkoi keq!</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header />
@@ -20,14 +55,14 @@ function Shpallja() {
                     className="text-5xl self-center"
                   />
                 </div>
-                <p className="font-bold text-2xl">Vendi Punes</p>
+                <p className="font-bold text-2xl">{shpallja.pozitaPunes}</p>
                 <p className="-col-4">
                   <FontAwesomeIcon icon={faBriefcase} />
-                  Kategoria
+                  {shpallja.kategoriaPunes.toUpperCase()}
                 </p>
                 <p>
                   <FontAwesomeIcon icon={faLocationDot} />
-                  Lokacioni
+                  {shpallja.lokacioniPunes}
                 </p>
                 <p>
                   <FontAwesomeIcon icon={faClock} />
@@ -38,29 +73,7 @@ function Shpallja() {
             <FontAwesomeIcon icon={faBookmark} className="text-xl" />
           </div>
         </div>
-        {/* Duhet me ndreq */}
-        <p className="relative left-35 top-20 max-w-xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius amet,
-          cumque iure dicta exercitationem saepe! Amet sunt blanditiis ut
-          similique fuga saepe velit, et molestiae delectus eos aliquid quam
-          modi. modi. modi. modi. modi. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Nesciunt excepturi laboriosam, quam atque saepe
-          totam fuga, molestiae assumenda aliquam velit ratione cupiditate illo
-          reiciendis nihil, quos commodi quis hic deserunt. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Nesciunt excepturi laboriosam,
-          quam atque saepe totam fuga, molestiae assumenda aliquam velit ratione
-          cupiditate illo reiciendis nihil, quos commodi quis hic deserunt.
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
-          excepturi laboriosam, quam atque saepe totam fuga, molestiae assumenda
-          aliquam velit ratione cupiditate illo reiciendis nihil, quos commodi
-          quis hic deserunt. Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Nesciunt excepturi laboriosam, quam atque saepe totam fuga,
-          molestiae assumenda aliquam velit ratione cupiditate illo reiciendis
-          nihil, quos commodi quis hic deserunt. Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Nesciunt excepturi laboriosam, quam
-          atque saepe totam fuga, molestiae assumenda aliquam velit ratione
-          cupiditate illo reiciendis nihil, quos commodi quis hic deserunt.
-        </p>
+        <p className="top-20 max-w-xl">{shpallja.pershkrimiPunes}</p>
       </div>
     </div>
   );

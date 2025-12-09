@@ -20,7 +20,7 @@ function App() {
         <Route path="/kycja" element={<Kycja />} />
         <Route path="/regjistrimi" element={<Regjistrimi />} />
         <Route path="/publikoPune" element={<PublikoPune />} />
-        <Route path="/shpallja" element={<Shpallja />} />
+        <Route path="/shpallja/:id" element={<Shpallja />} />
       </Routes>
     </BrowserRouter>
   );

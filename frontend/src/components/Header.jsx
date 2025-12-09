@@ -32,7 +32,7 @@ function Header() {
           <Link to="/kycja" className="kycja">
             Kycu/Regjistrohu
           </Link>
-          <Link to="/publikoPune" className="publikoPune">
+          <Link to="/publikopune" className="publikoPune">
             Publiko Pune
           </Link>
         </div>
