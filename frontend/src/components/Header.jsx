@@ -1,9 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
 import "../index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAtlassian } from "@fortawesome/free-brands-svg-icons/faAtlassian";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 function Header() {
+  const navigate = useNavigate();
+  const [perdoruesiData, setPerdoruesiData] = useState({});
+
+  useEffect(() => {
+    const fetchPerdoruesiData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/perdoruesi",
+          { withCredentials: true },
+        );
+
+        if (response.data.success) {
+          setPerdoruesiData(response.data.user);
+        } else {
+          navigate("/kycja");
+        }
+
+        console.log(response);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchPerdoruesiData();
+  }, [navigate]);
+
   return (
     <header>
       <div
@@ -35,6 +64,7 @@ function Header() {
           <Link to="/publikopune" className="publikoPune">
             Publiko Pune
           </Link>
+          <p>{perdoruesiData.emri}</p>
         </div>
       </div>
     </header>

@@ -4,12 +4,13 @@ import "../index.css";
 import ShpalljaCard from "./ShpalljaCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Ballina() {
   const [shpalljaData, setShpalljaData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchShpalljaData = async () => {
       try {
         const response = await axios.get(
           "http://localhost:3000/api/shpallja/kompania",
@@ -21,7 +22,7 @@ function Ballina() {
       }
     };
 
-    fetchData();
+    fetchShpalljaData();
   }, []);
 
   return (

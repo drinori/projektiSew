@@ -26,26 +26,15 @@ function Kycja() {
       const response = await axios.post(
         "http://localhost:3000/api/kycja/perdoruesi",
         data,
+        { withCredentials: true },
       );
       console.log("success", response.data);
       navigate("/");
+      localStorage.setItem("user", JSON.stringify(response.data.user));
     } catch (e) {
       console.log(e);
     }
   };
-
-  // const validateForm = () => {
-  //   if (!data.email) {
-  //     alert("sheno email");
-  //     return;
-  //   }
-  //   if (!data.password) {
-  //     alert("sheno password");
-  //     return;
-  //   }
-  //
-  //   navigate("/");
-  // };
 
   return (
     <div className="min-h-screen flex justify-center items-center">
@@ -80,7 +69,7 @@ function Kycja() {
                   placeholder="Fjalekalimi"
                   className="border rounded-sm p-1 w-full sm:w-80 md:w-95 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
                   onChange={(e) =>
-                    setData({ ...data, password: e.target.value })
+                    setData({ ...data, fjalekalimi: e.target.value })
                   }
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">

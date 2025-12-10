@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/userSchema");
+const Perdorues = require("../models/perdoruesSchema");
 
 router.post("/perdoruesi", async (req, res) => {
   try {
-    const { email, fjalekalimi, tipi } = req.body;
+    const { email, fjalekalimi } = req.body;
+    console.log(req.body);
 
     let userResponse;
 
-    const user = await User.findOne({ email });
+    const user = await Perdorues.findOne({ email, fjalekalimi });
     if (!user) {
       return res.status(400).json({
         status: "failed",
@@ -16,26 +17,28 @@ router.post("/perdoruesi", async (req, res) => {
       });
     }
 
-    if (tipi === "aplikant") {
+    if (user.tipiPerdoruesit === "aplikant") {
       userResponse = {
         _id: user._id,
         emri: user.emri,
         mbiemri: user.mbiemri,
         email: user.email,
-        tipi: user.tipi,
+        tipiPerdoruesit: user.tipiPerdoruesit,
       };
-    } else if (tipi === "punedhenes") {
+    } else if (user.tipiPerdoruesit === "punedhenes") {
       userResponse = {
         _id: user._id,
         kompania: user.kompania,
         email: user.email,
-        tipi: user.tipi,
+        tipiPerdoruesit: user.tipiPerdoruesit,
       };
     }
 
+    req.session.userId = user._id;
+
     res.json({
       success: true,
-      user: userResponse,
+      userResponse,
     });
   } catch (err) {
     console.error(err);

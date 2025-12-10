@@ -20,5 +20,5 @@ const shpalljaSchema = new mongoose.Schema({
   },
 });
 
-const Shpallja = mongoose.model("Shpallja", shpalljaSchema);
+const Shpallja = mongoose.model("Shpallja", shpalljaSchema, "shpalljet");
 module.exports = Shpallja;

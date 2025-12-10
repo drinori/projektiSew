@@ -1,20 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/userSchema");
+const Perdorues = require("../models/perdoruesSchema");
 
 router.post("/perdoruesi", async (req, res) => {
   try {
     console.log(req.body);
 
-    let savedUser;
+    let savedPerdorues;
     const { tipiPerdoruesit, email, fjalekalimi, emri, mbiemri, kompania } =
       req.body;
 
-    const user = await User.findOne({ email });
+    const user = await Perdorues.findOne({ email });
 
     if (user) {
       return res.status(400).json({
-        error: "perdoruesi ekziston",
+        error: "Perdoruesi ekziston",
       });
     }
 
@@ -40,7 +40,7 @@ router.post("/perdoruesi", async (req, res) => {
         });
       }
 
-      const aplikant = new User({
+      const aplikant = new Perdorues({
         emri,
         mbiemri,
         email,
@@ -48,7 +48,7 @@ router.post("/perdoruesi", async (req, res) => {
         tipiPerdoruesit,
       });
 
-      savedUser = await aplikant.save();
+      savedPerdorues = await aplikant.save();
     } else if (tipiPerdoruesit === "punedhenes") {
       if (!kompania) {
         return res.status(400).json({
@@ -66,14 +66,14 @@ router.post("/perdoruesi", async (req, res) => {
         });
       }
 
-      const punedhenes = new User({
+      const punedhenes = new Perdorues({
         kompania,
         email,
         fjalekalimi,
         tipiPerdoruesit,
       });
 
-      savedUser = await punedhenes.save();
+      savedPerdorues = await punedhenes.save();
     } else {
       return res.status(400).json({
         success: false,
@@ -85,7 +85,7 @@ router.post("/perdoruesi", async (req, res) => {
       message: `${
         tipiPerdoruesit === "aplikant" ? "Aplikanti" : "Punëdhënësi"
       } u regjistrua me sukses!`,
-      user: savedUser,
+      user: savedPerdorues,
     });
   } catch (error) {
     console.error(error);
