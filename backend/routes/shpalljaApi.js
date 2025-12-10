@@ -4,7 +4,7 @@ const Shpallja = require("../models/shpalljaSchema");
 
 router.get("/kompania", async (req, res) => {
   try {
-    const shpalljet = await Shpallja.find().sort({ createdAt: -1 });
+    const shpalljet = await Shpallja.find();
     return res.status(200).json({
       success: true,
       data: shpalljet,
@@ -43,16 +43,28 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/kompania", async (req, res) => {
-  const { pozitaPunes, kategoriaPunes, lokacioniPunes, pershkrimiPunes } =
-    req.body;
+  const {
+    pozitaPunes,
+    kategoriaPunes,
+    lokacioniPunes,
+    pershkrimiPunes,
+    pyetjet,
+  } = req.body;
 
-  console.log(pozitaPunes, kategoriaPunes, lokacioniPunes, pershkrimiPunes);
+  console.log(
+    pozitaPunes,
+    kategoriaPunes,
+    lokacioniPunes,
+    pershkrimiPunes,
+    pyetjet,
+  );
 
   const shpallja = new Shpallja({
     pozitaPunes,
     kategoriaPunes,
     lokacioniPunes,
     pershkrimiPunes,
+    pyetjet: pyetjet || [],
   });
 
   const shpalljaPunes = await shpallja.save();

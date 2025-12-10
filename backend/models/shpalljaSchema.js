@@ -18,6 +18,9 @@ const shpalljaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  pyetjet: {
+    type: [String],
+  },
 });
 
 const Shpallja = mongoose.model("Shpallja", shpalljaSchema, "shpalljet");

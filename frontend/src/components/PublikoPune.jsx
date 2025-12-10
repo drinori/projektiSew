@@ -5,12 +5,26 @@ import { useState } from "react";
 
 function PublikoPune() {
   const navigate = useNavigate();
+  const [pyetjet, setPyetjet] = useState([]);
+  const [pyetjaTanishme, setPyetjaTanishme] = useState("");
   const [formData, setFormData] = useState({
     pozitaPunes: "",
     kategoriaPunes: "",
     lokacioniPunes: "",
     pershkrimiPunes: "",
   });
+
+  const shtoPyetjen = () => {
+    if (pyetjaTanishme.trim()) {
+      setPyetjet([...pyetjet, pyetjaTanishme]);
+      setPyetjaTanishme("");
+    }
+  };
+
+  const fshijPyetjen = (index) => {
+    const pyetjetReja = pyetjet.filter((_, i) => i !== index);
+    setPyetjet(pyetjetReja);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +34,7 @@ function PublikoPune() {
       kategoriaPunes: formData.kategoriaPunes,
       lokacioniPunes: formData.lokacioniPunes,
       pershkrimiPunes: formData.pershkrimiPunes,
+      pyetjet: pyetjet,
     };
 
     const response = await axios.post(
@@ -29,6 +44,15 @@ function PublikoPune() {
 
     if (response.data.success) {
       alert("Puna u shpall");
+
+      setFormData({
+        pozitaPunes: "",
+        kategoriaPunes: "",
+        lokacioniPunes: "",
+        pershkrimiPunes: "",
+      });
+      setPyetjet([]);
+      setPyetjaTanishme("");
     }
 
     navigate("/");
@@ -87,6 +111,41 @@ function PublikoPune() {
             setFormData({ ...formData, pershkrimiPunes: e.target.value })
           }
         ></textarea>
+        <div>
+          <label htmlFor="pyetja"></label>
+          <input
+            type="text"
+            placeholder="Sheno pyetjen"
+            className="border"
+            value={pyetjaTanishme}
+            onChange={(e) => setPyetjaTanishme(e.target.value)}
+          />
+
+          <button
+            type="button"
+            className="cursor-pointer mx-5 publikoPune !bg-green-400"
+            onClick={() => shtoPyetjen()}
+          >
+            Shto Pyetje
+          </button>
+        </div>
+        <div>
+          {pyetjet.length > 0 && <h4>Pyetjet e shtuara: </h4>}
+          {pyetjet.map((pyetja, i) => {
+            return (
+              <div key={i}>
+                {pyetja}
+                <button
+                  type="button"
+                  className="cursor-pointer mx-5 publikoPune !bg-red-400"
+                  onClick={() => fshijPyetjen(i)}
+                >
+                  Fshij Pyetjen
+                </button>
+              </div>
+            );
+          })}
+        </div>
         <button type="submit" className="mx-5 publikoPune">
           Konfirmo
         </button>
