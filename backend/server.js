@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const regjistrimiApi = require("./routes/regjistrimiApi");
 const kycjaApi = require("./routes/kycjaApi");
 const shpalljaApi = require("./routes/shpalljaApi");
-const perdoruesiApi = require("./routes/perdoruesiApi");
 const kerkoApi = require("./routes/kerkoApi");
+const ckycjaApi = require("./routes/ckyckjaApi");
 const session = require("express-session");
 require("dotenv").config();
 
@@ -28,7 +28,7 @@ app.use("/api/shpallja", kerkoApi);
 app.use("/api/shpallja", shpalljaApi);
 app.use("/api/regjistrimi", regjistrimiApi);
 app.use("/api/kycja", kycjaApi);
-app.use("/api/perdoruesi", perdoruesiApi);
+app.use("/api/ckycja", ckycjaApi);
 
 app.use(express.urlencoded({ extended: true }));
 

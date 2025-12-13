@@ -31,8 +31,11 @@ function Kycja() {
       console.log("success", response.data);
       navigate("/");
       localStorage.setItem("user", JSON.stringify(response.data.user));
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      if (err.response.data.error.includes("nuk ekziston")) {
+        alert("Perdoruesi nuk ekziston");
+      }
+      console.log(err);
     }
   };
 

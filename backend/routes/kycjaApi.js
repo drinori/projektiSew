@@ -13,7 +13,7 @@ router.post("/perdoruesi", async (req, res) => {
     if (!user) {
       return res.status(400).json({
         status: "failed",
-        message: "perdoruesi nuk ekziston",
+        error: "perdoruesi nuk ekziston",
       });
     }
 
@@ -42,6 +42,37 @@ router.post("/perdoruesi", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
+  }
+});
+
+router.get("/perdoruesi", async (req, res) => {
+  try {
+    if (!req.session.userId) {
+      return res.status(401).json({
+        success: false,
+        error: "Nuk jeni kycur",
+      });
+    }
+
+    const user = await Perdorues.findById(req.session.userId);
+
+    return res.status(200).json({
+      success: true,
+      userResponse: {
+        _id: user._id,
+        emri: user.emri,
+        mbiemri: user.mbiemri,
+        email: user.email,
+        kompania: user.kompania,
+        tipiPerdoruesit: user.tipiPerdoruesit,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      error: "Gabim i brendshem i serverit",
+    });
   }
 });
 

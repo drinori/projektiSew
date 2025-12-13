@@ -8,23 +8,40 @@ import axios from "axios";
 
 function Header() {
   const navigate = useNavigate();
-  const [perdoruesiData, setPerdoruesiData] = useState({});
+  const [perdoruesiData, setPerdoruesiData] = useState(null);
+
+  const handleCkycja = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/ckycja/perdoruesi",
+        {},
+        { withCredentials: true },
+      );
+
+      setPerdoruesiData(null);
+      localStorage.removeItem("user");
+      console.log("Ckycja u be", response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const fetchPerdoruesiData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/perdoruesi",
-          { withCredentials: true },
+          "http://localhost:3000/api/kycja/perdoruesi",
+          {
+            withCredentials: true,
+          },
         );
 
         if (response.data.success) {
-          setPerdoruesiData(response.data.user);
+          setPerdoruesiData(response.data.userResponse);
         } else {
           navigate("/kycja");
         }
-
-        console.log(response);
+        console.log(response.data);
       } catch (err) {
         console.error(err);
       }
@@ -57,15 +74,29 @@ function Header() {
           </Link>
         </nav>
 
-        <div className="flex space-x-4 ml-auto">
-          <Link to="/kycja" className="kycja">
-            Kycu/Regjistrohu
-          </Link>
-          <Link to="/publikopune" className="publikoPune">
-            Publiko Pune
-          </Link>
-          <p>{perdoruesiData.emri}</p>
-        </div>
+        {perdoruesiData ? (
+          <div className="flex space-x-4 ml-auto">
+            <Link to="/profili">
+              {perdoruesiData.emri || perdoruesiData.kompania}
+            </Link>
+            <button
+              type="button"
+              className="cursor-pointer publikoPune"
+              onClick={handleCkycja}
+            >
+              C'kycu
+            </button>
+          </div>
+        ) : (
+          <div className="flex space-x-4 ml-auto">
+            <Link to="/kycja" className="kycja">
+              Kycu/Regjistrohu
+            </Link>
+            <Link to="/publikopune" className="publikoPune">
+              Publiko Pune
+            </Link>
+          </div>
+        )}
       </div>
     </header>
   );

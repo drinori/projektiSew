@@ -24,6 +24,7 @@ const shpalljaSchema = new mongoose.Schema({
   niveliPunes: {
     type: String,
     enum: [
+      "",
       "praktike",
       "fillestar",
       "junior",
@@ -33,10 +34,14 @@ const shpalljaSchema = new mongoose.Schema({
       "menaxher",
       "drejtor",
     ],
+    required: false,
+    default: "",
   },
   llojiPunesimit: {
     type: String,
-    enum: ["fulltime", "parttime", "contract", "temporary", "internship"],
+    enum: ["", "fulltime", "parttime", "contract", "temporary", "internship"],
+    required: false,
+    default: "",
   },
   dataKrijimit: {
     type: Date,
