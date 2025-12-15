@@ -20,7 +20,15 @@ app.use(
 app.use(express.json());
 app.use(
   session({
+    name: "connect.sid",
     secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      path: "/",
+    },
   }),
 );
 

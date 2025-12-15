@@ -14,6 +14,9 @@ router.post("/perdoruesi", async (req, res) => {
 
       res.clearCookie("connect.sid", {
         path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       });
 
       return res.json({
