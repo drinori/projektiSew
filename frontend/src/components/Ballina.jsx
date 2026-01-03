@@ -94,7 +94,7 @@ function Ballina() {
     <div>
       {perdoruesiData?.tipiPerdoruesit === "punedhenes" ? (
         <>
-          <div className="flex justify-between bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center ml-auto text-l rounded-2xl">
+          <div className=" bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center ml-auto text-l rounded-2xl">
             <Header />
             <div className="flex space-x-4 ml-auto items-center">
               <Link to={`/profili/${perdoruesiData._id}`}>
@@ -114,7 +114,7 @@ function Ballina() {
         </>
       ) : (
         <>
-          <div className="flex justify-between bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center ml-auto text-l rounded-2xl">
+          <div className="bg-white shadow-md py-7 px-6 mx-auto flex justify-between items-center ml-auto text-l rounded-2xl">
             <Header />
 
             {perdoruesiData ? (
