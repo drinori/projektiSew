@@ -14,7 +14,6 @@ function ShpalljaProfil() {
   const [shfaqPopupAplikanteve, setShfaqPopupAplikanteve] = useState(null);
   const [shpalljaZgjedhurPerAplikante, setShpalljaZgjedhurPerAplikante] =
     useState(null);
-  const [numriAplikimeve, setNumriAplikimeve] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
@@ -51,23 +50,6 @@ function ShpalljaProfil() {
 
           if (shpalljetFiltruara.length > 0) {
             setShpalljaData(shpalljetFiltruara);
-
-            // I merr numrin e aplikanteve per secilen pune
-            shpalljetFiltruara.forEach(async (shpallja) => {
-              try {
-                const aplikimiResponse = await axios.get(
-                  `http://localhost:3000/api/shpallja/${shpallja._id}/aplikimet`,
-                );
-                if (aplikimiResponse.data.success) {
-                  setNumriAplikimeve((prev) => ({
-                    ...prev,
-                    [shpallja._id]: aplikimiResponse.data.aplikimet.length,
-                  }));
-                }
-              } catch (error) {
-                console.error(error);
-              }
-            });
           }
         }
       } catch (error) {
@@ -237,7 +219,7 @@ function ShpalljaProfil() {
                     })}
                   </div>
                   <p className="text-sm font-medium text-gray-700">
-                    {numriAplikimeve[sh._id] || 0} Aplikant
+                    {sh.numriAplikimeve} aplikant
                   </p>
                 </div>
               </div>

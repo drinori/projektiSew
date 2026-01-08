@@ -66,15 +66,27 @@ const shpalljaSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  numriAplikimeve: {
-    type: Number,
-    default: 0,
-  },
   dataKrijimit: {
     type: Date,
     default: Date.now,
   },
 });
+
+shpalljaSchema.virtual("aplikimet", {
+  ref: "Aplikimi",
+  localField: "_id",
+  foreignField: "shpalljaId",
+});
+
+shpalljaSchema.virtual("numriAplikimeve", {
+  ref: "Aplikimi",
+  localField: "_id",
+  foreignField: "shpalljaId",
+  count: true,
+});
+
+shpalljaSchema.set("toJSON", { virtuals: true });
+shpalljaSchema.set("toObject", { virtuals: true });
 
 const Shpallja = mongoose.model("Shpallja", shpalljaSchema, "shpalljet");
 module.exports = Shpallja;

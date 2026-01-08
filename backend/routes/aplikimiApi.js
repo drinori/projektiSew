@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Aplikimi = require("../models/aplikimiSchema");
-const Perdorues = require("../models/perdoruesSchema");
 const Shpallja = require("../models/shpalljaSchema");
+const dergoMesazhin = require("../emailservice");
 
 router.post("/:id/aplikimi", async (req, res) => {
   try {
@@ -20,11 +20,10 @@ router.post("/:id/aplikimi", async (req, res) => {
     });
 
     await aplikimi.save();
-
-    await Shpallja.findByIdAndUpdate(
-      shpalljaId,
-      { $inc: { numriAplikimeve: 1 } },
-      { new: true },
+    await dergoMesazhin(
+      emailAplikantit,
+      "Aplikimi",
+      "Aplikimi u dergua me sukses!",
     );
 
     return res.status(200).json({
@@ -60,7 +59,6 @@ router.get("/:shpalljaId/aplikimet", async (req, res) => {
     return res.status(200).json({
       success: true,
       aplikimet,
-      numriAplikimeve: shpallja.numriAplikimeve,
     });
   } catch (error) {
     console.error(error);

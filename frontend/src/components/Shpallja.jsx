@@ -10,7 +10,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function Shpallja() {
   const navigate = useNavigate();
-  const [shpalljet, setShpalljet] = useState([]);
   const [shpallja, setShpallja] = useState(null);
   const [perdoruesiData, setPerdoruesiData] = useState({});
 
@@ -56,35 +55,6 @@ function Shpallja() {
   useEffect(() => {
     console.log("perdoruesi: ", perdoruesiData);
   }, [perdoruesiData]);
-
-  useEffect(() => {
-    const fetchShpalljet = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/shpallja/kompania",
-        );
-
-        if (Array.isArray(response.data.data) && perdoruesiData.email) {
-          const shpalljetFiltruara = response.data.data.filter((shpallja) => {
-            return shpallja.emailKompanise === perdoruesiData.email;
-          });
-
-          setShpalljet(shpalljetFiltruara);
-
-          // Nëse nuk kemi shpallje të vetme, përdor të parën nga lista
-          if (!shpallja && shpalljetFiltruara.length > 0) {
-            setShpallja(shpalljetFiltruara[0]);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (perdoruesiData.email) {
-      fetchShpalljet();
-    }
-  }, [perdoruesiData.email, shpallja]);
 
   if (!perdoruesiData) {
     return (

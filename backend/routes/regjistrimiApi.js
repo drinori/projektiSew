@@ -81,7 +81,11 @@ router.post("/perdoruesi", async (req, res) => {
     }
 
     await perdoruesiPerkohshem.save();
-    await dergoKodin(email, kodiVerifikimit);
+    await dergoKodin(
+      email,
+      "Verifiko email-in",
+      `Kodi juaj: ${kodiVerifikimit}`,
+    );
 
     return res.status(200).json({
       success: true,

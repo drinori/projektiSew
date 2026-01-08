@@ -9,13 +9,18 @@ const transportuesi = nodemailer.createTransport({
   },
 });
 
-const dergoKodin = async (emailPerdoruesit, kodi) => {
-  await transportuesi.sendMail({
-    from: `"Punesohu" <punesohu.info@gmail.com>`,
-    to: emailPerdoruesit,
-    subject: "Verifiko Email-in",
-    html: `<h1>Kodi i juaj ${kodi}</h1>`,
-  });
+const dergoMesazhin = async (emailPerdoruesit, subjekti, mesazhi) => {
+  const emails = Array.isArray(emailPerdoruesit)
+    ? emailPerdoruesit
+    : [emailPerdoruesit];
+  for (const email of emails) {
+    await transportuesi.sendMail({
+      from: `"Punesohu" <punesohu.info@gmail.com>`,
+      to: email,
+      subject: subjekti,
+      html: `<h1>${mesazhi}</h1>`,
+    });
+  }
 };
 
-module.exports = dergoKodin;
+module.exports = dergoMesazhin;
