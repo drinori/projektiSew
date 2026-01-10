@@ -26,7 +26,7 @@ function ShpalljaCard({ shpallja }) {
         <p className="paragraf">
           {" "}
           <FontAwesomeIcon icon={faClock} />
-          {shpallja.llojiPunesimit}
+          {shpallja.orari}
         </p>
         <p className="paragraf">{shpallja.niveliPunes}</p>
       </div>

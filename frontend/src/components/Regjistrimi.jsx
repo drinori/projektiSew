@@ -74,48 +74,63 @@ function Regjistrimi() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen p-4">
       <div
-        className="flex justify-center items-center w-full sm:w-[500px] md:w-[600px] lg:w-[650px]
-                      transition-all duration-300 ease-in-out
-                      bg-white rounded-lg shadow-2xl p-6 sm:p-8 md:p-10"
+        className="w-full max-w-[650px]
+                bg-white rounded-lg shadow-2xl 
+                p-4 sm:p-6 md:p-8 lg:p-10"
       >
-        <div>
-          <h1 className="font-bold text-4xl flex justify-center items-center mb-2 sm:mb-6 md:mb-9">
-            Regjistrimi
-          </h1>
-          <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6 text-xl">
-            <label
-              htmlFor="aplikant"
-              className="flex items-center gap-1 sm:gap-2 cursor-pointer"
-            >
-              <span className="text-sm sm:text-xl ">Aplikant</span>
-              <input
-                id="aplikant"
-                type="radio"
-                name="tipiPerdoruesit"
-                value="aplikant"
-                className="border w-4 h-4 cursor-pointer"
-                required
-                onChange={(e) => setTipiPerdoruesit(e.target.value)}
-              />
-            </label>
-            <label
-              htmlFor="punedhenes"
-              className="flex items-center gap-1 sm:gap-2 cursor-pointer"
-            >
-              <span className="text-sm sm:text-xl ">Punedhenes</span>
-              <input
-                id="punedhenes"
-                type="radio"
-                name="tipiPerdoruesit"
-                value="punedhenes"
-                className="border w-4 h-4 cursor-pointer"
-                required
-                onChange={(e) => setTipiPerdoruesit(e.target.value)}
-              />
-            </label>
+        <div className="grid grid-cols-1 gap-4 sm:gap-6">
+          <div className="text-center">
+            <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl mb-2 sm:mb-4 md:mb-6">
+              Regjistrimi
+            </h1>
           </div>
+
+          <div className="mb-6 sm:mb-8">
+            <div className="grid  grid-cols-[repeat(2,minmax(100px,130px))] place-self-center gap-3 sm:gap-4">
+              <div>
+                <input
+                  id="aplikant"
+                  type="radio"
+                  name="tipiPerdoruesit"
+                  value="aplikant"
+                  className="hidden peer"
+                  required
+                  onChange={(e) => setTipiPerdoruesit(e.target.value)}
+                />
+                <label
+                  htmlFor="aplikant"
+                  className="flex items-center justify-center p-3 border border-[#f7f7f7] rounded-lg cursor-pointer 
+                 bg-[#e2e2e2] transition-all duration-200
+                 peer-checked:border-[#6a6a6a] peer-checked:font-semibold"
+                >
+                  <span className="text-sm sm:text-base">Aplikant</span>
+                </label>
+              </div>
+
+              <div>
+                <input
+                  id="punedhenes"
+                  type="radio"
+                  name="tipiPerdoruesit"
+                  value="punedhenes"
+                  className="hidden peer"
+                  required
+                  onChange={(e) => setTipiPerdoruesit(e.target.value)}
+                />
+                <label
+                  htmlFor="punedhenes"
+                  className="flex items-center justify-center p-3 border border-[#f7f7f7] rounded-lg cursor-pointer 
+                 bg-[#f7f7f7] transition-all duration-200
+                 peer-checked:border-[#6a6a6a] peer-checked:font-semibold"
+                >
+                  <span className="text-sm sm:text-base">Punëdhënës</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
           <div
             className={
               tipiPerdoruesit === "aplikant" || tipiPerdoruesit === ""
@@ -123,161 +138,154 @@ function Regjistrimi() {
                 : "hidden"
             }
           >
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <div>
-                <label htmlFor="emri">Emri</label>
-                <input
-                  id="emri"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  onChange={(e) =>
-                    setDataAplikant({ ...dataAplikant, emri: e.target.value })
-                  }
-                />
+            <form
+              onSubmit={handleSubmit}
+              className="grid grid-cols-1 gap-3 sm:gap-4"
+            >
+              {[
+                {
+                  id: "emri",
+                  label: "Emri",
+                  placeholder: "Emri",
+                  type: "text",
+                },
+                {
+                  id: "mbiemri",
+                  label: "Mbiemri",
+                  placeholder: "Mbiemri",
+                  type: "text",
+                },
+                {
+                  id: "email",
+                  label: "Email",
+                  placeholder: "shembull@gmail.com",
+                  type: "email",
+                },
+                {
+                  id: "fjalekalimi",
+                  label: "Fjalëkalimi",
+                  placeholder: "Fjalëkalimi",
+                  type: "password",
+                },
+                {
+                  id: "konfirmoFjalekalimin",
+                  label: "Konfirmo Fjalëkalimin",
+                  placeholder: "Konfirmo fjalëkalimin",
+                  type: "password",
+                },
+              ].map((field) => (
+                <div key={field.id} className="grid grid-cols-1 gap-1">
+                  <label htmlFor={field.id} className="text-sm sm:text-base">
+                    {field.label}
+                  </label>
+                  <input
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    className="border-[#f7f7f7] bg-[#f7f7f7] rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                    onChange={(e) =>
+                      setDataAplikant({
+                        ...dataAplikant,
+                        [field.id]: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              ))}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  className="butoniKycjeRegjistrim w-full h-10 sm:h-12 text-sm sm:text-base"
+                >
+                  Regjistrohu
+                </button>
               </div>
-              <div>
-                <label htmlFor="mbiemri">Mbiemri</label>
-                <input
-                  id="mbiemri"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  onChange={(e) =>
-                    setDataAplikant({
-                      ...dataAplikant,
-                      mbiemri: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  onChange={(e) =>
-                    setDataAplikant({ ...dataAplikant, email: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <label htmlFor="fjalekalimi">Fjalekalimi</label>
-                <input
-                  id="fjalekalimi"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  onChange={(e) =>
-                    setDataAplikant({
-                      ...dataAplikant,
-                      fjalekalimi: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label htmlFor="konfirmoFjalekalimin">
-                  Konfirmo Fjalekalimin
-                </label>
-                <input
-                  id="konfirmoFjalekalimin"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  onChange={(e) =>
-                    setDataAplikant({
-                      ...dataAplikant,
-                      konfirmoFjalekalimin: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <button type="submit" className="butoniKycjeRegjistrim">
-                Regjistrohu
-              </button>
             </form>
           </div>
 
           <div
             className={tipiPerdoruesit === "punedhenes" ? "block" : "hidden"}
           >
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <div>
-                <label htmlFor="kompania">Kompania</label>
-                <input
-                  id="kompania"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  placeholder="Kompania"
-                  onChange={(e) =>
-                    setDataPunedhenesi({
-                      ...dataPunedhenesi,
-                      kompania: e.target.value,
-                    })
-                  }
-                />
+            <form
+              onSubmit={handleSubmit}
+              className="grid grid-cols-1 gap-3 sm:gap-4"
+            >
+              {[
+                {
+                  id: "kompania",
+                  label: "Kompania",
+                  placeholder: "Emri i kompanisë",
+                  type: "text",
+                },
+                {
+                  id: "email",
+                  label: "Email",
+                  placeholder: "kompania@gmail.com",
+                  type: "email",
+                },
+                {
+                  id: "fjalekalimi",
+                  label: "Fjalëkalimin",
+                  placeholder: "Fjalëkalimi",
+                  type: "password",
+                },
+                {
+                  id: "konfirmoFjalekalimin",
+                  label: "Konfirmo fjalëkalimin",
+                  placeholder: "Konfirmo fjalëkalimin",
+                  type: "password",
+                },
+              ].map((field) => (
+                <div key={field.id} className="grid grid-cols-1 gap-1">
+                  <label htmlFor={field.id} className="text-sm sm:text-base">
+                    {field.label}
+                  </label>
+                  <input
+                    id={field.id}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    className="border-[#f7f7f7] bg-[#f7f7f7] rounded-sm p-2 sm:p-3 w-full h-10 sm:h-12 placeholder-gray-500"
+                    onChange={(e) =>
+                      setDataPunedhenesi({
+                        ...dataPunedhenesi,
+                        [field.id]: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              ))}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  className="butoniKycjeRegjistrim w-full h-10 sm:h-12 text-sm sm:text-base"
+                >
+                  Regjistrohu
+                </button>
               </div>
-              <div>
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  placeholder="Email"
-                  onChange={(e) =>
-                    setDataPunedhenesi({
-                      ...dataPunedhenesi,
-                      email: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label htmlFor="fjalekalimi">Fjalekalimi</label>
-                <input
-                  id="fjalekalimi"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  onChange={(e) =>
-                    setDataPunedhenesi({
-                      ...dataPunedhenesi,
-                      fjalekalimi: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <label htmlFor="konfirmoFjalekalimin">
-                  Konfirmo Fjalekalimin
-                </label>
-                <input
-                  id="konfirmoFjalekalimin"
-                  type="text"
-                  className="border block rounded-sm p-1 w-full sm:w-80 md:w-96 lg:w-[350px] h-10 sm:h-12 md:h-14 lg:h-10"
-                  onChange={(e) =>
-                    setDataPunedhenesi({
-                      ...dataPunedhenesi,
-                      konfirmoFjalekalimin: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <button type="submit" className="butoniKycjeRegjistrim">
-                Regjistrohu
-              </button>
             </form>
           </div>
-          <div className="my-2">
+
+          <div className="text-center text-sm sm:text-base">
             <p className="inline">Keni Llogari? </p>
-            <Link to="/kycja" className="text-blue-600 underline">
+            <Link
+              to="/kycja"
+              className="text-blue-600 underline hover:text-blue-800"
+            >
               Kycuni
             </Link>
           </div>
-          <Link to="/" className="text-blue-600 underline">
-            Ballina
-          </Link>
+
+          <div className="text-center">
+            <Link
+              to="/"
+              className="text-blue-600 underline text-sm sm:text-base hover:text-blue-800"
+            >
+              Ballina
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
 export default Regjistrimi;

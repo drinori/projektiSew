@@ -23,8 +23,8 @@ function PublikoPune() {
   });
 
   const employmentTypes = [
-    { value: "fulltime", label: "Full-Time" },
-    { value: "part-time", label: "Part-Time" },
+    { value: "Fulltime", label: "Full-Time" },
+    { value: "Part-time", label: "Part-Time" },
   ];
 
   const shtoPyetjen = () => {
@@ -173,12 +173,12 @@ function PublikoPune() {
                 <option value="" disabled>
                   Kategoria
                 </option>
-                <option value="administrate">Administrate</option>
-                <option value="it">IT</option>
-                <option value="dizajner">Dizajner</option>
-                <option value="infermieri">Infermieri</option>
-                <option value="edukim">Edukim</option>
-                <option value="shitje dhe marketing">
+                <option value="Administrate">Administrate</option>
+                <option value="IT">IT</option>
+                <option value="Dizajner">Dizajner</option>
+                <option value="Infermieri">Infermieri</option>
+                <option value="Edukim">Edukim</option>
+                <option value="Shitje dhe Marketing">
                   Shitje dhe Marketing
                 </option>
               </select>
@@ -198,14 +198,14 @@ function PublikoPune() {
                 <option value="" disabled>
                   Zgjedh Nivelin
                 </option>
-                <option value="praktike">Praktikë</option>
-                <option value="fillestar">Fillestar</option>
-                <option value="junior">Junior</option>
-                <option value="mid-level">Mid-Level</option>
-                <option value="senior">Senior</option>
-                <option value="lider">Lider</option>
-                <option value="menaxher">Menaxher</option>
-                <option value="drejtor">Drejtor</option>
+                <option value="Praktike">Praktikë</option>
+                <option value="Fillestar">Fillestar</option>
+                <option value="Junior">Junior</option>
+                <option value="Mid-level">Mid-Level</option>
+                <option value="Senior">Senior</option>
+                <option value="Lider">Lider</option>
+                <option value="Menaxher">Menaxher</option>
+                <option value="Drejtor">Drejtor</option>
               </select>
             </div>
           </div>
@@ -213,7 +213,7 @@ function PublikoPune() {
           <hr className="border-gray-400 mt-10" />
 
           <h1 className="text-xl md:text-2xl mt-6">Informacione Shtese</h1>
-          <div className="flex">
+          <div className="grid grid-cols-2 gap-6">
             <div className="mt-4">
               <label className="label block mb-2">Orari</label>
               <div className="flex flex-wrap gap-3">
@@ -241,24 +241,70 @@ function PublikoPune() {
               <label htmlFor="paga" className="label block mb-2">
                 Paga
               </label>
-              <input
-                id="paga"
-                type="number"
-                className="border"
-                onChange={(e) =>
-                  setFormData({ ...formData, pagaPrej: Number(e.target.value) })
-                }
-                placeholder="prej"
-              />
-              <input
-                id="paga"
-                type="number"
-                className="border"
-                onChange={(e) =>
-                  setFormData({ ...formData, pagaDeri: Number(e.target.value) })
-                }
-                placeholder="deri"
-              />
+              <div className="flex items-center space-x-2">
+                <div className="flex-1">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <span className="text-gray-500 sm:text-sm">€</span>
+                    </div>
+                    <input
+                      type="number"
+                      value={formData.pagaPrej || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          pagaPrej: Number(e.target.value),
+                        })
+                      }
+                      className="pl-7 pr-3 py-2 border border-gray-400 rounded-md w-full focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Prej"
+                      min="0"
+                    />
+                  </div>
+                </div>
+
+                <div className="text-gray-500">-</div>
+
+                <div className="flex-1">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <span className="text-gray-500 sm:text-sm">€</span>
+                    </div>
+                    <input
+                      type="number"
+                      value={formData.pagaDeri || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          pagaDeri: Number(e.target.value),
+                        })
+                      }
+                      className="pl-7 pr-3 py-2 border border-gray-400 rounded-md w-full focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Deri"
+                      min="0"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Tregon rangun aktual */}
+              {formData.pagaPrej > 0 && formData.pagaDeri > 0 && (
+                <div className="mt-2 text-sm text-gray-600">
+                  Rangu aktual:{" "}
+                  <span className="font-semibold">
+                    €{formData.pagaPrej}-€{formData.pagaDeri}
+                  </span>
+                </div>
+              )}
+
+              {/* kallzon errorin nese vlera min eshte me e vogel se max*/}
+              {formData.pagaDeri > 0 &&
+                formData.pagaPrej > 0 &&
+                formData.pagaDeri < formData.pagaPrej && (
+                  <div className="mt-2 text-sm text-red-500">
+                    Vlera "Deri" duhet të jetë më e madhe se "Prej"
+                  </div>
+                )}
             </div>
           </div>
 
