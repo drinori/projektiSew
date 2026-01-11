@@ -133,9 +133,9 @@ function Kycja() {
             <div className="text-center">
               <Link
                 to="/"
-                className="text-blue-600 underline text-sm sm:text-base hover:text-blue-800"
+                className="text-[#0F4C75] text-sm sm:text-base hover:bg-[#0F4C75] hover:text-white  border p-2"
               >
-                Ballina
+                Kthehu Tek Ballina
               </Link>
             </div>
           </form>

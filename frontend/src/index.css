@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&display=swap");
+
 @import "tailwindcss";
 
 /* Ballina */
@@ -6,16 +8,16 @@
 }
 
 .publikoPune {
-  @apply px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors duration-200 cursor-pointer;
+  @apply px-6 py-2 bg-[#0F4C75] text-white rounded-lg hover:bg-white hover:text-[#0F4C75] border font-medium transition-colors duration-200 cursor-pointer;
 }
 
 .kycja {
-  @apply px-4 py-2 text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200;
+  @apply px-6 py-2 text-[#0F4C75] hover:text-white font-medium transition-colors duration-200 border hover:bg-[#0f4c75] rounded-lg transition-colors;
 }
 
 /* Butoni */
 .butoniKycjeRegjistrim {
-  @apply border border-[#7e7f7e] block rounded-3xl p-1 w-full bg-[#7e7f7e] hover:bg-[#6A6A6A] text-white hover:text-white cursor-pointer;
+  @apply border  block rounded-3xl p-1 w-full bg-[#0F4C75] hover:bg-white border-[#0F4C75] text-white hover:text-black cursor-pointer;
 }
 .input {
   @apply border border-gray-400 rounded-sm p-3 w-full box-border;

@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <footer className="bg-slate-900 text-gray-300 mt-auto">
+    <footer className="bg-[#1B262C] text-gray-300 mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
           <h3 className="text-xl font-semibold text-white mb-4">Punësohu</h3>

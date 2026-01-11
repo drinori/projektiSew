@@ -170,7 +170,7 @@ function Kerkimi() {
 
             <button
               type="submit"
-              className="w-full sm:col-span-2 lg:col-span-1 lg:w-auto px-6 py-2 rounded-4xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap"
+              className="w-full sm:col-span-2 lg:col-span-1 lg:w-auto px-6 py-2 rounded-4xl bg-[#0F4C75] text-white font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap"
             >
               Kerko
             </button>
