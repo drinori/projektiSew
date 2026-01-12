@@ -32,3 +32,6 @@
 .info {
   @apply text-gray-600 text-sm;
 }
+.input-ShpalljaProfil {
+  @apply w-full px-2 py-3 border border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition-colors text-sm font-semibold;
+}

@@ -19,6 +19,7 @@ function Aplikimi() {
     emailAplikantit: "",
     emriAplikantit: "",
     mbiemriAplikantit: "",
+    eksperienca: "",
     nrTelefonit: "",
     letraMotivuese: "",
   });
@@ -65,6 +66,7 @@ function Aplikimi() {
         emriAplikantit: aplikimi.emriAplikantit,
         mbiemriAplikantit: aplikimi.mbiemriAplikantit,
         nrTelefonit: aplikimi.nrTelefonit,
+        eksperienca: aplikimi.eksperienca,
         letraMotivuese: aplikimi.letraMotivuese,
       };
 
@@ -132,7 +134,6 @@ function Aplikimi() {
       <Header />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Job Info Card */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Apliko për këtë pozitë
@@ -165,7 +166,6 @@ function Aplikimi() {
           </div>
         </div>
 
-        {/* Application Form */}
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Të dhënat tuaja
@@ -173,7 +173,6 @@ function Aplikimi() {
 
           <form onSubmit={shtoAplikimin} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
-              {/* Emri */}
               <div>
                 <label
                   htmlFor="emri"
@@ -200,7 +199,6 @@ function Aplikimi() {
                 </div>
               </div>
 
-              {/* Mbiemri */}
               <div>
                 <label
                   htmlFor="mbiemri"
@@ -228,7 +226,6 @@ function Aplikimi() {
               </div>
             </div>
 
-            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -255,28 +252,52 @@ function Aplikimi() {
               </div>
             </div>
 
-            {/* Nr Telefonit */}
-            <div>
-              <label
-                htmlFor="telefon"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Numri i Telefonit <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="telefon"
-                type="tel"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                placeholder="+383 44 123 456"
-                value={aplikimi.nrTelefonit}
-                onChange={(e) =>
-                  setAplikimi({ ...aplikimi, nrTelefonit: e.target.value })
-                }
-              />
+            <div className="grid grid-cols-2 gap-3 mt-4">
+              <div className="col-span-1">
+                <label
+                  htmlFor="telefon"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Numri i Telefonit <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="telefon"
+                  type="tel"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  placeholder="+383 44 123 456"
+                  value={aplikimi.nrTelefonit}
+                  onChange={(e) =>
+                    setAplikimi({ ...aplikimi, nrTelefonit: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-span-1">
+                <label
+                  htmlFor="eksperienca"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Eksperienca<span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="eksperienca"
+                  className="w-full px-4 py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  value={aplikimi.eksperienca}
+                  onChange={(e) =>
+                    setAplikimi({ ...aplikimi, eksperienca: e.target.value })
+                  }
+                >
+                  <option value="" disabled>
+                    Eksperienca
+                  </option>
+                  <option value="0-6 muaj">0-6 muaj</option>
+                  <option value="1 vjet">1 vjet</option>
+                  <option value="1-2 vite">1-2 vite</option>
+                  <option value="2-3 vite">2-3 vite</option>
+                  <option value="3-6 vite">3-6 vite</option>
+                </select>
+              </div>
             </div>
-
-            {/* CV Upload */}
             <div>
               <label
                 htmlFor="cv"
@@ -305,7 +326,6 @@ function Aplikimi() {
               </div>
             </div>
 
-            {/* Letra Motivuese */}
             <div>
               <label
                 htmlFor="letraMotivuese"
@@ -325,7 +345,6 @@ function Aplikimi() {
               ></textarea>
             </div>
 
-            {/* Submit Button */}
             <div className="pt-4">
               <button
                 type="submit"
@@ -338,7 +357,6 @@ function Aplikimi() {
           </form>
         </div>
 
-        {/* Privacy Notice */}
         <p className="text-center text-sm text-gray-500 mt-6">
           Të dhënat tuaja do të përdoren vetëm për qëllime të rekrutimit dhe do
           të trajtohen në përputhje me politikat e privatësisë.
