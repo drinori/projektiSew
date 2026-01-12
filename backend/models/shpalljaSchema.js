@@ -55,7 +55,7 @@ const shpalljaSchema = new mongoose.Schema({
   },
   orari: {
     type: [String],
-    enum: ["", "Fulltime", "Part-time"],
+    enum: ["", "Full-time", "Part-time"],
     required: true,
     default: [],
   },

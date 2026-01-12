@@ -4,6 +4,10 @@ import "../App.css";
 import "../index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAtlassian } from "@fortawesome/free-brands-svg-icons/faAtlassian";
+import { SquareChartGantt } from "lucide-react";
+import { Settings } from "lucide-react";
+import { LogOut } from "lucide-react";
+
 import {
   faBars,
   faTimes,
@@ -37,7 +41,6 @@ function Header() {
     setIsDropdownOpen(false);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -136,7 +139,7 @@ function Header() {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   <Link
                     to={`/profili/${perdoruesiData._id}`}
                     className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
@@ -146,20 +149,32 @@ function Header() {
                     Profili
                   </Link>
                   <hr className="my-2 border-gray-200" />
-                  <Link to={`/profili/${perdoruesiData._id}/menaxhoShpalljet`}>
+                  <Link
+                    to={`/profili/${perdoruesiData._id}/menaxhoShpalljet`}
+                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <SquareChartGantt
+                      size={20}
+                      className="mr-3 text-gray-500"
+                    />
                     Menaxho Punet
                   </Link>
                   <hr className="my-2 border-gray-200" />
-                  <Link to={`/profili/${perdoruesiData._id}/konfigurimet`}>
+                  <Link
+                    to={`/profili/${perdoruesiData._id}/konfigurimet`}
+                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    <Settings size={20} className="mr-3 text-gray-500" />
                     Konfigurimet e Llogarise
                   </Link>
                   <hr className="my-2 border-gray-200" />
                   <button
                     type="button"
-                    className="w-full text-left flex items-center px-4 py-2 text-red-600 hover:bg-red-50 transition-colors"
+                    className="w-full text-center flex items-center px-4 py-2 text-gray-700 hover:text-red-600 transition-colors"
                     onClick={handleCkycja}
                   >
-                    <span>C'kycu</span>
+                    <LogOut size={20} className="mr-3 text-gray-700" />
+                    C'kycu
                   </button>
                 </div>
               )}
@@ -170,7 +185,6 @@ function Header() {
             <Link to="/kycja" className="kycja">
               Kycu/Regjistrohu
             </Link>
-            {/* Show "Publiko Pune" BUTTON  for non-logged users */}
             <Link to="/PublikoPune" className="publikoPune">
               Publiko Pune
             </Link>
@@ -225,7 +239,6 @@ function Header() {
                 Rreth Nesh
               </Link>
 
-              {/* Show "Publiko Pune" LINK in mobile menu ONLY for punedhenes */}
               {isPunedhenes && (
                 <Link
                   to="/PublikoPune"
@@ -275,7 +288,6 @@ function Header() {
                   >
                     Kycu/Regjistrohu
                   </Link>
-                  {/* Show "Publiko Pune" BUTTON for non-logged users in mobile */}
                   <Link
                     to="/PublikoPune"
                     className="publikoPune text-lg"

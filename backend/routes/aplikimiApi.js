@@ -6,7 +6,14 @@ const dergoMesazhin = require("../emailservice");
 
 router.post("/:id/aplikimi", async (req, res) => {
   try {
-    const { emailAplikantit, emriAplikantit, mbiemriAplikantit } = req.body;
+    const {
+      emailAplikantit,
+      emriAplikantit,
+      mbiemriAplikantit,
+      eksperienca,
+      niveliPunes,
+      letraMotivuese,
+    } = req.body;
     console.log(req.body);
 
     const shpalljaId = req.params.id;
@@ -17,6 +24,9 @@ router.post("/:id/aplikimi", async (req, res) => {
       emailAplikantit,
       emriAplikantit,
       mbiemriAplikantit,
+      eksperienca,
+      niveliPunes,
+      letraMotivuese,
     });
 
     await aplikimi.save();

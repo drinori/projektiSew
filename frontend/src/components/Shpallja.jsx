@@ -170,7 +170,7 @@ function Shpallja() {
                   <div className="text-center">
                     <p className="font-medium text-gray-700">Eksperienca</p>
                     <p className="text-lg font-bold mt-1">
-                      {shpallja.eksperienca || ""} vjet
+                      {shpallja.eksperienca}
                     </p>
                   </div>
 

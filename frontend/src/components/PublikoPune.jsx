@@ -26,7 +26,7 @@ function PublikoPune() {
   });
 
   const employmentTypes = [
-    { value: "Fulltime", label: "Full-Time" },
+    { value: "Full-time", label: "Full-Time" },
     { value: "Part-time", label: "Part-Time" },
   ];
 
@@ -53,7 +53,6 @@ function PublikoPune() {
     setKerkesatDheAftesite(kerkesatReja);
   };
 
-  // qetu
   const handleEmploymentTypeChange = (typeValue) => {
     setFormData((prevState) => {
       if (prevState.orari && prevState.orari.includes(typeValue)) {
@@ -69,7 +68,6 @@ function PublikoPune() {
       };
     });
   };
-  // dej qetu
 
   useEffect(() => {
     const fetchPerdoruesiData = async () => {
@@ -402,10 +400,10 @@ function PublikoPune() {
                     Eksperienca
                   </option>
                   <option value="0-6 muaj">0-6 muaj</option>
-                  <option value="1">1 vjet</option>
-                  <option value="1-2">1-2 vjet</option>
-                  <option value="2-3">2-3 vjet</option>
-                  <option value="3-6">3-6 vjet</option>
+                  <option value="1 vjet">1 vjet</option>
+                  <option value="1-2 vite">1-2 vite</option>
+                  <option value="2-3 vite">2-3 vite</option>
+                  <option value="3-6 vite">3-6 vite</option>
                 </select>
               </div>
             </div>
