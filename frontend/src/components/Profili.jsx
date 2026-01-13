@@ -93,15 +93,12 @@ function Profili() {
       );
 
       setPerdoruesiData(null);
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
 
       console.log("Ckycja u be", response.data);
       navigate("/");
     } catch (error) {
       console.error(error);
       setPerdoruesiData(null);
-      localStorage.clear();
     }
   };
 
@@ -126,9 +123,6 @@ function Profili() {
           </div>
         );
       })}
-
-      <ShpalljaProfil />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 m-10 md:m-15 lg:m-20"></div>
     </div>
   );
 }

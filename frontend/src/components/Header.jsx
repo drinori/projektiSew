@@ -88,7 +88,7 @@ function Header() {
         <FontAwesomeIcon icon={faAtlassian} className="text-2xl" />
       </Link>
 
-      <nav className="hidden md:flex space-x-8">
+      <nav className="hidden md:flex space-x-8 ">
         <Link to="/" className="nav-link">
           Ballina
         </Link>
