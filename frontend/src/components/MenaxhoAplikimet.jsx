@@ -62,14 +62,14 @@ function MenaxhoAplikimet() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/shpallja/kompania",
+          "http://localhost:3000/api/shpallja/aplikimet",
         );
         if (Array.isArray(response.data.data)) {
-          const shpalljetFiltruara = response.data.data.filter((shpallja) => {
-            return shpallja.emailKompanise === perdoruesiData.email;
+          const aplikimetFiltruara = response.data.data.filter((aplikimi) => {
+            return aplikimi.emailKompanise === perdoruesiData.email;
           });
-          if (shpalljetFiltruara.length > 0) {
-            setShpalljaData(shpalljetFiltruara);
+          if (aplikimetFiltruara.length > 0) {
+            setAplikimet(aplikimetFiltruara);
           }
         }
       } catch (error) {
@@ -77,40 +77,60 @@ function MenaxhoAplikimet() {
       }
     };
 
-    if (perdoruesiData.email) {
-      fetchData();
-    }
-  }, [perdoruesiData]);
+    fetchData();
+  }, [perdoruesiData.email]);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!shpalljaZgjedhurPerAplikante) {
-        setAplikimet([]);
-        return;
-      }
+      const shpalljet = [];
 
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/shpallja/${shpalljaZgjedhurPerAplikante._id}/aplikimet`,
-        );
+      for (const aplikimi of aplikimet) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/shpallja/${aplikimi.shpalljaId}`,
+          );
 
-        if (response.data.success) {
-          console.log("Aplikimet data:", response.data.aplikimet);
-          setAplikimet(response.data.aplikimet);
+          shpalljet.push(response.data.data);
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
-        setAplikimet([]);
       }
+
+      setShpalljaData(shpalljet);
     };
 
     fetchData();
-  }, [shpalljaZgjedhurPerAplikante]);
+  }, [aplikimet]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (!shpalljaZgjedhurPerAplikante) {
+  //       setAplikimet([]);
+  //       return;
+  //     }
+  //
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:3000/api/shpallja/${shpalljaZgjedhurPerAplikante._id}/aplikimet`,
+  //       );
+  //
+  //       if (response.data.success) {
+  //         console.log("Aplikimet data:", response.data.aplikimet);
+  //         setAplikimet(response.data.aplikimet);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //       setAplikimet([]);
+  //     }
+  //   };
+  //
+  //   fetchData();
+  // }, [shpalljaZgjedhurPerAplikante]);
 
   const modifikoShpalljen = (e) => {
     const { id, value } = e.target;
-    setShpalljaKlikuar({
-      ...shpalljaKlikuar,
+    setAplikimiKlikuar({
+      ...aplikimiKlikuar,
       [id]: value,
     });
   };
@@ -194,7 +214,7 @@ function MenaxhoAplikimet() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-gray-900">
-            Menaxho Shpalljet
+            Menaxho Aplikimet
           </h1>
           <p className="text-sm text-gray-500 mt-1">
             Menaxho dhe modifiko shpalljet e pozitave të punës
@@ -312,7 +332,7 @@ function MenaxhoAplikimet() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredData.map((sh) => (
+                {shpalljaData.map((sh) => (
                   <tr key={sh._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-gray-900">
@@ -513,7 +533,7 @@ function MenaxhoAplikimet() {
                       type="text"
                       value={shpalljaKlikuar.pozitaPunes}
                       onChange={modifikoShpalljen}
-                      className="input-MenaxhoAplikimet"
+                      className="input-ShpalljaProfil"
                       placeholder="Senior Full Stack Developer"
                     />
                   </div>
@@ -530,7 +550,7 @@ function MenaxhoAplikimet() {
                       type="text"
                       value={shpalljaKlikuar.niveliPunes || ""}
                       onChange={modifikoShpalljen}
-                      className="input-MenaxhoAplikimet"
+                      className="input-ShpalljaProfil"
                       placeholder="Full-time"
                     />
                   </div>
@@ -548,7 +568,7 @@ function MenaxhoAplikimet() {
                     type="text"
                     value={shpalljaKlikuar.lokacioniPunes || ""}
                     onChange={modifikoShpalljen}
-                    className="input-MenaxhoAplikimet"
+                    className="input-ShpalljaProfil"
                     placeholder="Pristina, Kosovo"
                   />
                 </div>
@@ -565,7 +585,7 @@ function MenaxhoAplikimet() {
                     type="text"
                     value={shpalljaKlikuar.llojiPunes || ""}
                     onChange={modifikoShpalljen}
-                    className="input-MenaxhoAplikimet"
+                    className="input-ShpalljaProfil"
                     placeholder="Full-time"
                   />
                 </div>
@@ -582,7 +602,7 @@ function MenaxhoAplikimet() {
                     value={shpalljaKlikuar.pershkrimiPunes || ""}
                     onChange={modifikoShpalljen}
                     rows="5"
-                    className="input-MenaxhoAplikimet"
+                    className="input-ShpalljaProfil"
                     placeholder="Pershkrimi"
                   />
                 </div>

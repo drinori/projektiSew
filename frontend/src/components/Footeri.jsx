@@ -6,7 +6,7 @@ function Footer() {
           <h3 className="text-xl font-semibold text-white mb-4">Punësohu</h3>
           <p className="text-sm leading-relaxed">
             Platformë moderne për lidhjen e punëkërkuesve me kompanitë më të
-            mira në Kosovë dhe rajon.
+            mira në Kosovë.
           </p>
         </div>
 
@@ -19,7 +19,7 @@ function Footer() {
             <li className="hover:text-white cursor-pointer">Regjistrohu</li>
             <li className="hover:text-white cursor-pointer">Ngarko CV</li>
             <li className="hover:text-white cursor-pointer">
-              Këshilla karriere
+              Apliko për punë
             </li>
           </ul>
         </div>

@@ -7,9 +7,11 @@ import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import "../index.css";
 import { useNavigate } from "react-router-dom";
+import Perdoruesi from "../PerdoruesiContext";
 
 function ShpalljaCard({ shpallja }) {
   const navigate = useNavigate();
+  const {perdoruesiData } = Perdoruesi.usePerdoruesi()
 
   const handleClick = () => {
     navigate(`/shpallja/${shpallja._id}`);
@@ -46,6 +48,7 @@ function ShpalljaCard({ shpallja }) {
           className="relative group bg-transparent cursor-pointer"
           onClick={handleClick}
         >
+          <div className={`${perdoruesiData.tipiPerdoruesit === "punedhenes" ? "hidden" : "block"}`}>
           <span className="relative z-10  bg-linear-to-r from-slate-700 via-gray-800 to-black bg-clip-text text-transparent font-semibold text-l group-hover:from-slate-800 group-hover:via-gray-900 group-hover:to-black transition-all duration-300">
             Apliko tani
           </span>
@@ -53,6 +56,7 @@ function ShpalljaCard({ shpallja }) {
             icon={faArrowRightLong}
             className="ml-1 text-gray-700 group-hover:text-black group-hover:translate-x-1 transition-all duration-300"
           />
+          </div>
           <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-linear-to-r from-slate-700 to-black group-hover:w-full transition-all duration-500 ease-out"></div>
         </button>
       </div>

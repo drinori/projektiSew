@@ -8,6 +8,7 @@ const kerkoApi = require("./routes/kerkoApi");
 const ckycjaApi = require("./routes/ckyckjaApi");
 const profiliApi = require("./routes/profiliApi");
 const aplikimiApi = require("./routes/aplikimiApi");
+const kompaniteApi = require("./routes/kompaniteApi");
 const session = require("express-session");
 require("dotenv").config();
 
@@ -44,6 +45,7 @@ app.use("/api/regjistrimi", regjistrimiApi);
 app.use("/api/kycja", kycjaApi);
 app.use("/api/ckycja", ckycjaApi);
 app.use("/api/profili", profiliApi);
+app.use("/api/kompania", kompaniteApi);
 
 mongoose
   .connect(process.env.MONGO_URI)

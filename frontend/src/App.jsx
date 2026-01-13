@@ -16,6 +16,7 @@ import MenaxhoShpalljet from "./components/MenaxhoShpalljet";
 import KonfigurimetLlogarise from "./components/KonfigurimetLlogarise";
 import BallinaMysafir from "./components/BallinaMysafir";
 import Perdoruesi from "./PerdoruesiContext";
+import MenaxhoAplikimet from "./components/MenaxhoAplikimet";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -63,6 +64,11 @@ function App() {
               path="/profili/:id/menaxhoShpalljet"
               element={<MenaxhoShpalljet />}
             />
+            <Route
+              path="/profili/:id/menaxhoAplikimet"
+              element={<MenaxhoAplikimet />}
+            />
+
             <Route
               path="/profili/:id/konfigurimet"
               element={<KonfigurimetLlogarise />}

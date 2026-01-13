@@ -6,6 +6,7 @@ import axios from "axios";
 function VerifikoEmail() {
   const navigate = useNavigate();
   const [kodiVerifikimit, setKodiVerifikimit] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -17,11 +18,10 @@ function VerifikoEmail() {
         {
           email: email,
           kodi: kodiVerifikimit,
-        },
+        }
       );
 
       if (response.data.success || response.data.status) {
-        console.log("sukses: ", response);
         alert("Verifikimi perfundoj me sukses");
         navigate("/kycja");
       }
@@ -29,23 +29,45 @@ function VerifikoEmail() {
       if (error.response.data.error.includes("Kodi eshte gabim")) {
         alert("Kodi eshte gabim");
       }
-      console.error(error);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="kodi">Sheno Kodin</label>
-        <input
-          placeholder="Sheno Kodin"
-          type="text"
-          id="kodi"
-          className="border"
-          value={kodiVerifikimit}
-          onChange={(e) => setKodiVerifikimit(e.target.value)}
-        />
-        <button type="submit">Konfirmo</button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md"
+      >
+        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+          Verifikimi i Email-it
+        </h2>
+
+        <div className="mb-5">
+          <label
+            htmlFor="kodi"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Ju lutem shënoni kodin që ju është dërguar në email!
+          </label>
+
+          <input
+            placeholder="Sheno Kodin"
+            type="text"
+            id="kodi"
+            value={kodiVerifikimit}
+            onChange={(e) => setKodiVerifikimit(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg
+                       focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded-lg
+                     hover:bg-blue-700 transition font-medium"
+        >
+          Konfirmo
+        </button>
       </form>
     </div>
   );
