@@ -33,7 +33,6 @@ function MenaxhoShpalljet() {
   const [menyRadhitjes, setMenyRadhitjes] = useState(false);
   const [sortimiDates, setSortimiDates] = useState("teRejat");
 
-  // Applicants related state
   const [aplikimet, setAplikimet] = useState([]);
   const [aplikimiKlikuar, setAplikimiKlikuar] = useState(null);
   const [shfaqPopupAplikanteve, setShfaqPopupAplikanteve] = useState(false);
@@ -285,9 +284,7 @@ function MenaxhoShpalljet() {
           </div>
         </div>
 
-        {/* Responsive Table */}
         <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-          {/* Desktop Table */}
           <div className="hidden lg:block">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -392,7 +389,6 @@ function MenaxhoShpalljet() {
             </table>
           </div>
 
-          {/* Mobile Cards */}
           <div className="lg:hidden divide-y divide-gray-200">
             {filteredData.map((sh) => (
               <div key={sh._id} className="p-4 hover:bg-gray-50">
