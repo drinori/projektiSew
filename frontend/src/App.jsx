@@ -16,6 +16,7 @@ import MenaxhoShpalljet from "./components/MenaxhoShpalljet";
 import KonfigurimetLlogarise from "./components/KonfigurimetLlogarise";
 import BallinaMysafir from "./components/BallinaMysafir";
 import Perdoruesi from "./PerdoruesiContext";
+import ProfiliVizitor from "./components/ProfiliVizitor"
 import MenaxhoAplikimet from "./components/MenaxhoAplikimet";
 import { useEffect, useState } from "react";
 
@@ -75,6 +76,7 @@ function App() {
             />
             <Route path="/verifiko" element={<VerifikoEmail />} />
             <Route path=":id/aplikimi" element={<Aplikimi />} />
+            <Route path="/kompania/:id" element={<ProfiliVizitor />} />
           </Routes>
         </div>
       </BrowserRouter>

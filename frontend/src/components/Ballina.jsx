@@ -50,7 +50,6 @@ function Ballina() {
     <div>
       {perdoruesiData?.tipiPerdoruesit === "punedhenes" ? (
         <>
-          <Header />
           <PublikoPune />
         </>
       ) : (
@@ -83,5 +82,6 @@ function Ballina() {
     </div>
   );
 }
+
 
 export default Ballina;
