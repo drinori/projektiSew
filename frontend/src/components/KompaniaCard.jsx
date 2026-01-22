@@ -12,6 +12,8 @@ function KompaniaCard({ kompania }) {
   const handleClick = () => {
     navigate(`/kompania/${kompania._id}`);
   };
+
+
   const getInitials = (name) => {
     if (!name) return "?";
     return name.charAt(0).toUpperCase();

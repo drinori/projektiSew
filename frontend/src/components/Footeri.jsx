@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Footer() {
   return (
     <footer className="bg-footer text-gray-300 mt-auto">
@@ -19,6 +20,12 @@ function Footer() {
             <li className="footerLinks">Regjistrohu</li>
             <li className="footerLinks">Ngarko CV</li>
             <li className="footerLinks">Apliko për punë</li>
+            <li className="hover:text-white cursor-pointer">Kërko punë</li>
+            <li className="hover:text-white cursor-pointer">Regjistrohu</li>
+            <li className="hover:text-white cursor-pointer"><Link to="/llogaritpagen" >Llogarit pagën</Link></li>
+            <li className="hover:text-white cursor-pointer">
+              Apliko për punë
+            </li>
           </ul>
         </div>
 
