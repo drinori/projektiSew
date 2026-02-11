@@ -93,6 +93,11 @@ const shpalljaSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
+  status: {
+    type: String,
+    enum: ["aktiv", "skaduar"],
+    default: "aktiv",
+  },
   dataKrijimit: {
     type: Date,
     default: Date.now,

@@ -66,7 +66,14 @@ function KonfigurimetLlogarise() {
       const hasNoSpaces = !/\s/.test(newPassword);
       const hasNoPipe = !/\|/.test(newPassword);
 
-      if (!hasLowerCase || !hasUpperCase || !hasNumberOrSymbol || !hasMinLength || !hasNoSpaces || !hasNoPipe) {
+      if (
+        !hasLowerCase ||
+        !hasUpperCase ||
+        !hasNumberOrSymbol ||
+        !hasMinLength ||
+        !hasNoSpaces ||
+        !hasNoPipe
+      ) {
         alert("Fjalëkalimi i ri nuk plotëson të gjitha kërkesat!");
         return;
       }
@@ -141,9 +148,7 @@ function KonfigurimetLlogarise() {
                   ></path>
                 </svg>
               </div>
-              <h1 className="text-2xl font-semibold  mb-2">
-                Konfigurimet
-              </h1>
+              <h1 className="text-2xl font-semibold  mb-2">Konfigurimet</h1>
               <p className="text-gray-600">Përditësoni të dhënat e llogarisë</p>
             </div>
           </div>
@@ -151,10 +156,7 @@ function KonfigurimetLlogarise() {
           <div className="p-8">
             <form onSubmit={handleSubmit} className="space-y-6 max-w-lg ">
               <div className="space-y-2">
-                <label
-                  htmlFor="emri"
-                  className="block text-sm font-medium "
-                >
+                <label htmlFor="emri" className="block text-sm font-medium ">
                   Emri
                 </label>
                 <input
@@ -168,10 +170,7 @@ function KonfigurimetLlogarise() {
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="mbiemri"
-                  className="block text-sm font-medium"
-                >
+                <label htmlFor="mbiemri" className="block text-sm font-medium">
                   Mbiemri
                 </label>
                 <input
@@ -185,10 +184,7 @@ function KonfigurimetLlogarise() {
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium"
-                >
+                <label htmlFor="email" className="block text-sm font-medium">
                   Email
                 </label>
                 <input
@@ -203,134 +199,136 @@ function KonfigurimetLlogarise() {
 
               {/* Current Password input */}
               <div>
-              <div className="space-y-2">
-                <label
-                  htmlFor="fjalekalimi"
-                  className="block text-sm font-medium text"
-                >
-                  Fjalëkalimi Aktual
-                </label>
-                <div className="relative">
-                  <input
-                    id="fjalekalimi"
-                    type={showPassword ? "text" : "password"}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
-                    onChange={modifikoProfilin}
-                    // value={perdoruesiData.fjalekalimi || ""}
-                    placeholder="Fjalëkalimi aktual"
-                  />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                    <FontAwesomeIcon
-                      icon={faEye}
-                      className={
-                        showPassword ? "!hidden" : "!block text-gray-800"
-                      }
-                      onClick={changeImage}
-                      size="sm"
+                <div className="space-y-2">
+                  <label
+                    htmlFor="fjalekalimi"
+                    className="block text-sm font-medium text"
+                  >
+                    Fjalëkalimi Aktual
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="fjalekalimi"
+                      type={showPassword ? "text" : "password"}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
+                      onChange={modifikoProfilin}
+                      // value={perdoruesiData.fjalekalimi || ""}
+                      placeholder="Fjalëkalimi aktual"
                     />
-                    <FontAwesomeIcon
-                      icon={faEyeSlash}
-                      className={
-                        showPassword ? "!block text-gray-600" : "!hidden"
-                      }
-                      onClick={changeImage}
-                      size="sm"
-                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                      <FontAwesomeIcon
+                        icon={faEye}
+                        className={
+                          showPassword ? "!hidden" : "!block text-gray-800"
+                        }
+                        onClick={changeImage}
+                        size="sm"
+                      />
+                      <FontAwesomeIcon
+                        icon={faEyeSlash}
+                        className={
+                          showPassword ? "!block text-gray-600" : "!hidden"
+                        }
+                        onClick={changeImage}
+                        size="sm"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* New Password input */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="newPassword"
-                  className="block text-sm font-medium"
-                >
-                  Fjalëkalimi i Ri
-                </label>
-                <div className="relative">
-                  <input
-                    id="newPassword"
-                    type={showNewPassword ? "text" : "password"}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    value={newPassword}
-                    placeholder="Fjalëkalimi i ri"
-                  />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                    <FontAwesomeIcon
-                      icon={faEye}
-                      className={
-                        showNewPassword ? "!hidden" : "!block text-gray-800"
-                      }
-                      onClick={changeNewPasswordImage}
-                      size="sm"
+                {/* New Password input */}
+                <div className="space-y-2">
+                  <label
+                    htmlFor="newPassword"
+                    className="block text-sm font-medium"
+                  >
+                    Fjalëkalimi i Ri
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="newPassword"
+                      type={showNewPassword ? "text" : "password"}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      value={newPassword}
+                      placeholder="Fjalëkalimi i ri"
                     />
-                    <FontAwesomeIcon
-                      icon={faEyeSlash}
-                      className={
-                        showNewPassword ? "!block text-gray-600" : "!hidden"
-                      }
-                      onClick={changeNewPasswordImage}
-                      size="sm"
-                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                      <FontAwesomeIcon
+                        icon={faEye}
+                        className={
+                          showNewPassword ? "!hidden" : "!block text-gray-800"
+                        }
+                        onClick={changeNewPasswordImage}
+                        size="sm"
+                      />
+                      <FontAwesomeIcon
+                        icon={faEyeSlash}
+                        className={
+                          showNewPassword ? "!block text-gray-600" : "!hidden"
+                        }
+                        onClick={changeNewPasswordImage}
+                        size="sm"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Repeat Password input */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="repeatPassword"
-                  className="block text-sm font-medium"
-                >
-                  Konfirmo Fjalëkalimin e Ri
-                </label>
-                <div className="relative">
-                  <input
-                    id="repeatPassword"
-                    type={showRepeatPassword ? "text" : "password"}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
-                    onChange={(e) => setRepeatPassword(e.target.value)}
-                    value={repeatPassword}
-                    placeholder="Konfirmo fjalëkalimin e ri"
-                  />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
-                    <FontAwesomeIcon
-                      icon={faEye}
-                      className={
-                        showRepeatPassword ? "!hidden" : "!block text-gray-800"
-                      }
-                      onClick={changeRepeatPasswordImage}
-                      size="sm"
+                {/* Repeat Password input */}
+                <div className="space-y-2">
+                  <label
+                    htmlFor="repeatPassword"
+                    className="block text-sm font-medium"
+                  >
+                    Konfirmo Fjalëkalimin e Ri
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="repeatPassword"
+                      type={showRepeatPassword ? "text" : "password"}
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#3282B8] focus:border-transparent transition"
+                      onChange={(e) => setRepeatPassword(e.target.value)}
+                      value={repeatPassword}
+                      placeholder="Konfirmo fjalëkalimin e ri"
                     />
-                    <FontAwesomeIcon
-                      icon={faEyeSlash}
-                      className={
-                        showRepeatPassword ? "!block text-gray-600" : "!hidden"
-                      }
-                      onClick={changeRepeatPasswordImage}
-                      size="sm"
-                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                      <FontAwesomeIcon
+                        icon={faEye}
+                        className={
+                          showRepeatPassword
+                            ? "!hidden"
+                            : "!block text-gray-800"
+                        }
+                        onClick={changeRepeatPasswordImage}
+                        size="sm"
+                      />
+                      <FontAwesomeIcon
+                        icon={faEyeSlash}
+                        className={
+                          showRepeatPassword
+                            ? "!block text-gray-600"
+                            : "!hidden"
+                        }
+                        onClick={changeRepeatPasswordImage}
+                        size="sm"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Password requirements */}
-              <div className="pt-4">
-                <div className="text-sm text-gray-600">
-                  <p className="font-medium  mb-2">
-                    Fjalëkalimi duhet të:
-                  </p>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>përmbajë shkronja të vogla dhe të mëdha</li>
-                    <li>përmbajë të paktën 1 numër ose simbol</li>
-                    <li>të jetë të paktën 8 karaktere i gjatë</li>
-                    <li>të përputhet në të dy fushat</li>
-                    <li>të mos përmbajë hapësira</li>
-                  </ul>
+                {/* Password requirements */}
+                <div className="pt-4">
+                  <div className="text-sm text-gray-600">
+                    <p className="font-medium  mb-2">Fjalëkalimi duhet të:</p>
+                    <ul className="list-disc pl-5 space-y-1">
+                      <li>përmbajë shkronja të vogla dhe të mëdha</li>
+                      <li>përmbajë të paktën 1 numër ose simbol</li>
+                      <li>të jetë të paktën 8 karaktere i gjatë</li>
+                      <li>të përputhet në të dy fushat</li>
+                      <li>të mos përmbajë hapësira</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
               </div>
 
               {/* Submit button */}

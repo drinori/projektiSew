@@ -10,12 +10,9 @@ function BallinaPundhenesit() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/aplikantet/"
+          "http://localhost:3000/api/aplikantet",
         );
-
-        if (response.data.success) {
-          setAplikantet(response.data.data);
-        }
+        setAplikantet(response.data.data);
       } catch (error) {
         console.error(error);
       }

@@ -18,7 +18,6 @@ function ShpalljaCard({ shpallja }) {
   const [eshteRuajtur, setEshteRuajtur] = useState(false);
   const [duke_ngarkuar, setDuke_ngarkuar] = useState(false);
 
-  // Kontrollo nëse shpallja është ruajtur kur komponenti ngarkohet
   useEffect(() => {
     const kontrolloStatusin = async () => {
       if (perdoruesiData && perdoruesiData.tipiPerdoruesit !== "punedhenes") {
@@ -41,7 +40,7 @@ function ShpalljaCard({ shpallja }) {
   };
 
   const ndryshoRuajtjen = async (e) => {
-    e.stopPropagation(); // Parandalon klikimin e kartelës kur klikon bookmark
+    e.stopPropagation();
 
     if (!perdoruesiData) {
       alert("Ju lutem kyçuni për të ruajtur punë");
@@ -49,13 +48,12 @@ function ShpalljaCard({ shpallja }) {
     }
 
     if (perdoruesiData.tipiPerdoruesit === "punedhenes") {
-      return; // Punëdhënësit nuk mund të ruajnë punë
+      return;
     }
 
     setDuke_ngarkuar(true);
     try {
       if (eshteRuajtur) {
-        // Hiq nga të ruajturat
         const response = await axios.delete(
           `http://localhost:3000/api/punetRuajtura/hiq/${shpallja._id}`,
           {
@@ -114,6 +112,7 @@ function ShpalljaCard({ shpallja }) {
           {" "}
           <FontAwesomeIcon icon={faClock} className="mr-1" />
           {shpallja.orari}
+          {shpallja.status}
         </p>
         <p className="paragraf font-light">{shpallja.niveliPunes}</p>
       </div>

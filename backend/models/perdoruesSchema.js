@@ -18,6 +18,10 @@ const perdoruesSchema = new mongoose.Schema(
         return this.tipiPerdoruesit === "aplikant";
       },
     },
+    profesioni: {
+      type: String,
+      required: false,
+    },
     kompania: {
       type: String,
       required: function () {
@@ -65,6 +69,40 @@ const perdoruesSchema = new mongoose.Schema(
         required: false,
       },
     },
+    eksperiencat: [
+      {
+        titulli: String,
+        kompania: String,
+        dataFillimit: Date,
+        dataMbarimit: Date,
+        aktuale: Boolean,
+        pershkrimi: String,
+      },
+    ],
+    linqet: [
+      {
+        platforma: String,
+        linku: String,
+      },
+    ],
+    edukimi: [
+      {
+        titulli: String,
+        institucioni: String,
+        dataFillimit: Date,
+        dataMbarimit: Date,
+        aktuale: Boolean,
+        pershkrimi: String,
+      },
+    ],
+    projektet: [
+      {
+        emriProjektit: String,
+        pershkrimi: String,
+        teknologjite: String,
+        linku: String,
+      },
+    ],
   },
   {
     timestamps: true,

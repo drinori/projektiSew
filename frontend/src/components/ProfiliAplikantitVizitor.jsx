@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
-  FaUser,
   FaEnvelope,
   FaPhone,
   FaCalendarAlt,
   FaMapMarkerAlt,
   FaGraduationCap,
   FaBriefcase,
-  FaStar,
-  FaEdit,
-  FaSave,
-  FaTimes,
-  FaLanguage,
-  FaCertificate,
-  FaTools,
+  FaLink,
 } from "react-icons/fa";
 import Header from "./Header";
 import axios from "axios";
@@ -22,81 +15,68 @@ import Perdoruesi from "../PerdoruesiContext";
 
 const ProfiliAplikantitVizitor = () => {
   const { id } = useParams();
-  const [aplikanti, setAplikanti] = useState(null);
+  const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editing, setEditing] = useState(false);
-  const [tempData, setTempData] = useState({});
-
   const [fotoProfile, setFotoProfile] = useState(null);
 
+  const { perdoruesiData: currentUser } = Perdoruesi.usePerdoruesi();
+
+  const formatDateDDMMYYYY = (dateString) => {
+    if (!dateString) return "";
+
+    try {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    } catch (error) {
+      console.error("Error formatting date:", dateString, error);
+      return "";
+    }
+  };
+
+  // Get initials for profile picture
+  const merreShkronjatFillestare = () => {
+    if (profileData?.emri && profileData?.mbiemri) {
+      return `${profileData.emri[0]}${profileData.mbiemri[0]}`.toUpperCase();
+    } else if (profileData?.kompania) {
+      return profileData.kompania.substring(0, 2).toUpperCase();
+    }
+    return "?";
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProfileData = async () => {
       try {
+        setLoading(true);
+
+        // Fetch user profile data
         const response = await axios.get(
           `http://localhost:3000/api/profili/${id}`,
         );
-        // Ngarko foton e profile nese ekziston
-        if (response.data.data.foto) {
+
+        const userData = response.data.data;
+        setProfileData(userData);
+
+        // Load profile photo if exists
+        if (userData.foto) {
           setFotoProfile(`http://localhost:3000/api/profili/${id}/foto`);
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (id) {
-      fetchData();
-    }
-  }, [id]);
 
-  useEffect(() => {
-    const fetchAplikanti = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `http://localhost:3000/api/aplikantet/${id}`,
-        );
-        if (response.data.success) {
-          setAplikanti(response.data.data);
-        }
         setLoading(false);
       } catch (err) {
         console.error(err);
-        setError("Gabim në ngarkimin e të dhënave");
+        setError("Gabim në ngarkimin e të dhënave të profilit");
         setLoading(false);
       }
     };
 
     if (id) {
-      fetchAplikanti();
+      fetchProfileData();
     }
   }, [id]);
-
-  // Funksioni për fillimin e editimit
-  const handleEdit = () => {
-    setTempData(aplikanti);
-    setEditing(true);
-  };
-
-  const handleSave = () => {
-    setAplikanti(tempData);
-    setEditing(false);
-  };
-
-  const handleCancel = () => {
-    setEditing(false);
-  };
-
-  const handleChange = (field, value) => {
-    setTempData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  if (!aplikanti) {
-    return <div>diqka shkoi keq</div>;
-  }
 
   if (loading) {
     return (
@@ -112,13 +92,13 @@ const ProfiliAplikantitVizitor = () => {
     );
   }
 
-  if (error) {
+  if (error || !profileData) {
     return (
       <div className="flex flex-col items-center min-h-screen">
         <Header />
         <div className="max-w-6xl mx-auto p-8">
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-            <p>{error}</p>
+            <p>{error || "Diqka shkoi keq. Profili nuk u gjet."}</p>
           </div>
         </div>
       </div>
@@ -131,319 +111,294 @@ const ProfiliAplikantitVizitor = () => {
 
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 md:p-8 w-full">
         <div className="max-w-6xl mx-auto">
-          {/* Header i profilit me butona edit */}
+          {/* Profile Header - View Only */}
           <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-6 mt-10">
             <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between">
                 <div className="flex items-center gap-6 mb-4 md:mb-0">
                   <div className="relative">
-                    <img
-                      src={editing ? tempData.fotoProfili : fotoProfile}
-                      alt="Foto Profili"
-                      className="w-24 h-24 rounded-full border-4 border-white"
-                    />
-                    {editing && (
-                      <button className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full">
-                        <FaEdit size={14} />
-                      </button>
-                    )}
+                    <div className="w-24 h-24 rounded-full border-4 border-white bg-blue-100 flex items-center justify-center text-black text-3xl font-bold overflow-hidden">
+                      {fotoProfile ? (
+                        <img
+                          src={fotoProfile}
+                          alt="Foto Profile"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>{merreShkronjatFillestare()}</span>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <h1 className="text-2xl md:text-3xl font-bold text-white">
-                      {editing ? (
-                        <input
-                          type="text"
-                          value={tempData.emri}
-                          onChange={(e) => handleChange("emri", e.target.value)}
-                          className="bg-transparent border-b border-white text-white"
-                        />
-                      ) : (
-                        aplikanti.emri
-                      )}
+                      {profileData.emri || profileData.kompania}{" "}
+                      {profileData.mbiemri}
                     </h1>
-                    <p className="text-blue-100 text-lg">
-                      {editing ? (
-                        <input
-                          type="text"
-                          value={tempData.profesioni}
-                          onChange={(e) =>
-                            handleChange("profesioni", e.target.value)
-                          }
-                          className="bg-transparent border-b border-blue-100 text-blue-100"
-                        />
-                      ) : (
-                        aplikanti.profesioni
-                      )}
-                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Informacioni kryesor */}
+          {/* Main Content */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Kolona e majtë - Informacione personale dhe kontakt */}
+            {/* Left Column - Main sections */}
             <div className="lg:col-span-2 space-y-6">
-              {/* Bio dhe përshkrim */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
-                  Rreth Meje
-                </h3>
-                {editing ? (
-                  <textarea
-                    value={tempData.bio}
-                    onChange={(e) => handleChange("bio", e.target.value)}
-                    className="w-full h-40 p-3 border rounded-lg"
-                    rows="4"
-                  />
-                ) : (
-                  <p className="text-gray-600 leading-relaxed">
-                    {aplikanti.bio}
-                  </p>
-                )}
-              </div>
-
-              {/* Edukimi */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b flex items-center gap-2">
-                  <FaGraduationCap /> Edukimi
-                </h3>
-              </div>
-
-              {/* Përvoja profesionale */}
+              {/* Experience Section */}
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b flex items-center gap-2">
                   <FaBriefcase /> Përvoja Profesionale
                 </h3>
+                {!profileData.eksperiencat ||
+                profileData.eksperiencat.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">
+                    Nuk ka përvoja të shtuara
+                  </p>
+                ) : (
+                  <div className="space-y-6">
+                    {profileData.eksperiencat.map((exp, index) => (
+                      <div
+                        key={index}
+                        className="border-l-4 border-blue-500 pl-4 py-3 hover:bg-gray-50 rounded-r-lg transition-colors"
+                      >
+                        <h4 className="font-semibold text-lg text-gray-900">
+                          {exp.titulli}
+                        </h4>
+                        <p className="text-gray-700">{exp.kompania}</p>
+                        <p className="text-sm text-gray-500">
+                          {formatDateDDMMYYYY(exp.dataFillimit)} -{" "}
+                          {exp.aktuale
+                            ? "Aktuale"
+                            : formatDateDDMMYYYY(exp.dataMbarimit)}
+                        </p>
+                        {exp.pershkrimi && (
+                          <p className="text-gray-600 mt-3">{exp.pershkrimi}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {/* Aftësitë - Këtu përdoret komponenti i ri */}
+              {/* Education Section */}
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b flex items-center gap-2">
+                  <FaGraduationCap /> Edukimi
+                </h3>
+                {!profileData.edukimi || profileData.edukimi.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">
+                    Nuk ka arsimim të shtuar
+                  </p>
+                ) : (
+                  <div className="space-y-6">
+                    {profileData.edukimi.map((edu, index) => (
+                      <div
+                        key={index}
+                        className="border-l-4 border-purple-500 pl-4 py-3 hover:bg-gray-50 rounded-r-lg transition-colors"
+                      >
+                        <h4 className="font-semibold text-lg text-gray-900">
+                          {edu.titulli}
+                        </h4>
+                        <p className="text-gray-700">{edu.institucioni}</p>
+                        <p className="text-sm text-gray-500">
+                          {formatDateDDMMYYYY(edu.dataFillimit)} -{" "}
+                          {edu.aktualet
+                            ? "Aktuale"
+                            : formatDateDDMMYYYY(edu.dataMbarimit)}
+                        </p>
+                        {edu.pershkrimi && (
+                          <p className="text-gray-600 mt-3">{edu.pershkrimi}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Projects Section */}
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b">
-                  Aftësitë
+                  Projektet
                 </h3>
+                {!profileData.projektet ||
+                profileData.projektet.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">
+                    Nuk ka projekte të shtuara
+                  </p>
+                ) : (
+                  <div className="space-y-6">
+                    {profileData.projektet.map((proj, index) => (
+                      <div
+                        key={index}
+                        className="border-l-4 border-green-500 pl-4 py-3 hover:bg-gray-50 rounded-r-lg transition-colors"
+                      >
+                        <h4 className="font-semibold text-lg text-gray-900">
+                          {proj.emriProjektit}
+                        </h4>
+                        {proj.pershkrimi && (
+                          <p className="text-gray-600 mt-2">
+                            {proj.pershkrimi}
+                          </p>
+                        )}
+                        {proj.teknologjite && (
+                          <div className="mt-3">
+                            <span className="font-medium text-sm text-gray-700">
+                              Teknologjitë:
+                            </span>
+                            <p className="text-gray-600 text-sm mt-1">
+                              {proj.teknologjite}
+                            </p>
+                          </div>
+                        )}
+                        {proj.linku && (
+                          <a
+                            href={proj.linku}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block mt-3 text-blue-600 hover:text-blue-800 font-medium text-sm"
+                          >
+                            Shiko projektin →
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Kolona e djathtë - Informacione shtesë */}
+            {/* Right Column - Contact and Additional Info */}
             <div className="space-y-6">
-              {/* Informacione kontaktuese */}
+              {/* Contact Information */}
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
                   Informacione Kontaktuese
                 </h3>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <FaEnvelope className="text-blue-500" />
+                    <FaEnvelope className="text-blue-500 flex-shrink-0" />
                     <div>
                       <p className="text-sm text-gray-500">Email</p>
-                      <p className="text-gray-700">{aplikanti.email}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <FaPhone className="text-blue-500" />
-                    <div>
-                      <p className="text-sm text-gray-500">Telefon</p>
-                      <p className="text-gray-700">{aplikanti.telefon}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <FaCalendarAlt className="text-blue-500" />
-                    <div>
-                      <p className="text-sm text-gray-500">Data e Lindjes</p>
-                      <p className="text-gray-700">{aplikanti.dataLindjes}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <FaMapMarkerAlt className="text-blue-500" />
-                    <div>
-                      <p className="text-sm text-gray-500">Vendodhja</p>
-                      <p className="text-gray-700">{aplikanti.vendodhja}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Preferencat e punës */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
-                  Preferencat e Punës
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-gray-500 mb-1">
-                      Pozitat e preferuara
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {aplikanti.preferencat?.pozitat?.map((pozita, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
-                        >
-                          {pozita}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-gray-500 mb-1">
-                      Industria e preferuar
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {aplikanti.preferencat?.industria.map(
-                        (industri, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm"
-                          >
-                            {industri}
-                          </span>
-                        ),
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-gray-500 mb-1">
-                      Lokacioni i preferuar
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {aplikanti.preferencat?.lokacioni.map(
-                        (lokacion, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm"
-                          >
-                            {lokacion}
-                          </span>
-                        ),
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-gray-500 mb-1">
-                      Paga minimale e pritur
-                    </p>
-                    <p className="text-gray-700 font-medium">
-                      {aplikanti.preferencat?.pagaMin}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Certifikimet */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
-                  Certifikimet
-                </h3>
-                <div className="space-y-3">
-                  {aplikanti.certifikimet?.map((certifikimi) => (
-                    <div
-                      key={certifikimi.id}
-                      className="border-l-4 border-blue-500 pl-3"
-                    >
-                      <h4 className="font-semibold text-gray-800">
-                        {certifikimi.emri}
-                      </h4>
-                      <p className="text-gray-600 text-sm">
-                        {certifikimi.institucioni}
-                      </p>
-                      <p className="text-gray-500 text-xs">
-                        {certifikimi.data}
+                      <p className="text-gray-700 font-medium">
+                        {profileData.email}
                       </p>
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
 
-              {/* Projekte */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
-                  Projektet
-                </h3>
-                <div className="space-y-3">
-                  {aplikanti.projektet?.map((projekti) => (
-                    <div
-                      key={projekti.id}
-                      className="p-3 border rounded-lg hover:bg-gray-50"
-                    >
-                      <h4 className="font-semibold text-gray-800 mb-1">
-                        {projekti.emri}
-                      </h4>
-                      <p className="text-gray-600 text-sm mb-2">
-                        {projekti.pershkrimi}
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {projekti.teknologjite.map((tech, index) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs"
-                          >
-                            {tech}
-                          </span>
-                        ))}
+                  {profileData.nrTelefonit && (
+                    <div className="flex items-center gap-3">
+                      <FaPhone className="text-blue-500 flex-shrink-0" />
+                      <div>
+                        <p className="text-sm text-gray-500">Telefon</p>
+                        <p className="text-gray-700 font-medium">
+                          {profileData.nrTelefonit}
+                        </p>
                       </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-3">
+                    <FaMapMarkerAlt className="text-blue-500 flex-shrink-0" />
+                    <div>
+                      <p className="text-sm text-gray-500">Anëtar që nga</p>
+                      <p className="text-gray-700 font-medium">
+                        {profileData.createdAt
+                          ? formatDateDDMMYYYY(profileData.createdAt)
+                          : "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Links */}
+              {profileData.linqet && profileData.linqet.length > 0 && (
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
+                    Linqet Sociale
+                  </h3>
+                  <div className="space-y-3">
+                    {profileData.linqet.map((link, index) => (
                       <a
-                        href={projekti.link}
+                        key={index}
+                        href={link.linku}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline text-sm"
+                        className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-colors"
                       >
-                        Shiko projektin →
+                        <FaLink className="text-blue-500" />
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            {link.platforma}
+                          </p>
+                          <p className="text-sm text-gray-500 truncate">
+                            {link.linku}
+                          </p>
+                        </div>
                       </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Saved Jobs (if applicant) */}
+              {profileData.tipiPerdoruesit === "aplikant" &&
+                profileData.punetRuajtura &&
+                profileData.punetRuajtura.length > 0 && (
+                  <div className="bg-white rounded-xl shadow-lg p-6">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
+                      Punët e Ruajtura
+                    </h3>
+                    <div className="space-y-3">
+                      <p className="text-gray-600">
+                        Ka ruajtur {profileData.punetRuajtura.length} punë
+                      </p>
+                      {/* You could fetch and display job details here if needed */}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                )}
+
+              {/* If it's a company profile */}
+              {profileData.tipiPerdoruesit === "punedhenes" &&
+                profileData.kompania && (
+                  <div className="bg-white rounded-xl shadow-lg p-6">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
+                      Informacione të Kompanisë
+                    </h3>
+                    <div className="space-y-3">
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Emri i Kompanisë
+                        </p>
+                        <p className="text-gray-700 font-medium">
+                          {profileData.kompania}
+                        </p>
+                      </div>
+                      {profileData.email && (
+                        <div>
+                          <p className="text-sm text-gray-500">
+                            Email i Kompanisë
+                          </p>
+                          <p className="text-gray-700 font-medium">
+                            {profileData.email}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
 
-          {/* CV dhe dokumente */}
-          <div className="mt-6">
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b">
-                Dokumentet
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="border rounded-lg p-4 text-center hover:bg-gray-50 cursor-pointer">
-                  <div className="text-blue-600 text-3xl mb-2">📄</div>
-                  <h4 className="font-semibold text-gray-800">CV</h4>
-                  <p className="text-gray-600 text-sm">
-                    Ngarko CV_Punesohu.pdf
-                  </p>
-                  <button className="mt-2 text-blue-600 hover:underline text-sm">
-                    Shkarko
-                  </button>
-                </div>
-
-                <div className="border rounded-lg p-4 text-center hover:bg-gray-50 cursor-pointer">
-                  <div className="text-green-600 text-3xl mb-2">📃</div>
-                  <h4 className="font-semibold text-gray-800">
-                    Letër Rekomandimi
-                  </h4>
-                  <p className="text-gray-600 text-sm">Punesohu.pdf</p>
-                  <button className="mt-2 text-blue-600 hover:underline text-sm">
-                    Shkarko
-                  </button>
-                </div>
-
-                <div className="border rounded-lg p-4 text-center hover:bg-gray-50 cursor-pointer">
-                  <div className="text-purple-600 text-3xl mb-2">🎓</div>
-                  <h4 className="font-semibold text-gray-800">Diploma</h4>
-                  <p className="text-gray-600 text-sm">Diploma_Master.pdf</p>
-                  <button className="mt-2 text-blue-600 hover:underline text-sm">
-                    Shkarko
-                  </button>
-                </div>
-              </div>
+          {/* Optional: Display if current user is viewing their own profile */}
+          {currentUser && currentUser._id === profileData._id && (
+            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-blue-800 text-center">
+                ⓘ Ju jeni duke parë profilin tuaj. Për të ndryshuar të dhëna,
+                shkoni te faqja e profilit tuaj.
+              </p>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

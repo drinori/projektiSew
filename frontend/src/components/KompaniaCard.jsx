@@ -4,15 +4,37 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 import "../index.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 function KompaniaCard({ kompania }) {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [fotoProfile, setFotoProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/profili/${id}`,
+        );
+        // Ngarko foton e profile nese ekziston
+        if (response.data.data.foto) {
+          setFotoProfile(`http://localhost:3000/api/profili/${id}/foto`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   const handleClick = () => {
     navigate(`/kompania/${kompania._id}`);
   };
-
 
   const getInitials = (name) => {
     if (!name) return "?";
@@ -24,9 +46,13 @@ function KompaniaCard({ kompania }) {
         <div className="w-20 h-20 rounded-full overflow-hidden bg-linear-to-r from-slate-700 via-gray-800 to-black flex items-center justify-center">
           {}
 
-          <span className="text-white font-bold text-xl">
-            {getInitials(kompania.kompania)}
-          </span>
+          {fotoProfile ? (
+            <img src={fotoProfile} alt="Foto Profilit" />
+          ) : (
+            <span className="text-white font-bold text-xl">
+              {getInitials(kompania.kompania)}
+            </span>
+          )}
         </div>
         <FontAwesomeIcon icon={faBookmark} className="text-l" />
       </div>

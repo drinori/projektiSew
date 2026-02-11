@@ -40,7 +40,6 @@ function MenaxhoShpalljet() {
   const [shpalljaZgjedhurPerAplikante, setShpalljaZgjedhurPerAplikante] =
     useState(null);
 
-  // State per foto te aplikanteve
   const [fotoAplikanteve, setFotoAplikanteve] = useState({});
 
   const { id } = useParams();
@@ -189,10 +188,21 @@ function MenaxhoShpalljet() {
   const ruajNdryshimetAplikimit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
+      const response = await axios.put(
         `http://localhost:3000/api/shpallja/aplikimi/${aplikimiKlikuar._id}`,
         aplikimiKlikuar,
       );
+
+      if (response.data.data.status) {
+        setAplikimet((prevAplikimet) =>
+          prevAplikimet.map((aplikim) =>
+            aplikim._id === aplikimiKlikuar._id
+              ? { ...aplikim, status: aplikimiKlikuar.status }
+              : aplikim,
+          ),
+        );
+      }
+
       alert("Ndryshimet u ruajten");
       setAplikimiKlikuar(null);
     } catch (error) {
@@ -239,11 +249,31 @@ function MenaxhoShpalljet() {
     return sorted;
   };
 
+  const shpalljaSkaduar = (dk) => {
+    const dataKrijimit = new Date(dk);
+    const tani = new Date();
+
+    const diferenca = tani - dataKrijimit;
+    // const 30Dite = 30 * 24 * 60 * 60 * 1000; // 30 dite
+    const dyMinuta = 2 * 60 * 1000;
+
+    return diferenca > dyMinuta;
+  };
+
   const filteredData = sortimDates(
     shpalljaData.filter((sh) => {
       const matchesSearch = sh.pozitaPunes
         .toLowerCase()
         .includes(kerko.toLowerCase());
+
+      const isExpired = shpalljaSkaduar(sh.dataKrijimit);
+
+      if (filtrimiFaqes === "Active") {
+        return matchesSearch && !isExpired;
+      } else if (filtrimiFaqes === "Expired") {
+        return matchesSearch && isExpired;
+      }
+
       return matchesSearch;
     }),
   );
@@ -405,7 +435,6 @@ function MenaxhoShpalljet() {
                       </button>
                     </td>
                     <td className="tableData text-right text-sm font-medium">
-                      {/* 3 dots */}
                       <div className="relative">
                         <button
                           onClick={() =>
@@ -901,21 +930,26 @@ function MenaxhoShpalljet() {
                   </button>
                 </div>
               </div>
-              <select
-                id="status"
-                onChange={(e) =>
-                  setAplikimiKlikuar({
-                    ...aplikimiKlikuar,
-                    status: e.target.value,
-                  })
-                }
-              >
-                <option value={`${aplikimiKlikuar.status}`} default hidden>
-                  {aplikimiKlikuar.status}
-                </option>
-                <option value="Pranuar">Prano</option>
-                <option value="Refuzuar">Refuzo</option>
-              </select>
+              {aplikimiKlikuar.status === "Ne_Pritje" &&
+              shpalljaSkaduar(shpalljaZgjedhurPerAplikante.dataKrijimit) ? (
+                <select
+                  id="status"
+                  onChange={(e) =>
+                    setAplikimiKlikuar({
+                      ...aplikimiKlikuar,
+                      status: e.target.value,
+                    })
+                  }
+                >
+                  <option value={`${aplikimiKlikuar.status}`} default hidden>
+                    {aplikimiKlikuar.status}
+                  </option>
+                  <option value="Pranuar">Prano</option>
+                  <option value="Refuzuar">Refuzo</option>
+                </select>
+              ) : (
+                <p>{aplikimiKlikuar.status}</p>
+              )}
             </div>
 
             <div className="px-6 py-4 bg-white/80 backdrop-blur-lg border-t border-gray-100 rounded-b-2xl flex justify-end items-center gap-3">
@@ -943,3 +977,4 @@ function MenaxhoShpalljet() {
 }
 
 export default MenaxhoShpalljet;
+

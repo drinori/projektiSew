@@ -27,4 +27,3 @@ function AplikantiCard({ aplikanti }) {
 }
 
 export default AplikantiCard;
-

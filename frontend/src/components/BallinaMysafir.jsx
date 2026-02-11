@@ -24,7 +24,12 @@ function BallinaMysafir() {
         const response = await axios.get(
           "http://localhost:3000/api/shpallja/kompania",
         );
-        setShpalljaData(response.data.data || []);
+        if (response.data.success) {
+          const shpalljetAktive = response.data.data.filter(
+            (shpallja) => shpallja.status === "aktiv",
+          );
+          setShpalljaData(shpalljetAktive || []);
+        }
       } catch (err) {
         console.error(err);
         setShpalljaData([]);

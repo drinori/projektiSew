@@ -102,6 +102,10 @@ function Header() {
           <Link to="/listaKompanive" className="nav-link">
             Lista e Kompanive
           </Link>
+          <Link to="/listaAplikanteve" className="nav-link">
+            Lista e Aplikanteve
+          </Link>
+
           {isPunedhenes && (
             <Link to="/publikopune" className="nav-link">
               Publiko Pune
@@ -189,15 +193,17 @@ function Header() {
                       <Settings size={20} className="mr-3 text-[#0F4C75]" />
                       Konfigurimet e Llogarise
                     </Link>
-                    <hr className="my-2 border-gray-200" />
-                    <Link
-                      to={`/profili/${perdoruesiData._id}/punetRuajtura`}
-                      className="profileDropDown"
-                      onClick={closeDropdown}
-                    >
-                      <Heart size={20} className="mr-3 text-[#0F4C75]" />
-                      Punet e Ruajtura
-                    </Link>
+                    <div className={`${isPunedhenes ? "hidden" : "block"}`}>
+                      <hr className="my-2 border-gray-200" />
+                      <Link
+                        to={`/profili/${perdoruesiData._id}/punetRuajtura`}
+                        className="profileDropDown"
+                        onClick={closeDropdown}
+                      >
+                        <Heart size={20} className="mr-3 text-[#0F4C75]" />
+                        Punet e Ruajtura
+                      </Link>
+                    </div>
 
                     <hr className="my-2 border-gray-200" />
                     <button
@@ -260,6 +266,14 @@ function Header() {
             >
               Lista e Kompanive
             </Link>
+            <Link
+              to="/listaAplikanteve"
+              className="text-lg font-medium py-3 hover:text-[#0F4C75] transition-colors"
+              onClick={closeMenu}
+            >
+              Lista e Aplikanteve
+            </Link>
+
             <Link
               to="/rrethNesh"
               className="text-lg font-medium py-3 hover:text-[#0F4C75] transition-colors"

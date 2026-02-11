@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import ProfiliKompaniseVizitor from "./components/ProfiliKompaniseVizitor";
 import LlogaritPagen from "./components/LlogaritPagen";
 import ProfiliAplikantitVizitor from "./components/ProfiliAplikantitVizitor";
-import ProfiliKompanise from "./components/ProfiliKompanise";
+import ListaAplikanteve from "./components/ListaAplikanteve";
 
 function App() {
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -59,6 +59,7 @@ function App() {
             />
             <Route path="/listaPuneve" element={<ListaPuneve />} />
             <Route path="/listaKompanive" element={<ListaKompanive />} />
+            <Route path="/listaAplikanteve" element={<ListaAplikanteve />} />
             <Route path="/rrethNesh" element={<RrethNesh />} />
             <Route path="/kycja" element={<Kycja />} />
             <Route path="/regjistrimi" element={<Regjistrimi />} />
@@ -66,7 +67,6 @@ function App() {
             <Route path="/shpallja/:id" element={<Shpallja />} />
             <Route path="/profili/:id" element={<Profili />} />
             <Route path="/publikoPune" element={<PublikoPune />} />
-            <Route path="/profilikompanise" element={<ProfiliKompanise />} />
 
             <Route
               path="/profili/:id/menaxhoShpalljet"
@@ -92,7 +92,6 @@ function App() {
               element={<ProfiliAplikantitVizitor />}
             />
             <Route path="/llogaritpagen" element={<LlogaritPagen />} />
-            <Route path="/kompani/:id" element={<ProfiliKompanise />} />
           </Routes>
         </div>
         <Footeri />

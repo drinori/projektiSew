@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import "../index.css";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import Header from "./Header";
 import {
   Mail,
   Phone,
@@ -52,7 +51,7 @@ function ProfiliKompanise() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/kompania/${id}`,
+          `http://localhost:3000/api/profili/${id}`,
         );
         setKompaniaData(response.data.data);
         setRrethKompanise(response.data.data.rrethKompanise || "");
@@ -66,7 +65,7 @@ function ProfiliKompanise() {
 
         // Ngarko foton e profile nese ekziston
         if (response.data.data.foto) {
-          setFotoProfile(`http://localhost:3000/api/kompania/${id}/foto`);
+          setFotoProfile(`http://localhost:3000/api/profili/${id}/foto`);
         }
       } catch (error) {
         console.error(error);
@@ -76,21 +75,6 @@ function ProfiliKompanise() {
       fetchData();
     }
   }, [id]);
-
-  const handleCkycja = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/ckycja/kompania",
-        {},
-      );
-      setKompaniaData(null);
-      console.log("Ckycja u be", response.data);
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      setKompaniaData(null);
-    }
-  };
 
   const merreShkronjatFillestare = () => {
     if (kompaniaData?.emri) {
@@ -128,7 +112,7 @@ function ProfiliKompanise() {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/kompania/${id}/ngarko-foto`,
+        `http://localhost:3000/api/profili/${id}/ngarko-foto`,
         formData,
         {
           headers: {
@@ -139,7 +123,7 @@ function ProfiliKompanise() {
 
       if (response.data.success) {
         setFotoProfile(
-          `http://localhost:3000/api/kompania/${id}/foto?t=${Date.now()}`,
+          `http://localhost:3000/api/profili/${id}/foto?t=${Date.now()}`,
         );
         alert("Fotoja u ngarkua me sukses!");
       }
@@ -158,7 +142,7 @@ function ProfiliKompanise() {
 
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/kompania/${id}/foto`,
+        `http://localhost:3000/api/profili/${id}/foto`,
       );
 
       if (response.data.success) {
@@ -224,7 +208,7 @@ function ProfiliKompanise() {
   // Save edits
   const handleRuajRrethKompanise = async () => {
     try {
-      await axios.put(`http://localhost:3000/api/kompania/${id}`, {
+      await axios.put(`http://localhost:3000/api/profili/${id}`, {
         rrethKompanise,
       });
       setEditMode({ ...editMode, rrethKompanise: false });
@@ -237,7 +221,7 @@ function ProfiliKompanise() {
 
   const handleRuajPermbledhje = async () => {
     try {
-      await axios.put(`http://localhost:3000/api/kompania/${id}`, {
+      await axios.put(`http://localhost:3000/api/profili/${id}`, {
         ...permbledhje,
       });
       setEditMode({ ...editMode, permbledhje: false });
@@ -250,8 +234,6 @@ function ProfiliKompanise() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Header perdoruesiData={kompaniaData} onCkycja={handleCkycja} />
-
       <div className="max-w-4xl mx-auto mb-2 mt-10">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-2">
@@ -260,7 +242,10 @@ function ProfiliKompanise() {
               <button className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 transition-colors duration-200">
                 <Edit2 size={20} className="text-white" />
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+              <button
+                onClick={() => navigate("/publikopune")}
+                className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+              >
                 <Upload size={18} />
                 Publiko Punë
               </button>
@@ -319,16 +304,18 @@ function ProfiliKompanise() {
 
               <div className="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left flex-1">
                 <h1 className="text-left text-3xl font-bold mb-1 text-gray-900">
-                  {kompaniaData?.emri || "Emri i Kompanisë"}
+                  {kompaniaData?.kompania || "Emri i Kompanisë"}
                 </h1>
                 <div className="space-y-2 mt-4">
                   <p className="paragrafProfili">
                     <Mail size={16} />
                     {kompaniaData.email || "email@kompania.com"}
                   </p>
-                  
+
                   <div className="mt-4">
-                    <p className="text-sm text-gray-600 mb-2">Linjet e rrjeteve sociale:</p>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Linjet e rrjeteve sociale:
+                    </p>
                     <div className="flex flex-wrap gap-2">
                       {linkeSociale.map((link) => (
                         <div key={link.id} className="group relative">

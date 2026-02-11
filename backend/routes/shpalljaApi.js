@@ -6,6 +6,18 @@ const dergoMesazhin = require("../emailservice");
 
 router.get("/kompania", async (req, res) => {
   try {
+    const now = new Date();
+    const expiryTime = 2 * 60 * 1000;
+
+    const expiredJobs = await Shpallja.find({
+      status: "aktiv",
+      dataKrijimit: { $lt: new Date(now - expiryTime) },
+    });
+
+    for (const shpallja of expiredJobs) {
+      shpallja.status = "skaduar";
+      await shpallja.save();
+    }
     const shpalljet = await Shpallja.find()
       .sort({ dataKrijimit: -1 })
       .populate("numriAplikimeve");
