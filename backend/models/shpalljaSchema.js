@@ -5,6 +5,11 @@ const shpalljaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  perdoruesiId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Perdorues",
+    required: true,
+  },
   pozitaPunes: {
     type: String,
     required: true,
@@ -106,6 +111,13 @@ const shpalljaSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+});
+
+shpalljaSchema.virtual("kompania", {
+  ref: "Perdorues",
+  localField: "perdoruesiId",
+  foreignField: "_id",
+  justOne: true,
 });
 
 shpalljaSchema.virtual("aplikimet", {

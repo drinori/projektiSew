@@ -1,7 +1,7 @@
 import Header from "./Header";
 import Kerkimi from "./Kerkimi";
 import ShpalljaCard from "./ShpalljaCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Perdoruesi from "../PerdoruesiContext";
@@ -17,6 +17,7 @@ import {
 function BallinaMysafir() {
   const navigate = useNavigate();
   const [shpalljaData, setShpalljaData] = useState([]);
+  const [kerkoParams] = useSearchParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,9 +36,42 @@ function BallinaMysafir() {
         setShpalljaData([]);
       }
     };
-
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const params = new URLSearchParams(kerkoParams);
+
+        if (params.toString()) {
+          const response = await axios.get(
+            `http://localhost:3000/api/shpallja/kerko?${params.toString()}`,
+          );
+          if (response.data.success) {
+            setShpalljaData(response.data.data || []);
+          } else {
+            console.error("Gabim ne kerkim:  ", response.data.error);
+          }
+        } else {
+          const response = await axios.get(
+            "http://localhost:3000/api/shpallja/kompania",
+          );
+          if (response.data.success) {
+            const shpalljetAktive = response.data.data.filter(
+              (shpallja) => shpallja.status === "aktiv",
+            );
+            setShpalljaData(shpalljetAktive || []);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        setShpalljaData([]);
+      }
+    };
+
+    fetchData();
+  }, [kerkoParams]);
 
   return (
     <div>

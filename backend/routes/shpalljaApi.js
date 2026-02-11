@@ -49,7 +49,8 @@ async function fetchCompanyPhoto(emailKompanise, perdoruesiId) {
 router.get("/kompania", async (req, res) => {
   try {
     const now = new Date();
-    const expiryTime = 2 * 60 * 1000;
+    // const expiryTime = 2 * 60 * 1000;
+    const expiryTime = 30 * 24 * 60 * 60 * 1000;
 
     const expiredJobs = await Shpallja.find({
       status: "aktiv",
@@ -99,6 +100,20 @@ router.get("/kompania", async (req, res) => {
   }
 });
 
+router.get("/kompania/im", async (req, res) => {
+  try {
+    const perdoruesiId = req.userId;
+
+    const shpalljet = await Shpallja.find({ perdoruesiId }).sort({
+      createdAt: -1,
+    });
+
+    res.json({ success: true, data: shpalljet });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const shpallja = await Shpallja.findById(req.params.id)
@@ -106,7 +121,8 @@ router.get("/:id", async (req, res) => {
         path: "aplikimet",
         options: { sort: { dataAplikimit: -1 } },
       })
-      .populate("numriAplikimeve");
+      .populate("numriAplikimeve")
+      .populate("perdoruesiId");
 
     if (!shpallja) {
       return res.status(404).json({

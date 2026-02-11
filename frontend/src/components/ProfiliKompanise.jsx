@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "../index.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   Mail,
@@ -20,6 +20,7 @@ import Perdoruesi from "../PerdoruesiContext";
 
 function ProfiliKompanise() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const { perdoruesiData, setPerdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shfaqLinkeForm, setShfaqLinkeForm] = useState(false);
@@ -28,6 +29,23 @@ function ProfiliKompanise() {
   const [fotoProfile, setFotoProfile] = useState(null);
   const [poNgarkohetFoto, setPoNgarkohetFoto] = useState(false);
   const inputFotoRef = useRef(null);
+
+  useEffect(() => {
+    const fetchEmployerJobs = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/shpallja/kompania/im",
+        );
+        if (response.data.success) {
+          setPuneHapura(response.data.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEmployerJobs();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -437,12 +455,6 @@ function ProfiliKompanise() {
               </div>
             </div>
 
-            {shfaqFormenPuneHapura && (
-              <div className="px-6 py-4 bg-gray-50 mb-5 rounded-lg">
-                <div className="space-y-3"></div>
-              </div>
-            )}
-
             <div className="px-6 py-4">
               {puneHapura.length === 0 ? (
                 <p className="text-gray-500 text-center py-8">
@@ -450,35 +462,37 @@ function ProfiliKompanise() {
                 </p>
               ) : (
                 <div className="space-y-4">
-                  {puneHapura.map((pune) => (
+                  {puneHapura.slice(0, 2).map((pune) => (
                     <div
                       key={pune.id}
                       className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow relative group"
                     >
                       <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                        {pune.titulli}
+                        {pune.pozitaPunes}
                       </h3>
                       <div className="flex flex-wrap gap-2 mb-3">
                         <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                          {pune.lloji}
+                          {pune.kategoriaPunes}
                         </span>
-                        {pune.lokacioni && (
+                        {pune.lokacioniPunes && (
                           <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm flex items-center gap-1">
                             <MapPin size={14} />
-                            {pune.lokacioni}
+                            {pune.lokacioniPunes}
                           </span>
                         )}
                       </div>
-                      {pune.pershkrimi && (
-                        <p className="text-gray-600 mb-2">{pune.pershkrimi}</p>
+                      {pune.pershkrimiPunes && (
+                        <p className="text-gray-600 mb-2">
+                          {pune.pershkrimiPunes}
+                        </p>
                       )}
-                      {pune.kualifikimet && (
+                      {pune.aftesite && (
                         <div className="mt-2">
                           <p className="text-sm font-medium text-gray-700">
-                            Kualifikimet:
+                            Aftesite:
                           </p>
                           <p className="text-sm text-gray-600">
-                            {pune.kualifikimet}
+                            {pune.aftesite}
                           </p>
                         </div>
                       )}
@@ -487,6 +501,13 @@ function ProfiliKompanise() {
                 </div>
               )}
             </div>
+            <button
+              onClick={() =>
+                navigate(`/profili/${perdoruesiData?._id}/menaxhoShpalljet`)
+              }
+            >
+              Shiko me shume
+            </button>
           </div>
 
           <hr className="border-gray-200 my-8" />

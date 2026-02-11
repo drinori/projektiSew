@@ -254,10 +254,10 @@ function MenaxhoShpalljet() {
     const tani = new Date();
 
     const diferenca = tani - dataKrijimit;
-    // const 30Dite = 30 * 24 * 60 * 60 * 1000; // 30 dite
-    const dyMinuta = 2 * 60 * 1000;
+    const tridhjeteDite = 30 * 24 * 60 * 60 * 1000;
+    // const dyMinuta = 2 * 60 * 1000;
 
-    return diferenca > dyMinuta;
+    return diferenca > tridhjeteDite;
   };
 
   const filteredData = sortimDates(

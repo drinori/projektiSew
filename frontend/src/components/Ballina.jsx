@@ -67,7 +67,7 @@ function Ballina() {
 
           <Kerkimi />
           <div className="shpalljaCard">
-            {shpalljaData.map((shpallja) => {
+            {shpalljaData.slice(0, 9).map((shpallja) => {
               return <ShpalljaCard key={shpallja._id} shpallja={shpallja} />;
             })}
             {shpalljaData.length === 0 && (

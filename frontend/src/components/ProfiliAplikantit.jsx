@@ -22,9 +22,8 @@ function ProfiliAplikantit() {
   const [shfaqFormenEksperienca, setShfaqFormenEksperienca] = useState(false);
   const [shfaqFormenEdukimi, setShfaqFormenEdukimi] = useState(false);
   const [shfaqFormenProjektet, setShfaqFormenProjektet] = useState(false);
-  // Skills state – simple string array, single input
   const [shfaqFormenAftesite, setShfaqFormenAftesite] = useState(false);
-  const [aftesiRi, setAftesiRi] = useState("");
+  const [aftesiRe, setAftesiRe] = useState("");
 
   const [fotoProfile, setFotoProfile] = useState(null);
   const [poNgarkohetFoto, setPoNgarkohetFoto] = useState(false);
@@ -508,7 +507,7 @@ function ProfiliAplikantit() {
 
   // ========== SKILLS (AFTËSITË) SECTION – CORRECTED FOR [String] SCHEMA ==========
   const handleShtoAftesine = async () => {
-    if (!aftesiRi.trim()) {
+    if (!aftesiRe.trim()) {
       alert("Ju lutem shkruani emrin e aftësisë");
       return;
     }
@@ -516,7 +515,7 @@ function ProfiliAplikantit() {
     try {
       const updatedSkills = [
         ...(perdoruesiData?.aftesite || []),
-        aftesiRi.trim(),
+        aftesiRe.trim(),
       ];
 
       const response = await axios.put(
@@ -528,7 +527,7 @@ function ProfiliAplikantit() {
 
       if (response.data.success) {
         setPerdoruesiData(response.data.data);
-        setAftesiRi("");
+        setAftesiRe("");
         setShfaqFormenAftesite(false);
         alert("Aftësia u shtua me sukses!");
       }
@@ -571,7 +570,10 @@ function ProfiliAplikantit() {
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-2">
         <div className="h-32 bg-white/30">
           <div className="flex justify-end p-10 gap-2">
-            <button className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200">
+            <button
+              onClick={modifikoProfilin}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+            >
               <Edit2 size={20} className="text-gray-600" />
             </button>
             <button className="publikoPune flex items-center gap-2 px-4 py-2 ">
@@ -1085,8 +1087,8 @@ function ProfiliAplikantit() {
                   <input
                     type="text"
                     placeholder="Emri i aftësisë (p.sh. React, Projekt Menaxhim)"
-                    value={aftesiRi}
-                    onChange={(e) => setAftesiRi(e.target.value)}
+                    value={aftesiRe}
+                    onChange={(e) => setAftesiRe(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                   />
                   <div className="flex gap-2">
@@ -1099,7 +1101,7 @@ function ProfiliAplikantit() {
                     <button
                       onClick={() => {
                         setShfaqFormenAftesite(false);
-                        setAftesiRi("");
+                        setAftesiRe("");
                       }}
                       className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm"
                     >

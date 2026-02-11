@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function Kerkimi() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [filters, setFilters] = useState({
     kerko: "",
     lokacioniPunes: "",
@@ -32,7 +33,7 @@ function Kerkimi() {
       params.append("kategoriaPunes", filters.kategoriaPunes.trim());
     }
 
-    navigate(`/?${params.toString()}`);
+    navigate(`${location.pathname}?${params.toString()}`);
   };
   return (
     <div className="w-full max-w-6xl mx-auto px-4 my-8">
