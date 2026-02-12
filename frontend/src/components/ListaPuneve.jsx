@@ -77,7 +77,7 @@ function ListaPuneve() {
   const currentItems = shpalljaData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div>
+    <div className="bg-gradient-to-br from-[769FCD] to-[#B9D7EA]">
       <Header />
       <h1 className="mt-20">E ardhmja jote fillon këtu</h1>
       <Kerkimi />

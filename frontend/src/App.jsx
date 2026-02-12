@@ -51,7 +51,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <BrowserRouter>
-        <div className="grow">
+        <div className="grow flex flex-col">
           <Routes>
             <Route
               path="/"

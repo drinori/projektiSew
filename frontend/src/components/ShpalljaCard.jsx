@@ -102,7 +102,7 @@ function ShpalljaCard({ shpallja }) {
   };
 
   return (
-    <div className="border border-gray-200 hover:bg-gray-50 shadow-sm rounded-xl w-full p-6 transition-colors duration-200">
+    <div className="bg-white/60 border border-[#D6E6F2] backdrop-blur-sm shadow-sm rounded-xl w-full p-6 transition-colors duration-200">
       {/* Header with Logo, Company Name, and Bookmark */}
       <div className="flex items-start gap-3 mb-2">
         {/* Company Logo */}
