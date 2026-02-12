@@ -7,8 +7,10 @@ import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import Perdoruesi from "../PerdoruesiContext";
 import BallinaPundhenesit from "./BallinaPundhenesit";
+import { useNavigate } from "react-router-dom";
 
 function Ballina() {
+  const navigate = useNavigate();
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shpalljaData, setShpalljaData] = useState([]);
   const [kerkoParams] = useSearchParams();
@@ -80,6 +82,17 @@ function Ballina() {
               </div>
             )}
           </div>
+          {shpalljaData.length > 9 && (
+            <div className="flex justify-center mt-10">
+              <button
+                type="button"
+                className="publikoPune px-8 py-3"
+                onClick={() => navigate("/ListaPuneve")}
+              >
+                Shfaq më shumë
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

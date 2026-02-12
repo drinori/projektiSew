@@ -570,10 +570,7 @@ function ProfiliAplikantit() {
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-2">
         <div className="h-32 bg-white/30">
           <div className="flex justify-end p-10 gap-2">
-            <button
-              onClick={modifikoProfilin}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
-            >
+            <button className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200">
               <Edit2 size={20} className="text-gray-600" />
             </button>
             <button className="publikoPune flex items-center gap-2 px-4 py-2 ">

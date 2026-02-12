@@ -9,6 +9,7 @@ import {
   Building,
   X,
 } from "lucide-react";
+import Header from "./Header";
 import {
   faSearch,
   faEllipsisVertical,
@@ -138,6 +139,13 @@ function MenaxhoAplikimet() {
         (sh) => sh._id === aplikimi.shpalljaId,
       );
 
+      const jobStatus = shpallja?.status?.toLowerCase();
+      const matchesStatus =
+        (filtrimiFaqes === "Active" && jobStatus === "aktiv") ||
+        (filtrimiFaqes === "Expired" && jobStatus === "skaduar");
+
+      if (!matchesStatus) return false;
+
       const matchesSearch =
         shpallja?.pozitaPunes?.toLowerCase().includes(kerko?.toLowerCase()) ||
         shpallja?.kategoriaPunes
@@ -157,6 +165,7 @@ function MenaxhoAplikimet() {
 
   return (
     <div className="bg-white min-h-screen">
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-gray-900">
@@ -260,7 +269,9 @@ function MenaxhoAplikimet() {
                   <th className="tableHead">Lokacioni</th>
                   <th className="tableHead text-center ">Orari</th>
                   <th className="tableHead">Statusi</th>
-                  <th className="tableHead text-right">Veprime</th>
+                  {filtrimiFaqes === "Active" && (
+                    <th className="tableHead text-right">Veprime</th>
+                  )}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -302,40 +313,42 @@ function MenaxhoAplikimet() {
                           Në pritje
                         </span>
                       </td>
-                      <td className="tableData text-right">
-                        <div className="relative">
-                          <button
-                            onClick={() =>
-                              setShfaqMeny(
-                                shfaqMeny === aplikimi._id
-                                  ? null
-                                  : aplikimi._id,
-                              )
-                            }
-                            className="text-gray-400 hover:text-gray-600 p-2"
-                          >
-                            <FontAwesomeIcon icon={faEllipsisVertical} />
-                          </button>
+                      {filtrimiFaqes === "Active" && (
+                        <td className="tableData text-right">
+                          <div className="relative">
+                            <button
+                              onClick={() =>
+                                setShfaqMeny(
+                                  shfaqMeny === aplikimi._id
+                                    ? null
+                                    : aplikimi._id,
+                                )
+                              }
+                              className="text-gray-400 hover:text-gray-600 p-2"
+                            >
+                              <FontAwesomeIcon icon={faEllipsisVertical} />
+                            </button>
 
-                          {shfaqMeny === aplikimi._id && (
-                            <div className="absolute right-6 top-0 max-w-48 bg-white rounded-lg shadow-lg border border-gray-200  z-10">
-                              <button
-                                onClick={() => {
-                                  setAplikimiKlikuar(aplikimi);
-                                  setShfaqMeny(null);
-                                }}
-                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 rounded-t-lg"
-                              >
-                                <FontAwesomeIcon
-                                  icon={faPencil}
-                                  className="text-sm"
-                                />
-                                <span>Modifiko</span>
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </td>
+                            {shfaqMeny === aplikimi._id && (
+                              <div className="absolute right-6 top-0 max-w-48 bg-white rounded-lg shadow-lg border border-gray-200  z-10">
+                                <button
+                                  onClick={() => {
+                                    setAplikimiKlikuar(aplikimi);
+                                    setShfaqMeny(null);
+                                  }}
+                                  className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 rounded-t-lg"
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faPencil}
+                                    className="text-sm"
+                                  />
+                                  <span>Modifiko</span>
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   );
                 })}
