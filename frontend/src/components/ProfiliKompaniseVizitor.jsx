@@ -97,12 +97,12 @@ const ProfiliKompaniseVizitor = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center min-h-screen">
+      <div className="flex flex-col items-center min-h-screen" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
         <Header />
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Duke ngarkuar profilin...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: '#D6E6F2' }}></div>
+            <p className="font-medium" style={{ color: '#5A7A99' }}>Duke ngarkuar profilin...</p>
           </div>
         </div>
       </div>
@@ -111,10 +111,10 @@ const ProfiliKompaniseVizitor = () => {
 
   if (error || !profileData) {
     return (
-      <div className="flex flex-col items-center min-h-screen">
+      <div className="flex flex-col items-center min-h-screen" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
         <Header />
         <div className="max-w-6xl mx-auto p-8">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+          <div className="bg-white border border-red-200 rounded-lg p-4 text-red-700">
             <p>{error || "Diqka shkoi keq. Profili nuk u gjet."}</p>
           </div>
         </div>
@@ -123,36 +123,78 @@ const ProfiliKompaniseVizitor = () => {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-50">
+    <div className="flex flex-col items-center min-h-screen" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
       <Header />
 
       <div className="w-full max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="h-40 bg-linear-to-r from-blue-500 to-blue-600 relative">
-            <div className="absolute -bottom-12 left-8">
-              <div className="w-24 h-24 rounded-2xl bg-white shadow-xl flex items-center justify-center overflow-hidden border-4 border-white">
-                {fotoProfile ? (
-                  <img
-                    src={fotoProfile}
-                    alt="Logo Kompania"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-blue-600 text-2xl font-bold">
-                    {merreShkronjatFillestare()}
-                  </span>
-                )}
-              </div>
+          {/* Header section with abstract wave background */}
+        <div className="h-40 relative overflow-visible">
+          <svg 
+            className="absolute inset-0 w-full h-full" 
+            viewBox="0 0 1440 320" 
+            preserveAspectRatio="xMidYMid slice"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ zIndex: 1 }}
+          >
+            <defs>
+              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{ stopColor: '#3a3a3a', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: '#4a4a4a', stopOpacity: 1 }} />
+              </linearGradient>
+              <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{ stopColor: '#4a4a4a', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: '#5a5a5a', stopOpacity: 1 }} />
+              </linearGradient>
+              <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{ stopColor: '#5a5a5a', stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: '#6a6a6a', stopOpacity: 1 }} />
+              </linearGradient>
+            </defs>
+            
+            {/* Layered waves */}
+            <path 
+              fill="url(#grad1)" 
+              d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,128C672,107,768,85,864,90.7C960,96,1056,128,1152,138.7C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.8"
+            />
+            <path 
+              fill="url(#grad2)" 
+              d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.6"
+            />
+            <path 
+              fill="url(#grad3)" 
+              d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,213.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              opacity="0.4"
+            />
+          </svg>
+          
+          <div className="absolute bottom-0 left-8 transform translate-y-1/2" style={{ zIndex: 50 }}>
+            <div className="w-24 h-24 rounded-2xl bg-white shadow-xl flex items-center justify-center overflow-hidden border-4 border-white">
+              {fotoProfile ? (
+                <img
+                  src={fotoProfile}
+                  alt="Logo Kompania"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-2xl font-bold" style={{ color: '#5A7A99' }}>
+                  {merreShkronjatFillestare()}
+                </span>
+              )}
             </div>
           </div>
+        </div>
 
-          <div className="pt-16 pb-6 px-8">
-            <div className="flex justify-end">
-              <button className="px-4 py-2 bg-white hover:border text-gray-700 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium">
-                Visit website
-              </button>
-            </div>
+        <div className="pt-5 pb-4 px-2">
+          <div className="flex justify-end">
+            <button className="px-4 py-2 bg-white hover:border text-gray-700 rounded-lg hover:bg-gray-100 transition-colors text-sm font-medium">
+              Visit website
+            </button>
+          </div>
 
+          <div className="ml-8">
             <h1 className="text-3xl text-left font-bold text-gray-900 mb-2">
               {profileData?.kompania || "Kompania"}
             </h1>
@@ -163,16 +205,17 @@ const ProfiliKompaniseVizitor = () => {
             <div className="flex items-center gap-6 text-sm text-gray-600">
               {profileData?.vendodhja && (
                 <div className="flex items-center gap-2">
-                  <MapPin size={16} />
+                  <MapPin size={16} style={{ color: '#5A7A99' }} />
                   <span>{profileData.vendodhja}</span>
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <BriefcaseBusiness size={16} />
+                <BriefcaseBusiness size={16} style={{ color: '#5A7A99' }} />
                 <span>{puneHapura.length} punë të publikuara</span>
               </div>
             </div>
           </div>
+        </div>
 
           <div className="border-b border-gray-200 mx-10">
             <div className="flex justify-center gap-8 px-8">
@@ -186,7 +229,7 @@ const ProfiliKompaniseVizitor = () => {
               >
                 Punë të Kompanisë
                 {activeTab === "jobs" && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 transition-all duration-300"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-300" style={{ background: 'linear-gradient(90deg, #F7FBFC 0%, #D6E6F2 100%)' }}></div>
                 )}
               </button>
               <button
@@ -199,7 +242,7 @@ const ProfiliKompaniseVizitor = () => {
               >
                 Rreth Kompanisë
                 {activeTab === "about" && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 transition-all duration-300"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-300" style={{ background: 'linear-gradient(90deg, #F7FBFC 0%, #D6E6F2 100%)' }}></div>
                 )}
               </button>
               <button
@@ -212,7 +255,7 @@ const ProfiliKompaniseVizitor = () => {
               >
                 Informacione të Kompanisë
                 {activeTab === "info" && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 transition-all duration-300"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-300" style={{ background: 'linear-gradient(90deg, #F7FBFC 0%, #D6E6F2 100%)' }}></div>
                 )}
               </button>
             </div>
@@ -237,7 +280,7 @@ const ProfiliKompaniseVizitor = () => {
                         onClick={() => navigate(`/shpallja/${pune._id}`)}
                       >
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+                          <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
                             {fotoProfile ? (
                               <img
                                 src={fotoProfile}
@@ -245,7 +288,7 @@ const ProfiliKompaniseVizitor = () => {
                                 className="w-full h-full object-cover rounded-lg"
                               />
                             ) : (
-                              <span className="text-blue-600 font-bold text-sm">
+                              <span className="font-bold text-sm" style={{ color: '#5A7A99' }}>
                                 {merreShkronjatFillestare()}
                               </span>
                             )}
@@ -313,7 +356,7 @@ const ProfiliKompaniseVizitor = () => {
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-3">
-                    <FaBuilding className="text-blue-500 shrink-0 mt-1" />
+                    <FaBuilding className="shrink-0 mt-1" style={{ color: '#5A7A99' }} />
                     <div>
                       <p className="text-sm text-gray-500 mb-1">
                         Emri i Kompanisë
@@ -326,7 +369,7 @@ const ProfiliKompaniseVizitor = () => {
 
                   {profileData?.email && (
                     <div className="flex items-start gap-3">
-                      <FaEnvelope className="text-blue-500 shrink-0 mt-1" />
+                      <FaEnvelope className="shrink-0 mt-1" style={{ color: '#5A7A99' }} />
                       <div>
                         <p className="text-sm text-gray-500 mb-1">Email</p>
                         <p className="text-gray-900 font-medium break-all">
@@ -338,7 +381,7 @@ const ProfiliKompaniseVizitor = () => {
 
                   {profileData?.nrTelefonit && (
                     <div className="flex items-start gap-3">
-                      <FaPhone className="text-blue-500 shrink-0 mt-1" />
+                      <FaPhone className="shrink-0 mt-1" style={{ color: '#5A7A99' }} />
                       <div>
                         <p className="text-sm text-gray-500 mb-1">Telefon</p>
                         <p className="text-gray-900 font-medium">
@@ -349,7 +392,7 @@ const ProfiliKompaniseVizitor = () => {
                   )}
 
                   <div className="flex items-start gap-3">
-                    <FaCalendarAlt className="text-blue-500 shrink-0 mt-1" />
+                    <FaCalendarAlt className="shrink-0 mt-1" style={{ color: '#5A7A99' }} />
                     <div>
                       <p className="text-sm text-gray-500 mb-1">
                         Anëtar që nga
@@ -374,9 +417,10 @@ const ProfiliKompaniseVizitor = () => {
                             href={item.linku || "#"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:underline"
+                            className="flex items-center gap-2 hover:underline"
+                            style={{ color: '#5A7A99' }}
                           >
-                            {item.platforma}
+                            {item.platforma} →
                           </a>
                         ))}
                       </div>
