@@ -138,13 +138,14 @@ function Shpallja() {
 
     navigate(`/${id}/aplikimi`);
   };
+
   const hasPhoto =
     (shpallja.fotoProfili?.startsWith("http") ||
       shpallja.fotoProfili?.startsWith("data:")) &&
     !fotoError;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] ">
+    <div className="min-h-screen bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA]">
       <Header />
 
       <div className="max-w-6xl mx-auto px-4 py-8 md:px-8">
@@ -160,12 +161,12 @@ function Shpallja() {
           Kthehu tek punët
         </button>
 
-        {/* Main Content + Sidebar - Two Column Layout */}
+        {/* ✅ FIXED: Two column layout – sidebar is a sibling, not nested */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* ── Left Column: ONE BIG Card with Header + All Sections ── */}
+          {/* ── LEFT COLUMN: Job Details Card ── */}
           <div className="flex-1">
             <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg overflow-hidden">
-              {/* Job Header Inside Card */}
+              {/* Job Header */}
               <div className="p-6 md:p-8 border-b border-gray-200">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
                   {/* Logo + Company + Title */}
@@ -203,7 +204,11 @@ function Shpallja() {
                         eshteRuajtur
                           ? "text-blue-600"
                           : "text-gray-500 hover:text-gray-700"
-                      } ${duke_ngarkuar ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                      } ${
+                        duke_ngarkuar
+                          ? "opacity-50 cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
                     >
                       <FontAwesomeIcon
                         icon={
@@ -267,12 +272,12 @@ function Shpallja() {
                 </div>
               </div>
 
-              {/* Content Sections Inside Same Card */}
-              <div className="p-6 md:p-8">
-                {/* Job Description Section */}
-                <div className="mb-8">
+              {/* Content Sections – design from second version */}
+              <div className="p-6 md:p-8 space-y-6">
+                {/* Job Description */}
+                <div>
                   <h2 className="text-xl font-bold text-gray-900 mb-4">
-                    Pershkrimi i Punës
+                    Përshkrimi i Punës
                   </h2>
                   {shpallja.pershkrimiPunes ? (
                     <p className="text-gray-600 leading-relaxed whitespace-pre-line">
@@ -280,16 +285,16 @@ function Shpallja() {
                     </p>
                   ) : (
                     <p className="text-gray-400 italic text-sm">
-                      Nuk ka pershkrim të shtuar.
+                      Nuk ka përshkrim të shtuar.
                     </p>
                   )}
                 </div>
 
-                {/* Requirements */}
+                {/* Required Skills – White Card */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
                   <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
-                    Aftesite e Detyrueshme
+                    Aftësitë e Detyrueshme
                   </h2>
                   {shpallja.aftesitePrimare &&
                   shpallja.aftesitePrimare.length > 0 ? (
@@ -305,15 +310,16 @@ function Shpallja() {
                     </ul>
                   ) : (
                     <p className="text-gray-400 italic text-sm">
-                      Nuk ka aftesi të specifikuara.
+                      Nuk ka aftësi të specifikuara.
                     </p>
                   )}
                 </div>
 
+                {/* Optional Skills – White Card */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
                   <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
-                    Aftesite Opsionale
+                    Aftësitë Opsionale
                   </h2>
                   {shpallja.aftesiteSekondare &&
                   shpallja.aftesiteSekondare.length > 0 ? (
@@ -329,165 +335,145 @@ function Shpallja() {
                     </ul>
                   ) : (
                     <p className="text-gray-400 italic text-sm">
-                      Nuk ka aftesi të specifikuara.
+                      Nuk ka aftësi të specifikuara.
                     </p>
                   )}
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* ── Right Sidebar: Apply & Company Info ── */}
-              <div className="lg:w-80 space-y-4">
-                {/* Apply Card */}
-                <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl  shadow-lg p-6 ">
-                  <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
-                    Apliko tani
-                  </h3>
+          {/* ── RIGHT COLUMN: Sidebar – SIBLING, NOT NESTED ✅ */}
+          <div className="lg:w-80 space-y-4">
+            {/* Apply Card – with the EXACT button from your second version */}
+            <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
+                Apliko tani
+              </h3>
 
-                  {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
-                    <button
-                      onClick={aplikoTani}
-                      className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 mb-5"
-                    >
-                      Apliko
+              {/* Job detail rows */}
+              <div className="divide-y divide-gray-100">
+                {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Paga
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      ${shpallja.pagaPrej}–${shpallja.pagaDeri}
+                    </span>
+                  </div>
+                )}
+                {shpallja.lokacioniPunes && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Lokacioni
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {shpallja.lokacioniPunes}
+                    </span>
+                  </div>
+                )}
+                {shpallja.niveliPunes && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Niveli
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {shpallja.niveliPunes}
+                    </span>
+                  </div>
+                )}
+                {shpallja.orari && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Orari
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {Array.isArray(shpallja.orari)
+                        ? shpallja.orari[0]
+                        : shpallja.orari}
+                    </span>
+                  </div>
+                )}
+                {shpallja.eksperienca && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Eksperienca
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {shpallja.eksperienca}
+                    </span>
+                  </div>
+                )}
+                {shpallja.numriAplikimeve !== undefined && (
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
+                      Aplikante
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800 flex items-center gap-1.5">
                       <FontAwesomeIcon
-                        icon={faArrowRight}
-                        className="text-sm"
+                        icon={faUsers}
+                        className="text-gray-400 text-xs"
                       />
-                    </button>
-                  )}
-
-                  {/* Job detail rows */}
-                  <div className="divide-y divide-gray-100">
-                    {shpallja.pagaPrej > 0 && shpallja.pagaDeri > 0 && (
-                      <div className="flex items-center justify-between py-3">
-                        <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
-                          Paga
-                        </span>
-                        <span className="text-sm font-semibold text-gray-800">
-                          ${shpallja.pagaPrej}–${shpallja.pagaDeri}
-                        </span>
-                      </div>
-                    )}
-                    {shpallja.lokacioniPunes && (
-                      <div className="flex items-center justify-between py-3">
-                        <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
-                          Lokacioni
-                        </span>
-                        <span className="text-sm font-semibold text-gray-800">
-                          {shpallja.lokacioniPunes}
-                        </span>
-                      </div>
-                    )}
-                    {shpallja.niveliPunes && (
-                      <div className="flex items-center justify-between py-3">
-                        <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
-                          Niveli
-                        </span>
-                        <span className="text-sm font-semibold text-gray-800">
-                          {shpallja.niveliPunes}
-                        </span>
-                      </div>
-                    )}
-                    {shpallja.orari && (
-                      <div className="flex items-center justify-between py-3">
-                        <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
-                          Orari
-                        </span>
-                        <span className="text-sm font-semibold text-gray-800">
-                          {Array.isArray(shpallja.orari)
-                            ? shpallja.orari[0]
-                            : shpallja.orari}
-                        </span>
-                      </div>
-                    )}
-                    {shpallja.eksperienca && (
-                      <div className="flex items-center justify-between py-3">
-                        <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
-                          Eksperienca
-                        </span>
-                        <span className="text-sm font-semibold text-gray-800">
-                          {shpallja.eksperienca}
-                        </span>
-                      </div>
-                    )}
-                    {shpallja.numriAplikimeve !== undefined && (
-                      <div className="flex items-center justify-between py-3">
-                        <span className="text-xs text-gray-400 uppercase tracking-wide font-medium">
-                          Aplikante
-                        </span>
-                        <span className="text-sm font-semibold text-gray-800 flex items-center gap-1.5">
-                          <FontAwesomeIcon
-                            icon={faUsers}
-                            className="text-gray-400 text-xs"
-                          />
-                          {shpallja.numriAplikimeve}
-                        </span>
-                      </div>
-                    )}
-                    {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
-                      <button
-                        onClick={() => {
-                          if (!perdoruesiData) {
-                            navigate("/kycja");
-                          } else {
-                            navigate(`/${id}/aplikimi`);
-                          }
-                        }}
-                        className="publikoPune w-full mt-3"
-                      >
-                        Apliko
-                        <FontAwesomeIcon
-                          icon={faArrowRight}
-                          className="text-sm"
-                        />
-                      </button>
-                    )}
+                      {shpallja.numriAplikimeve}
+                    </span>
                   </div>
-                </div>
+                )}
 
-                {/* About Company Card */}
-                <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
-                  <h3 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-4">
-                    Rreth kompanisë
-                  </h3>
-                  <div className="flex items-center gap-3 mb-4">
-                    {hasPhoto ? (
-                      <img
-                        src={shpallja.fotoProfili}
-                        alt="Company Logo"
-                        className="w-10 h-10 rounded-lg object-cover border border-[#D6E6F2] shrink-0"
-                        onError={handlePhotoError}
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shrink-0">
-                        <span className="text-white font-bold text-sm">
-                          {getCompanyName().substring(0, 2)}
-                        </span>
-                      </div>
-                    )}
-                    <div>
-                      <p className="font-semibold text-gray-800 text-sm">
-                        {getCompanyName()}
-                      </p>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        {shpallja.emailKompanise}
-                      </p>
-                    </div>
+                {/* ✅ YOUR BUTTON – exactly as in the second version, no blue button */}
+                {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
+                  <button
+                    onClick={aplikoTani}
+                    className="publikoPune w-full mt-3"
+                  >
+                    Apliko
+                    <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* About Company Card */}
+            <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
+              <h3 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-4">
+                Rreth kompanisë
+              </h3>
+              <div className="flex items-center gap-3 mb-4">
+                {hasPhoto ? (
+                  <img
+                    src={shpallja.fotoProfili}
+                    alt="Company Logo"
+                    className="w-10 h-10 rounded-lg object-cover border border-[#D6E6F2] shrink-0"
+                    onError={handlePhotoError}
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shrink-0">
+                    <span className="text-white font-bold text-sm">
+                      {getCompanyName().substring(0, 2)}
+                    </span>
                   </div>
-
-                  {/* View Company Button */}
-                  {shpallja.perdoruesiId && (
-                    <button
-                      onClick={() =>
-                        navigate(`/kompania/${shpallja.perdoruesiId}`)
-                      }
-                      className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                    >
-                      Shiko Kompaninë
-                    </button>
-                  )}
+                )}
+                <div>
+                  <p className="font-semibold text-gray-800 text-sm">
+                    {getCompanyName()}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {shpallja.emailKompanise}
+                  </p>
                 </div>
               </div>
+
+              {/* View Company Button */}
+              {shpallja.perdoruesiId._id && (
+                <button
+                  onClick={() =>
+                    navigate(`/kompania/${shpallja.perdoruesiId._id}`)
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                >
+                  Shiko Kompaninë
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -24,6 +24,7 @@ router.post("/perdoruesi", async (req, res) => {
         mbiemri: perdoruesi.mbiemri,
         email: perdoruesi.email,
         tipiPerdoruesit: perdoruesi.tipiPerdoruesit,
+        aftesite: perdoruesi.aftesite,
       };
     } else if (perdoruesi.tipiPerdoruesit === "punedhenes") {
       perdoruesiObj = {
