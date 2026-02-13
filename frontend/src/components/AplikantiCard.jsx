@@ -43,7 +43,7 @@ function AplikantiCard({ aplikanti }) {
   };
 
   return (
-    <div className="bg-white/60 hover:bg-[#F7FBFC] shadow-xl rounded-xl w-full p-3">
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-300 w-full p-6 transition-colors duration-200 shadow-lg">
       <div className="flex justify-between">
         <div className="w-20 h-20 rounded-full overflow-hidden bg-linear-to-r from-slate-700 via-gray-800 to-black flex items-center justify-center">
           {fotoProfile ? (

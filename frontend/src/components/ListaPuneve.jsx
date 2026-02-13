@@ -77,10 +77,12 @@ function ListaPuneve() {
   const currentItems = shpalljaData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="bg-gradient-to-br from-[769FCD] to-[#B9D7EA]">
-      <Header />
-      <h1 className="mt-20">E ardhmja jote fillon këtu</h1>
-      <Kerkimi />
+    <div>
+      <div className="bg-linear-to-br from-[#F7FBFC] to-[#B9D7EA] pb-10 backdrop-blur-sm shadow-[#0F4C75] ">
+        <Header />
+        <h1 className="mt-20 text-primary">E ardhmja jote fillon këtu</h1>
+        <Kerkimi />
+      </div>
       <div className="m-10 md:m-20 lg:m-30">
         <div className="shpalljaCard">
           {currentItems.map((shpallja) => (
@@ -94,7 +96,7 @@ function ListaPuneve() {
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
               className={`
-        px-4 py-2 rounded-full border transition-all duration-200
+        px-3 py-1 rounded-full border transition-all duration-200
         flex items-center gap-1
         ${
           currentPage === 1
@@ -127,10 +129,10 @@ function ListaPuneve() {
                     key={page}
                     onClick={() => setCurrentPage(page)}
                     className={`
-            w-10 h-10 rounded-full font-medium transition-all duration-200
+            w-7 h-7 rounded-full font-medium transition-all duration-200
             ${
               currentPage === page
-                ? "bg-blue-600 text-white shadow-md scale-105"
+                ? "bg-primary text-white shadow-md scale-105"
                 : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400"
             }
           `}
@@ -148,7 +150,7 @@ function ListaPuneve() {
               }
               disabled={currentPage === totalPages}
               className={`
-        px-4 py-2 rounded-full border transition-all duration-200
+        px-3 py-1 rounded-full border transition-all duration-200
         flex items-center gap-1
         ${
           currentPage === totalPages

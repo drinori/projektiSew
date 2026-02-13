@@ -4,7 +4,7 @@ import "../App.css";
 import "../index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAtlassian } from "@fortawesome/free-brands-svg-icons/faAtlassian";
-import { SquareChartGantt, Heart, Settings, LogOut } from "lucide-react";
+import { SquareChartGantt, Heart, Settings, LogOut, User } from "lucide-react";
 
 import {
   faBars,
@@ -12,7 +12,6 @@ import {
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Perdoruesi from "../PerdoruesiContext";
 
@@ -87,7 +86,7 @@ function Header() {
 
   return (
     <>
-      <div className="flex items-center justify-between w-full bg-white shadow-md py-7 px-6 mx-auto text-l ">
+      <div className="flex items-center justify-between w-full bg-transparent py-5 px-6 mx-auto text-base">
         <Link to="/" className="flex items-center mr-8">
           <FontAwesomeIcon icon={faAtlassian} className="text-2xl" />
           <h1 className="text-2xl text-primary">𝗣𝘂𝗻𝗲𝘀𝗼𝗵𝘂</h1>
@@ -125,13 +124,7 @@ function Header() {
                   onClick={toggleDropdown}
                   className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
                 >
-                  <FontAwesomeIcon
-                    icon={
-                      perdoruesiData.tipiPerdoruesit === "punedhenes"
-                        ? faBriefcase
-                        : faUser
-                    }
-                  />
+                  <User size={18} />
                   <span style={{ color: "#3f3f46", fontWeight: "500" }}>
                     {perdoruesiData.tipiPerdoruesit === "punedhenes"
                       ? perdoruesiData.kompania
@@ -300,13 +293,7 @@ function Header() {
                   className="flex items-center justify-between w-full text-left py-3 px-3 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <FontAwesomeIcon
-                      icon={
-                        perdoruesiData.tipiPerdoruesit === "punedhenes"
-                          ? faBriefcase
-                          : faUser
-                      }
-                    />
+                    <User size={18} />
                     <span className="font-medium text-[#3f3f46]">
                       {perdoruesiData.tipiPerdoruesit === "punedhenes"
                         ? perdoruesiData.kompania

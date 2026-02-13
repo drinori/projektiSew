@@ -78,6 +78,7 @@ router.get("/perdoruesi", async (req, res) => {
         email: perdoruesi.email,
         kompania: perdoruesi.kompania,
         tipiPerdoruesit: perdoruesi.tipiPerdoruesit,
+        aftesite: perdoruesi.aftesite,
       },
     });
   } catch (err) {

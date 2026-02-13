@@ -112,6 +112,32 @@ function Shpallja() {
     );
   }
 
+  const aplikoTani = (e) => {
+    e.preventDefault();
+
+    if (!perdoruesiData) {
+      navigate("/kycja");
+      return;
+    }
+
+    const aftesiteAplikantit = (perdoruesiData.aftesite || []).map((aftesia) =>
+      aftesia.toLowerCase().trim(),
+    );
+    const aftesiteDetyrueshme = shpallja.aftesitePrimare.map((aftesia) =>
+      aftesia.toLowerCase().trim(),
+    );
+
+    const iGatshem = aftesiteDetyrueshme.every((aftesia) =>
+      aftesiteAplikantit.includes(aftesia),
+    );
+
+    if (!iGatshem) {
+      alert("Nuk i keni të gjitha aftësitë e kërkuara për këtë pozitë.");
+      return;
+    }
+
+    navigate(`/${id}/aplikimi`);
+  };
   const hasPhoto =
     (shpallja.fotoProfili?.startsWith("http") ||
       shpallja.fotoProfili?.startsWith("data:")) &&
@@ -273,11 +299,12 @@ function Shpallja() {
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
-                Kualifikimet e kërkuara
+                Aftesite e Detyrueshme
               </h2>
-              {shpallja.kualifikimet && shpallja.kualifikimet.length > 0 ? (
+              {shpallja.aftesitePrimare &&
+              shpallja.aftesitePrimare.length > 0 ? (
                 <ul className="space-y-3">
-                  {shpallja.kualifikimet.map((kerkesa, index) => (
+                  {shpallja.aftesitePrimare.map((kerkesa, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
                       <span className="text-gray-600 leading-relaxed">
@@ -288,7 +315,31 @@ function Shpallja() {
                 </ul>
               ) : (
                 <p className="text-gray-400 italic text-sm">
-                  Nuk ka kualifikime të specifikuara.
+                  Nuk ka aftesi të specifikuara.
+                </p>
+              )}
+            </div>
+
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
+                Aftesite Opsionale
+              </h2>
+              {shpallja.aftesiteSekondare &&
+              shpallja.aftesiteSekondare.length > 0 ? (
+                <ul className="space-y-3">
+                  {shpallja.aftesiteSekondare.map((kerkesa, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
+                      <span className="text-gray-600 leading-relaxed">
+                        {kerkesa}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-400 italic text-sm">
+                  Nuk ka aftesi të specifikuara.
                 </p>
               )}
             </div>
@@ -304,13 +355,7 @@ function Shpallja() {
 
               {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
                 <button
-                  onClick={() => {
-                    if (!perdoruesiData) {
-                      navigate("/kycja");
-                    } else {
-                      navigate(`/${id}/aplikimi`);
-                    }
-                  }}
+                  onClick={aplikoTani}
                   className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 mb-5"
                 >
                   Apliko

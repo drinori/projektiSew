@@ -37,7 +37,7 @@ function Kerkimi() {
   };
   return (
     <div className="w-full max-w-6xl mx-auto px-4 my-8">
-      <div className="bg-white border border-gray-200 rounded-4xl shadow-xl ">
+      <div className="bg-white border border-gray-100 rounded-4xl shadow-xl ">
         <form onSubmit={handleSubmit}>
           <div className="responsiveKerko">
             <div className="kerko">

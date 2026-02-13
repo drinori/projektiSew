@@ -102,11 +102,11 @@ function ShpalljaCard({ shpallja }) {
   };
 
   return (
-    <div className="bg-white/60 border border-[#D6E6F2] backdrop-blur-sm shadow-sm rounded-xl w-full p-6 transition-colors duration-200">
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-lg w-full p-6 transition-colors duration-200">
       {/* Header with Logo, Company Name, and Bookmark */}
       <div className="flex items-start gap-3 mb-2">
         {/* Company Logo */}
-        <div className="flex-shrink-0">
+        <div className="shrink-o">
           {(isPhotoUrl || isPhotoBase64) && !fotoError ? (
             <img
               src={shpallja.fotoProfili}
@@ -115,7 +115,7 @@ function ShpalljaCard({ shpallja }) {
               onError={handlePhotoError}
             />
           ) : (
-            <div className="w-14 h-14 rounded-lg bg-blue-600 flex items-center justify-center border border-gray-200">
+            <div className="w-14 h-14 rounded-lg bg-primary flex items-center justify-center border border-gray-200">
               <span className="text-white font-bold text-lg">
                 {getCompanyName().substring(0, 2)}
               </span>

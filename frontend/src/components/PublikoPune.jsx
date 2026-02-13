@@ -8,8 +8,10 @@ import Header from "./Header";
 
 function PublikoPune() {
   const navigate = useNavigate();
-  const [aftesite, setAftesite] = useState([]);
-  const [aftesiaTanishme, setAftesiaTanishme] = useState("");
+  const [aftesitePrimare, setAftesitePrimare] = useState([]);
+  const [aftesiaPrimareTanishme, setAftesiaPrimareTanishme] = useState("");
+  const [aftesiteSekondare, setAftesiteSekondare] = useState([]);
+  const [aftesiaSekondareTanishme, setAftesiaSekondareTanishme] = useState("");
 
   const [formData, setFormData] = useState({
     emailKompanise: "",
@@ -22,6 +24,8 @@ function PublikoPune() {
     eksperienca: "",
     pagaPrej: 0,
     pagaDeri: 0,
+    aftesitePrimare: [],
+    aftesiteSekondare: [],
     perdoruesiId: "",
   });
 
@@ -30,16 +34,30 @@ function PublikoPune() {
     { value: "Part-time", label: "Part-time" },
   ];
 
-  const shtoAftesine = () => {
-    if (aftesiaTanishme.trim()) {
-      setAftesite([...aftesite, aftesiaTanishme]);
-      setAftesiaTanishme("");
+  const shtoAftesinePrimare = () => {
+    if (aftesiaPrimareTanishme.trim()) {
+      setAftesitePrimare([...aftesitePrimare, aftesiaPrimareTanishme]);
+      setAftesiaPrimareTanishme("");
     }
   };
 
-  const fshijAftesine = (index) => {
-    const aftesiteReja = aftesite.filter((_, i) => i !== index);
-    setAftesite(aftesiteReja);
+  const fshijAftesinePrimare = (index) => {
+    const aftesitePrimareReja = aftesitePrimare.filter((_, i) => i !== index);
+    setAftesitePrimare(aftesitePrimareReja);
+  };
+
+  const shtoAftesineSekondare = () => {
+    if (aftesiaSekondareTanishme.trim()) {
+      setAftesiteSekondare([...aftesiteSekondare, aftesiaSekondareTanishme]);
+      setAftesiaSekondareTanishme("");
+    }
+  };
+
+  const fshijAftesineSekondare = (index) => {
+    const aftesiteSekondareReja = aftesiteSekondare.filter(
+      (_, i) => i !== index,
+    );
+    setAftesiteSekondare(aftesiteSekondareReja);
   };
 
   const handleEmploymentTypeChange = (typeValue) => {
@@ -90,12 +108,13 @@ function PublikoPune() {
       lokacioniPunes: formData.lokacioniPunes,
       pershkrimiPunes: formData.pershkrimiPunes,
       pyetjet: [],
-      kualifikimet: aftesite,
       niveliPunes: formData.niveliPunes,
       orari: formData.orari,
       eksperienca: formData.eksperienca,
       pagaPrej: formData.pagaPrej,
       pagaDeri: formData.pagaDeri,
+      aftesitePrimare: aftesitePrimare,
+      aftesiteSekondare: aftesiteSekondare,
       perdoruesiId: formData.perdoruesiId,
     };
 
@@ -121,12 +140,16 @@ function PublikoPune() {
         niveliPunes: "",
         orari: [],
         eksperienca: "",
+        aftesitePrimare: [],
+        aftesiteSekondare: [],
         pagaPrej: 0,
         pagaDeri: 0,
         perdoruesiId: "",
       });
-      setAftesite([]);
-      setAftesiaTanishme("");
+      setAftesitePrimare([]);
+      setAftesiteSekondare([]);
+      setAftesiaPrimareTanishme("");
+      setAftesiaSekondareTanishme("");
     }
 
     navigate("/");
@@ -134,23 +157,17 @@ function PublikoPune() {
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <div className="bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] pb-32 relative overflow-hidden">
+        <Header />
 
-      <div className="bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] backdrop-blur-2xl pt-24 pb-32 relative overflow-hidden">
         <div className="text-center relative z-10">
-          <h1 className="text-5xl font-bold text-primary mb-4">
-            Publiko Punë të Re
-          </h1>
-          <p className="text-lg text-[#6D94C5] max-w-2xl mx-auto px-4">
-            Plotësoni formularin për të publikuar shpalljen tuaj
-          </p>
+          <h1 className="text-5xl font-bold mb-4">Publiko Punë të Re</h1>
+          <p className="text-lg text-primary font-extralight max-w-2xl mx-auto px-4"></p>
         </div>
-
-        <div className="absolute bottom-0 left-0 w-full h-64 bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] blur-3xl"></div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 -mt-20 pb-20 relative z-20">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+        <div className="bg-white rounded-2xl  shadow-2xl p-8 md:p-12">
           <form onSubmit={handleSubmit} className="space-y-8">
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">
@@ -432,13 +449,13 @@ function PublikoPune() {
               {/* Aftësitë Section - List Style */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Aftësitë
+                  Aftësitë Primare
                 </label>
 
                 {/* Display existing skills as list */}
-                {aftesite.length > 0 && (
+                {aftesitePrimare.length > 0 && (
                   <div className="mb-4 border border-gray-200 rounded-lg divide-y divide-gray-200">
-                    {aftesite.map((aftesi, i) => (
+                    {aftesitePrimare.map((aftesi, i) => (
                       <div
                         key={i}
                         className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
@@ -446,7 +463,7 @@ function PublikoPune() {
                         <span className="text-gray-700">{aftesi}</span>
                         <button
                           type="button"
-                          onClick={() => fshijAftesine(i)}
+                          onClick={() => fshijAftesinePrimare(i)}
                           className="text-red-500 hover:text-red-700 transition-colors"
                         >
                           <FontAwesomeIcon
@@ -465,18 +482,74 @@ function PublikoPune() {
                     type="text"
                     placeholder="Shto aftësi (p.sh. Aftësi komunikuese të shkëlqyera)"
                     className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    value={aftesiaTanishme}
-                    onChange={(e) => setAftesiaTanishme(e.target.value)}
+                    value={aftesiaPrimareTanishme}
+                    onChange={(e) => setAftesiaPrimareTanishme(e.target.value)}
                     onKeyPress={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
-                        shtoAftesine();
+                        shtoAftesinePrimare();
                       }
                     }}
                   />
                   <button
                     type="button"
-                    onClick={shtoAftesine}
+                    onClick={shtoAftesinePrimare}
+                    className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                  >
+                    <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
+                    Shto
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2 mt-5">
+                  Aftësitë Sekondare
+                </label>
+
+                {/* Display existing skills as list */}
+                {aftesiteSekondare.length > 0 && (
+                  <div className="mb-4 border border-gray-200 rounded-lg divide-y divide-gray-200">
+                    {aftesiteSekondare.map((aftesi, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                      >
+                        <span className="text-gray-700">{aftesi}</span>
+                        <button
+                          type="button"
+                          onClick={() => fshijAftesineSekondare(i)}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashCan}
+                            className="w-4 h-4"
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Add skill input */}
+                <div className="flex gap-3">
+                  <input
+                    type="text"
+                    placeholder="Shto aftësi (p.sh. Aftësi komunikuese të shkëlqyera)"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={aftesiaSekondareTanishme}
+                    onChange={(e) =>
+                      setAftesiaSekondareTanishme(e.target.value)
+                    }
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        shtoAftesineSekondare();
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={shtoAftesineSekondare}
                     className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
                   >
                     <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />

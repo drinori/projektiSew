@@ -32,10 +32,10 @@ function BallinaPundhenesit() {
 
   return (
     <div className="bg-[#F7FBFC] min-h-screen font-sans">
-      <Header />
-
       {/* Hero Section profesional */}
       <div className="relative overflow-hidden bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] backdrop-blur-2xl">
+        <Header />
+
         {/* Forme dekorative subtile */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#769FCD]/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#0F4C75]/5 rounded-full blur-3xl"></div>
@@ -43,7 +43,7 @@ function BallinaPundhenesit() {
         <div className="relative z-10 py-20 px-6 md:px-12 max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="flex-1 max-w-2xl">
-              <h1 className="text-4xl md:text-5xl mb-6 leading-tight text-[#0F4C75] font-bold text-left">
+              <h1 className="text-4xl md:text-5xl mb-6 leading-tight text-primary font-bold text-left">
                 Menaxho kandidatët dhe gjej profesionistët e duhur
               </h1>
               <p className="text-xl text-[#6D94C5] mb-8 leading-relaxed">
@@ -129,7 +129,7 @@ function BallinaPundhenesit() {
       </div>
 
       {/* Kërkim dhe filtra */}
-      <div className="mx-10 my-5 rounded-lg sticky top-0 z-20 bg-white/55 backdrop-blur-lg border-b border-[#D6E6F2] shadow-sm">
+      <div className="mx-10 my-5 rounded-lg sticky top-0 z-20 bg-white/55 backdrop-blur-lg border-b border-[#F7FBFC] shadow-sm">
         <div className=" mx-auto px-6 md:px-12 py-5">
           <div className="flex flex-col md:flex-row items-center justify-between">
             {/* Search bar */}
@@ -152,8 +152,8 @@ function BallinaPundhenesit() {
                 onClick={() => setFilterActive("te-gjithe")}
                 className={`px-5 py-2.5 rounded-lg font-medium transition-all ${
                   filterActive === "te-gjithe"
-                    ? "bg-[#0F4C75] text-white shadow-lg shadow-[#0F4C75]/20"
-                    : "bg-white text-[#0F4C75] hover:bg-[#D6E6F2] border border-[#D6E6F2]"
+                    ? "bg-primary text-white shadow-lg "
+                    : "bg-white text-primary hover:bg-primary hover:text-white border border-[#769FCD]"
                 }`}
               >
                 Të gjithë
@@ -162,8 +162,8 @@ function BallinaPundhenesit() {
                 onClick={() => setFilterActive("te-rinj")}
                 className={`px-5 py-2.5 rounded-lg font-medium transition-all ${
                   filterActive === "te-rinj"
-                    ? "bg-[#0F4C75] text-white shadow-lg shadow-[#0F4C75]/20"
-                    : "bg-white text-[#0F4C75] hover:bg-[#D6E6F2] border border-[#D6E6F2]"
+                    ? "bg-primary text-white shadow-lg "
+                    : "bg-white text-primary hover:bg-primary hover:text-white border border-[#769FCD]"
                 }`}
               >
                 Të rinjtë
@@ -172,8 +172,8 @@ function BallinaPundhenesit() {
                 onClick={() => setFilterActive("te-preferuar")}
                 className={`px-5 py-2.5 rounded-lg font-medium transition-all ${
                   filterActive === "te-preferuar"
-                    ? "bg-[#0F4C75] text-white shadow-lg shadow-[#0F4C75]/20"
-                    : "bg-white text-[#0F4C75] hover:bg-[#D6E6F2] border border-[#D6E6F2]"
+                    ? "bg-primary text-white shadow-lg "
+                    : "bg-white text-primary hover:bg-primary hover:text-white border border-[#769FCD]"
                 }`}
               >
                 Të preferuar
@@ -206,11 +206,11 @@ function BallinaPundhenesit() {
 
         {/* Grid i aplikantëve */}
         {filteredAplikantet.length > 0 ? (
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-2xl grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {filteredAplikantet.map((a, index) => (
               <div
                 key={a._id}
-                className="bg-white "
+                className="bg-white/60 rounded-2xl shadow-lg transition-colors duration-200 "
                 style={{
                   animation: `fadeInUp 0.4s ease-out ${index * 0.08}s both`,
                 }}
@@ -220,7 +220,7 @@ function BallinaPundhenesit() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white rounded-xl border border-[#D6E6F2]">
+          <div className="text-center py-20 bg-white rounded-2xl border border-[#D6E6F2]">
             <svg
               className="w-16 h-16 mx-auto text-[#B9D7EA] mb-4"
               fill="none"
@@ -248,4 +248,3 @@ function BallinaPundhenesit() {
 }
 
 export default BallinaPundhenesit;
-

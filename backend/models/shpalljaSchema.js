@@ -56,14 +56,6 @@ const shpalljaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  pyetjet: {
-    type: [String],
-  },
-  kualifikimet: {
-    type: [String],
-    default: [],
-    required: false,
-  },
   niveliPunes: {
     type: String,
     enum: [
@@ -89,6 +81,12 @@ const shpalljaSchema = new mongoose.Schema({
   eksperienca: {
     type: String,
     required: false,
+  },
+  aftesitePrimare: {
+    type: [String],
+  },
+  aftesiteSekondare: {
+    type: [String],
   },
   pagaPrej: {
     type: Number,
