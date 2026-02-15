@@ -43,7 +43,7 @@ function KompaniaCard({ kompania }) {
   return (
     <div className="border border-gray-200 hover:bg-gray-200 shadow-xl rounded-xl w-full p-3">
       <div className="flex justify-between">
-        <div className="w-20 h-20 rounded-full overflow-hidden bg-linear-to-r from-slate-700 via-gray-800 to-black flex items-center justify-center">
+        <div className="w-20 h-20 rounded-full  bg-linear-to-r from-slate-700 via-gray-800 to-black flex items-center justify-center">
           {}
 
           {fotoProfile ? (

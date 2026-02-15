@@ -5,14 +5,11 @@ const Aplikimi = require("../models/aplikimiSchema");
 const dergoMesazhin = require("../emailservice");
 const axios = require("axios");
 
-// Helper function to fetch company profile photo
 async function fetchCompanyPhoto(emailKompanise, perdoruesiId) {
   try {
-    // Method 1: If you have perdoruesiId directly
     if (perdoruesiId) {
       const photoUrl = `http://localhost:3000/api/profili/${perdoruesiId}/foto`;
 
-      // Check if photo exists by making a HEAD request
       try {
         await axios.head(photoUrl);
         return photoUrl;
@@ -21,23 +18,6 @@ async function fetchCompanyPhoto(emailKompanise, perdoruesiId) {
         return null;
       }
     }
-
-    // Method 2: If you need to look up user by email first
-    // Uncomment this if you need to find user ID by email:
-    /*
-    const Perdoruesi = require("../models/perdoruesiSchema");
-    const user = await Perdoruesi.findOne({ email: emailKompanise });
-    if (user && user._id) {
-      const photoUrl = `http://localhost:3000/api/profili/${user._id}/foto`;
-      try {
-        await axios.head(photoUrl);
-        return photoUrl;
-      } catch (err) {
-        console.log(`No photo found for user ${user._id}`);
-        return null;
-      }
-    }
-    */
 
     return null;
   } catch (error) {
@@ -49,7 +29,7 @@ async function fetchCompanyPhoto(emailKompanise, perdoruesiId) {
 router.get("/kompania", async (req, res) => {
   try {
     const now = new Date();
-    // const expiryTime = 2 * 60 * 1000;
+    // const tridhjeteDite = 2 * 60 * 1000;
     const tridhjeteDite = 30 * 24 * 60 * 60 * 1000;
     const expiredJobs = await Shpallja.find({
       status: "aktiv",
@@ -61,28 +41,68 @@ router.get("/kompania", async (req, res) => {
       await shpallja.save();
     }
 
-    const shpalljet = await Shpallja.find()
-      .sort({ dataKrijimit: -1 })
-      .populate("numriAplikimeve");
+    const shpalljet = await Shpallja.aggregate([
+      {
+        $lookup: {
+          from: "aplikimet",
+          localField: "_id",
+          foreignField: "shpalljaId",
+          as: "apps",
+        },
+      },
+      {
+        $addFields: {
+          numriNePritje: {
+            $size: {
+              $filter: {
+                input: "$apps",
+                as: "app",
+                cond: { $eq: ["$$app.status", "Ne_Pritje"] },
+              },
+            },
+          },
+          numriPranuar: {
+            $size: {
+              $filter: {
+                input: "$apps",
+                as: "app",
+                cond: { $eq: ["$$app.status", "Pranuar"] },
+              },
+            },
+          },
+          numriRefuzuar: {
+            $size: {
+              $filter: {
+                input: "$apps",
+                as: "app",
+                cond: { $eq: ["$$app.status", "Refuzuar"] },
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: { apps: 0 }, // remove the raw applications array
+      },
+      { $sort: { dataKrijimit: -1 } },
+    ]);
 
     // Add company profile photos to each job posting
     const shpalljetWithPhotos = await Promise.all(
       shpalljet.map(async (shpallja) => {
-        const shpalljaObj = shpallja.toObject();
-
         // If job posting doesn't have a photo URL, fetch from company profile
-        if (!shpalljaObj.fotoProfili) {
+        if (!shpallja.fotoProfili) {
           const photoUrl = await fetchCompanyPhoto(
             shpallja.emailKompanise,
             shpallja.perdoruesiId,
           );
 
           if (photoUrl) {
-            shpalljaObj.fotoProfili = photoUrl;
+            shpallja.fotoProfili = photoUrl;
           }
         }
 
-        return shpalljaObj;
+        return shpallja;
       }),
     );
 
@@ -101,7 +121,7 @@ router.get("/kompania", async (req, res) => {
 
 router.get("/kompania/im", async (req, res) => {
   try {
-    const perdoruesiId = req.userId;
+    const perdoruesiId = req.session.perdoruesiId;
 
     const shpalljet = await Shpallja.find({ perdoruesiId }).sort({
       createdAt: -1,
@@ -189,10 +209,10 @@ router.post("/kompania", async (req, res) => {
       kategoriaPunes,
       lokacioniPunes,
       pershkrimiPunes,
-      pyetjet,
-      kualifikimet,
       niveliPunes,
       orari,
+      aftesitePrimare,
+      aftesiteSekondare,
       eksperienca,
       pagaPrej,
       pagaDeri,
@@ -221,11 +241,11 @@ router.post("/kompania", async (req, res) => {
       kategoriaPunes,
       lokacioniPunes,
       pershkrimiPunes,
-      pyetjet,
-      kualifikimet,
       niveliPunes,
       orari,
       eksperienca,
+      aftesitePrimare,
+      aftesiteSekondare,
       pagaPrej,
       pagaDeri,
       perdoruesiId,
@@ -238,11 +258,11 @@ router.post("/kompania", async (req, res) => {
       kategoriaPunes,
       lokacioniPunes,
       pershkrimiPunes,
-      pyetjet: pyetjet || [],
-      kualifikimet: kualifikimet || [],
       niveliPunes,
       orari,
       eksperienca,
+      aftesitePrimare,
+      aftesiteSekondare,
       pagaPrej,
       pagaDeri,
       perdoruesiId,
@@ -268,6 +288,29 @@ router.post("/kompania", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
+    const shpalljaId = req.params.id;
+
+    const aplikantet = await Aplikimi.find({ shpalljaId: shpalljaId });
+
+    if (aplikantet.length > 0) {
+      const emailPerdoruesit = aplikantet
+        .map((a) => a.emailAplikantit)
+        .filter((email) => email && email.trim() !== "")
+        .map((email) => email.trim().replace(/['"]+/g, ""));
+
+      console.log("Emails sent to:", emailPerdoruesit);
+
+      if (emailPerdoruesit.length > 0) {
+        await dergoMesazhin(
+          emailPerdoruesit,
+          "Shpallja eshte fshire",
+          `Shpallja me id: ${shpalljaId}, e kompanise:  eshte fshire nga punedhenesi`,
+        );
+      }
+    }
+
+    await Aplikimi.deleteMany({ shpalljaId: shpalljaId });
+
     const shpallja = await Shpallja.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
@@ -291,7 +334,6 @@ router.put("/:id", async (req, res) => {
 
     const updateData = { ...req.body };
 
-    // Refresh the company photo URL if not provided in update
     if (!updateData.fotoProfili) {
       const shpallja = await Shpallja.findById(shpalljaId);
       if (shpallja) {

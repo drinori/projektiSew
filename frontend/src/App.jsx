@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AlertProvider } from "./contexts/AlertContext";
+import CustomAlert from "./components/CustomAlert";
 import Ballina from "./components/Ballina";
 import ListaPuneve from "./components/ListaPuneve";
 import "./index.css";
@@ -49,54 +51,60 @@ function App() {
   }, [perdoruesiData]);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <BrowserRouter>
-        <div className="grow flex flex-col">
-          <Routes>
-            <Route
-              path="/"
-              element={eshteKycur ? <Ballina /> : <BallinaMysafir />}
-            />
-            <Route path="/listaPuneve" element={<ListaPuneve />} />
-            <Route path="/listaKompanive" element={<ListaKompanive />} />
-            <Route path="/listaAplikanteve" element={<ListaAplikanteve />} />
-            <Route path="/rrethNesh" element={<RrethNesh />} />
-            <Route path="/kycja" element={<Kycja />} />
-            <Route path="/regjistrimi" element={<Regjistrimi />} />
-            <Route path="/kycja" element={<Kycja />} />
-            <Route path="/shpallja/:id" element={<Shpallja />} />
-            <Route path="/profili/:id" element={<Profili />} />
-            <Route path="/publikoPune" element={<PublikoPune />} />
+    <AlertProvider>
+      <CustomAlert />
+      <div className="min-h-screen flex flex-col">
+        <BrowserRouter>
+          <div className="grow flex flex-col">
+            <Routes>
+              <Route
+                path="/"
+                element={eshteKycur ? <Ballina /> : <BallinaMysafir />}
+              />
+              <Route path="/listaPuneve" element={<ListaPuneve />} />
+              <Route path="/listaKompanive" element={<ListaKompanive />} />
+              <Route path="/listaAplikanteve" element={<ListaAplikanteve />} />
+              <Route path="/rrethNesh" element={<RrethNesh />} />
+              <Route path="/kycja" element={<Kycja />} />
+              <Route path="/regjistrimi" element={<Regjistrimi />} />
+              <Route path="/kycja" element={<Kycja />} />
+              <Route path="/shpallja/:id" element={<Shpallja />} />
+              <Route path="/profili/:id" element={<Profili />} />
+              <Route path="/publikoPune" element={<PublikoPune />} />
 
-            <Route
-              path="/profili/:id/menaxhoShpalljet"
-              element={<MenaxhoShpalljet />}
-            />
-            <Route
-              path="/profili/:id/menaxhoAplikimet"
-              element={<MenaxhoAplikimet />}
-            />
-            <Route
-              path="/profili/:id/konfigurimet"
-              element={<KonfigurimetLlogarise />}
-            />
-            <Route path="/verifiko" element={<VerifikoEmail />} />
-            <Route path=":id/aplikimi" element={<Aplikimi />} />
-            <Route
-              path="/profili/:id/punetRuajtura"
-              element={<PunetRuajtura />}
-            />
-            <Route path="/kompania/:id" element={<ProfiliKompaniseVizitor />} />
-            <Route
-              path="/profiliAplikantit/:id"
-              element={<ProfiliAplikantitVizitor />}
-            />
-            <Route path="/llogaritpagen" element={<LlogaritPagen />} />
-          </Routes>
-        </div>
-        <Footeri />
-      </BrowserRouter>
-    </div>
+              <Route
+                path="/profili/:id/menaxhoShpalljet"
+                element={<MenaxhoShpalljet />}
+              />
+              <Route
+                path="/profili/:id/menaxhoAplikimet"
+                element={<MenaxhoAplikimet />}
+              />
+              <Route
+                path="/profili/:id/konfigurimet"
+                element={<KonfigurimetLlogarise />}
+              />
+              <Route path="/verifiko" element={<VerifikoEmail />} />
+              <Route path=":id/aplikimi" element={<Aplikimi />} />
+              <Route
+                path="/profili/:id/punetRuajtura"
+                element={<PunetRuajtura />}
+              />
+              <Route
+                path="/kompania/:id"
+                element={<ProfiliKompaniseVizitor />}
+              />
+              <Route
+                path="/profiliAplikantit/:id"
+                element={<ProfiliAplikantitVizitor />}
+              />
+              <Route path="/llogaritpagen" element={<LlogaritPagen />} />
+            </Routes>
+            <Footeri />
+          </div>
+        </BrowserRouter>
+      </div>
+    </AlertProvider>
   );
 }
 

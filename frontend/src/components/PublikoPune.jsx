@@ -5,11 +5,15 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Header from "./Header";
+import { useAlert } from "../contexts/AlertContext";
 
 function PublikoPune() {
   const navigate = useNavigate();
-  const [aftesite, setAftesite] = useState([]);
-  const [aftesiaTanishme, setAftesiaTanishme] = useState("");
+  const { showAlert } = useAlert();
+  const [aftesitePrimare, setAftesitePrimare] = useState([]);
+  const [aftesiaPrimareTanishme, setAftesiaPrimareTanishme] = useState("");
+  const [aftesiteSekondare, setAftesiteSekondare] = useState([]);
+  const [aftesiaSekondareTanishme, setAftesiaSekondareTanishme] = useState("");
 
   const [formData, setFormData] = useState({
     emailKompanise: "",
@@ -22,6 +26,8 @@ function PublikoPune() {
     eksperienca: "",
     pagaPrej: 0,
     pagaDeri: 0,
+    aftesitePrimare: [],
+    aftesiteSekondare: [],
     perdoruesiId: "",
   });
 
@@ -30,16 +36,30 @@ function PublikoPune() {
     { value: "Part-time", label: "Part-time" },
   ];
 
-  const shtoAftesine = () => {
-    if (aftesiaTanishme.trim()) {
-      setAftesite([...aftesite, aftesiaTanishme]);
-      setAftesiaTanishme("");
+  const shtoAftesinePrimare = () => {
+    if (aftesiaPrimareTanishme.trim()) {
+      setAftesitePrimare([...aftesitePrimare, aftesiaPrimareTanishme]);
+      setAftesiaPrimareTanishme("");
     }
   };
 
-  const fshijAftesine = (index) => {
-    const aftesiteReja = aftesite.filter((_, i) => i !== index);
-    setAftesite(aftesiteReja);
+  const fshijAftesinePrimare = (index) => {
+    const aftesitePrimareReja = aftesitePrimare.filter((_, i) => i !== index);
+    setAftesitePrimare(aftesitePrimareReja);
+  };
+
+  const shtoAftesineSekondare = () => {
+    if (aftesiaSekondareTanishme.trim()) {
+      setAftesiteSekondare([...aftesiteSekondare, aftesiaSekondareTanishme]);
+      setAftesiaSekondareTanishme("");
+    }
+  };
+
+  const fshijAftesineSekondare = (index) => {
+    const aftesiteSekondareReja = aftesiteSekondare.filter(
+      (_, i) => i !== index,
+    );
+    setAftesiteSekondare(aftesiteSekondareReja);
   };
 
   const handleEmploymentTypeChange = (typeValue) => {
@@ -90,17 +110,18 @@ function PublikoPune() {
       lokacioniPunes: formData.lokacioniPunes,
       pershkrimiPunes: formData.pershkrimiPunes,
       pyetjet: [],
-      kualifikimet: aftesite,
       niveliPunes: formData.niveliPunes,
       orari: formData.orari,
       eksperienca: formData.eksperienca,
       pagaPrej: formData.pagaPrej,
       pagaDeri: formData.pagaDeri,
+      aftesitePrimare: aftesitePrimare,
+      aftesiteSekondare: aftesiteSekondare,
       perdoruesiId: formData.perdoruesiId,
     };
 
     if (dataToSend.pagaDeri < dataToSend.pagaPrej) {
-      alert("Rangu i pages eshte gabim!");
+      showAlert("Rangu i pages eshte gabim!", "info");
       return;
     }
 
@@ -110,7 +131,7 @@ function PublikoPune() {
     );
 
     if (response.data.success) {
-      alert("Puna u shpall");
+      showAlert("Puna u shpall", "success");
 
       setFormData({
         emailKompanise: "",
@@ -121,12 +142,16 @@ function PublikoPune() {
         niveliPunes: "",
         orari: [],
         eksperienca: "",
+        aftesitePrimare: [],
+        aftesiteSekondare: [],
         pagaPrej: 0,
         pagaDeri: 0,
         perdoruesiId: "",
       });
-      setAftesite([]);
-      setAftesiaTanishme("");
+      setAftesitePrimare([]);
+      setAftesiteSekondare([]);
+      setAftesiaPrimareTanishme("");
+      setAftesiaSekondareTanishme("");
     }
 
     navigate("/");
@@ -134,7 +159,7 @@ function PublikoPune() {
 
   return (
     <div className="min-h-screen">
-      <div className="bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] pb-32 relative overflow-hidden">
+      <div className="bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] pb-32 relative ">
         <Header />
 
         <div className="text-center relative z-10">
@@ -428,13 +453,13 @@ function PublikoPune() {
               {/* Aftësitë Section - List Style */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Aftësitë
+                  Aftësitë Primare
                 </label>
 
                 {/* Display existing skills as list */}
-                {aftesite.length > 0 && (
+                {aftesitePrimare.length > 0 && (
                   <div className="mb-4 border border-gray-200 rounded-lg divide-y divide-gray-200">
-                    {aftesite.map((aftesi, i) => (
+                    {aftesitePrimare.map((aftesi, i) => (
                       <div
                         key={i}
                         className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
@@ -442,7 +467,7 @@ function PublikoPune() {
                         <span className="text-gray-700">{aftesi}</span>
                         <button
                           type="button"
-                          onClick={() => fshijAftesine(i)}
+                          onClick={() => fshijAftesinePrimare(i)}
                           className="text-red-500 hover:text-red-700 transition-colors"
                         >
                           <FontAwesomeIcon
@@ -461,18 +486,74 @@ function PublikoPune() {
                     type="text"
                     placeholder="Shto aftësi (p.sh. Aftësi komunikuese të shkëlqyera)"
                     className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                    value={aftesiaTanishme}
-                    onChange={(e) => setAftesiaTanishme(e.target.value)}
+                    value={aftesiaPrimareTanishme}
+                    onChange={(e) => setAftesiaPrimareTanishme(e.target.value)}
                     onKeyPress={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
-                        shtoAftesine();
+                        shtoAftesinePrimare();
                       }
                     }}
                   />
                   <button
                     type="button"
-                    onClick={shtoAftesine}
+                    onClick={shtoAftesinePrimare}
+                    className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
+                  >
+                    <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
+                    Shto
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2 mt-5">
+                  Aftësitë Sekondare
+                </label>
+
+                {/* Display existing skills as list */}
+                {aftesiteSekondare.length > 0 && (
+                  <div className="mb-4 border border-gray-200 rounded-lg divide-y divide-gray-200">
+                    {aftesiteSekondare.map((aftesi, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                      >
+                        <span className="text-gray-700">{aftesi}</span>
+                        <button
+                          type="button"
+                          onClick={() => fshijAftesineSekondare(i)}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrashCan}
+                            className="w-4 h-4"
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Add skill input */}
+                <div className="flex gap-3">
+                  <input
+                    type="text"
+                    placeholder="Shto aftësi (p.sh. Aftësi komunikuese të shkëlqyera)"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={aftesiaSekondareTanishme}
+                    onChange={(e) =>
+                      setAftesiaSekondareTanishme(e.target.value)
+                    }
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        shtoAftesineSekondare();
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={shtoAftesineSekondare}
                     className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center gap-2"
                   >
                     <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />

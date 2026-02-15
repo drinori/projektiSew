@@ -23,9 +23,12 @@ import {
   faCheck,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAlert } from "../contexts/AlertContext";
+import Perdoruesi from "../PerdoruesiContext";
 
 function MenaxhoShpalljet() {
-  const [perdoruesiData, setPerdoruesiData] = useState({});
+  const { showAlert } = useAlert();
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shpalljaData, setShpalljaData] = useState([]);
   const [shpalljaKlikuar, setShpalljaKlikuar] = useState(null);
   const [filtrimiFaqes, setFiltrimiFaqes] = useState("Active");
@@ -33,55 +36,40 @@ function MenaxhoShpalljet() {
   const [shfaqMeny, setShfaqMeny] = useState(null);
   const [menyRadhitjes, setMenyRadhitjes] = useState(false);
   const [sortimiDates, setSortimiDates] = useState("teRejat");
+  const [isSaving, setIsSaving] = useState(false);
 
   const [aplikimet, setAplikimet] = useState([]);
   const [aplikimiKlikuar, setAplikimiKlikuar] = useState(null);
   const [shfaqPopupAplikanteve, setShfaqPopupAplikanteve] = useState(false);
   const [shpalljaZgjedhurPerAplikante, setShpalljaZgjedhurPerAplikante] =
     useState(null);
+  const [shfaqPopupPranuar, setShfaqPopupPranuar] = useState(false);
+  const [shfaqPopupRefuzuar, setShfaqPopupRefuzuar] = useState(false);
 
   const [fotoAplikanteve, setFotoAplikanteve] = useState({});
 
-  const { id } = useParams();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/profili/${id}`,
-        );
-        setPerdoruesiData(response.data.data);
-      } catch (error) {
-        console.error(error);
+  const fetchShpalljet = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/shpallja/kompania",
+      );
+      if (Array.isArray(response.data.data)) {
+        const shpalljetFiltruara = response.data.data.filter((shpallja) => {
+          return (
+            shpallja?.emailKompanise?.toLowerCase() ===
+            perdoruesiData?.email?.toLowerCase()
+          );
+        });
+        setShpalljaData(shpalljetFiltruara);
       }
-    };
-
-    if (id) {
-      fetchData();
+    } catch (error) {
+      console.error(error);
     }
-  }, [id]);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/shpallja/kompania",
-        );
-        if (Array.isArray(response.data.data)) {
-          const shpalljetFiltruara = response.data.data.filter((shpallja) => {
-            return shpallja.emailKompanise === perdoruesiData.email;
-          });
-          if (shpalljetFiltruara.length > 0) {
-            setShpalljaData(shpalljetFiltruara);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (perdoruesiData.email) {
-      fetchData();
+    if (perdoruesiData?.email) {
+      fetchShpalljet();
     }
   }, [perdoruesiData]);
 
@@ -134,8 +122,9 @@ function MenaxhoShpalljet() {
           }
         }
       } catch (error) {
-        // Nese nuk gjendet perdoruesi ose foto, vazhdo me te tjeret
-        console.log(`Foto nuk u gjet per: ${aplikimi.emailAplikantit}`);
+        console.log(
+          `Foto nuk u gjet per: ${aplikimi.emailAplikantit}, ${error}`,
+        );
       }
     }
 
@@ -144,10 +133,17 @@ function MenaxhoShpalljet() {
 
   const modifikoShpalljen = (e) => {
     const { id, value } = e.target;
-    setShpalljaKlikuar({
-      ...shpalljaKlikuar,
-      [id]: value,
-    });
+
+    if (id === "aftesitePrimare" || id === "aftesiteSekondare") {
+      // Convert comma‑separated string to array of trimmed, non‑empty strings
+      const arrayValue = value
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s !== "");
+      setShpalljaKlikuar((prev) => ({ ...prev, [id]: arrayValue }));
+    } else {
+      setShpalljaKlikuar((prev) => ({ ...prev, [id]: value }));
+    }
   };
 
   const fshijShpalljen = async (idShpallja) => {
@@ -168,6 +164,7 @@ function MenaxhoShpalljet() {
 
   const ruajNdryshimet = async (e) => {
     e.preventDefault();
+    setIsSaving(true);
     try {
       await axios.put(
         `http://localhost:3000/api/shpallja/${shpalljaKlikuar._id}`,
@@ -178,10 +175,13 @@ function MenaxhoShpalljet() {
           sh._id === shpalljaKlikuar._id ? shpalljaKlikuar : sh,
         ),
       );
-      alert("Ndryshimet u ruajten");
+      showAlert("Ndryshimet u ruajten", "info");
       setShpalljaKlikuar(null);
     } catch (error) {
       console.error(error);
+      showAlert("Ndodhi një gabim gjatë ruajtjes", "error");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -203,7 +203,9 @@ function MenaxhoShpalljet() {
         );
       }
 
-      alert("Ndryshimet u ruajten");
+      await fetchShpalljet();
+
+      showAlert("Ndryshimet u ruajten", "info");
       setAplikimiKlikuar(null);
     } catch (error) {
       console.error(error);
@@ -222,6 +224,32 @@ function MenaxhoShpalljet() {
     setShpalljaZgjedhurPerAplikante(null);
     setAplikimiKlikuar(null);
     setFotoAplikanteve({});
+  };
+
+  const shfaqAplikantPranuar = (e, shpallja) => {
+    e.stopPropagation();
+    setShpalljaZgjedhurPerAplikante(shpallja);
+    setShfaqPopupPranuar(true);
+    setShfaqMeny(null);
+  };
+
+  const shfaqAplikantRefuzuar = (e, shpallja) => {
+    e.stopPropagation();
+    setShpalljaZgjedhurPerAplikante(shpallja);
+    setShfaqPopupRefuzuar(true);
+    setShfaqMeny(null);
+  };
+
+  const mbyllPopupPranuar = () => {
+    setShfaqPopupPranuar(false);
+    setShpalljaZgjedhurPerAplikante(null);
+    setAplikimet([]);
+  };
+
+  const mbyllPopupRefuzuar = () => {
+    setShfaqPopupRefuzuar(false);
+    setShpalljaZgjedhurPerAplikante(null);
+    setAplikimet([]);
   };
 
   const hapAplikimin = (aplikimi) => {
@@ -266,7 +294,7 @@ function MenaxhoShpalljet() {
         .toLowerCase()
         .includes(kerko.toLowerCase());
 
-      const isExpired = shpalljaSkaduar(sh.dataKrijimit);
+      const isExpired = sh.status === "skaduar";
 
       if (filtrimiFaqes === "Active") {
         return matchesSearch && !isExpired;
@@ -394,7 +422,9 @@ function MenaxhoShpalljet() {
                   <th className="tableHead">Data e Publikimit</th>
                   <th className="tableHead">Lokacioni</th>
                   <th className="tableHead text-center">Orari</th>
-                  <th className="tableHead">Aplikimet</th>
+                  <th className="tableHead">Aplikimet ne Pritje</th>
+                  <th className="tableHead">Aplikimet e Pranuara</th>
+                  <th className="tableHead">Aplikimet e Refuzuara</th>
                   <th className="tableHead text-right">Veprime</th>
                 </tr>
               </thead>
@@ -429,7 +459,23 @@ function MenaxhoShpalljet() {
                         onClick={(e) => shfaqAplikantPopup(e, sh)}
                         className="text-sm text-indigo-600 hover:text-indigo-900 font-medium"
                       >
-                        {sh.numriAplikimeve || 0} aplikant
+                        {sh.numriNePritje} aplikant
+                      </button>
+                    </td>
+                    <td className="tableData">
+                      <button
+                        onClick={(e) => shfaqAplikantPranuar(e, sh)}
+                        className="text-sm text-indigo-600 hover:text-indigo-900 font-medium"
+                      >
+                        {sh.numriPranuar} aplikant
+                      </button>
+                    </td>
+                    <td className="tableData">
+                      <button
+                        onClick={(e) => shfaqAplikantRefuzuar(e, sh)}
+                        className="text-sm text-indigo-600 hover:text-indigo-900 font-medium"
+                      >
+                        {sh.numriRefuzuar} aplikant
                       </button>
                     </td>
                     <td className="tableData text-right text-sm font-medium">
@@ -446,7 +492,11 @@ function MenaxhoShpalljet() {
                           <div className="absolute right-6  top-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                             <button
                               onClick={() => {
-                                setShpalljaKlikuar(sh);
+                                setShpalljaKlikuar({
+                                  ...sh,
+                                  aftesitePrimare: sh.aftesitePrimare || [],
+                                  aftesiteSekondare: sh.aftesiteSekondare || [],
+                                });
                                 setShfaqMeny(null);
                               }}
                               className="butonModifikimi"
@@ -657,16 +707,138 @@ function MenaxhoShpalljet() {
                   />
                 </div>
 
+                {/* New skills fields */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Aftesite Primare */}
+                  <div>
+                    <label className="labelTabela">Aftesite Primare</label>
+                    {shpalljaKlikuar.aftesitePrimare?.map((skill, index) => (
+                      <div key={index} className="flex items-center gap-2 mb-2">
+                        <input
+                          type="text"
+                          value={skill}
+                          onChange={(e) => {
+                            const newSkills = [
+                              ...shpalljaKlikuar.aftesitePrimare,
+                            ];
+                            newSkills[index] = e.target.value;
+                            setShpalljaKlikuar({
+                              ...shpalljaKlikuar,
+                              aftesitePrimare: newSkills,
+                            });
+                          }}
+                          className="input-ShpalljaProfil flex-1"
+                          placeholder="Shkruaj nje aftesi"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newSkills =
+                              shpalljaKlikuar.aftesitePrimare.filter(
+                                (_, i) => i !== index,
+                              );
+                            setShpalljaKlikuar({
+                              ...shpalljaKlikuar,
+                              aftesitePrimare: newSkills,
+                            });
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <X size={18} />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSkills = [
+                          ...(shpalljaKlikuar.aftesitePrimare || []),
+                          "",
+                        ];
+                        setShpalljaKlikuar({
+                          ...shpalljaKlikuar,
+                          aftesitePrimare: newSkills,
+                        });
+                      }}
+                      className="text-sm text-indigo-600 hover:text-indigo-800 mt-2"
+                    >
+                      + Shto aftesi primare
+                    </button>
+                  </div>
+
+                  {/* Aftesite Sekondare - NO mt-6 */}
+                  <div>
+                    <label className="labelTabela">Aftesite Sekondare</label>
+                    {shpalljaKlikuar.aftesiteSekondare?.map((skill, index) => (
+                      <div key={index} className="flex items-center gap-2 mb-2">
+                        <input
+                          type="text"
+                          value={skill}
+                          onChange={(e) => {
+                            const newSkills = [
+                              ...shpalljaKlikuar.aftesiteSekondare,
+                            ];
+                            newSkills[index] = e.target.value;
+                            setShpalljaKlikuar({
+                              ...shpalljaKlikuar,
+                              aftesiteSekondare: newSkills,
+                            });
+                          }}
+                          className="input-ShpalljaProfil flex-1"
+                          placeholder="Shkruaj nje aftesi"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newSkills =
+                              shpalljaKlikuar.aftesiteSekondare.filter(
+                                (_, i) => i !== index,
+                              );
+                            setShpalljaKlikuar({
+                              ...shpalljaKlikuar,
+                              aftesiteSekondare: newSkills,
+                            });
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <X size={18} />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSkills = [
+                          ...(shpalljaKlikuar.aftesiteSekondare || []),
+                          "",
+                        ];
+                        setShpalljaKlikuar({
+                          ...shpalljaKlikuar,
+                          aftesiteSekondare: newSkills,
+                        });
+                      }}
+                      className="text-sm text-indigo-600 hover:text-indigo-800 mt-2"
+                    >
+                      + Shto aftesi sekondare
+                    </button>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <button
                     type="button"
-                    className="publikoPune bg-red-500 cursor-pointer"
+                    disabled={isSaving}
+                    className="publikoPune bg-red-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={() => fshijShpalljen(shpalljaKlikuar._id)}
                   >
                     Fshij Shpalljen
                   </button>
-                  <button type="submit" className="publikoPune cursor-pointer">
-                    Perfundo
+                  <button
+                    type="submit"
+                    disabled={isSaving}
+                    className="publikoPune cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSaving ? "Duke ruajtur..." : "Perfundo"}
                   </button>
                 </div>
               </form>
@@ -685,23 +857,21 @@ function MenaxhoShpalljet() {
               >
                 <div className="flex flex-col gap-2">
                   <h2 className="text-2xl font-bold mb-2">
-                    {shpalljaZgjedhurPerAplikante.pozitaPunes}
+                    {shpalljaZgjedhurPerAplikante.pozitaPunes} - Aplikantët në
+                    Pritje
                   </h2>
-
                   <div className="flex flex-wrap gap-2">
                     <span className="px-4 py-1.5 flex justify-between items-center gap-2 rounded-full text-sm font-semibold">
-                      <User size={16} /> {aplikimet.length} Aplikant
-                      {aplikimet.length !== 1 ? "ë" : ""}
+                      <User size={16} />{" "}
+                      {aplikimet.filter((a) => a.status === "Ne_Pritje").length}{" "}
+                      Aplikantë
                     </span>
-
                     <span className="px-4 py-1.5 rounded-full text-sm font-semibold">
-                      {" "}
-                      <FontAwesomeIcon icon={faLocationDot} className="" />
+                      <FontAwesomeIcon icon={faLocationDot} />
                       {shpalljaZgjedhurPerAplikante.lokacioniPunes}
                     </span>
                   </div>
                 </div>
-
                 <button
                   onClick={mbyllAplikantPopup}
                   className="cursor-pointer text-xl hover:text-gray-700"
@@ -710,68 +880,270 @@ function MenaxhoShpalljet() {
                 </button>
               </div>
             </div>
-
             <div className="p-6">
-              {aplikimet.length === 0 ? (
+              {aplikimet.filter((a) => a.status === "Ne_Pritje").length ===
+              0 ? (
                 <p className="text-gray-500 text-center py-8 italic">
-                  Nuk ka aplikime për këtë pozitë
+                  Nuk ka aplikantë në pritje për këtë pozitë
                 </p>
               ) : (
                 <div className="space-y-3">
-                  {aplikimet.map((a) => (
-                    <div
-                      key={a._id}
-                      className="rounded-lg p-4 hover:bg-gray-50 hover:shadow-xl transition-all duration-300 group"
-                    >
-                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-                        <div className="flex items-start gap-4">
-                          <div className="relative">
-                            <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
-                              {fotoAplikanteve[a.emailAplikantit] ? (
-                                <img
-                                  src={fotoAplikanteve[a.emailAplikantit]}
-                                  alt={`${a.emriAplikantit} ${a.mbiemriAplikantit}`}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.target.style.display = "none";
-                                    const parent = e.target.parentElement;
-                                    parent.innerHTML = `<span class="text-blue-600">${a.emriAplikantit?.charAt(0)}${a.mbiemriAplikantit?.charAt(0)}</span>`;
-                                  }}
-                                />
-                              ) : (
-                                <span className="text-blue-600">
-                                  {a.emriAplikantit?.charAt(0)}
-                                  {a.mbiemriAplikantit?.charAt(0)}
-                                </span>
-                              )}
+                  {aplikimet
+                    .filter((a) => a.status === "Ne_Pritje")
+                    .map((a) => (
+                      <div
+                        key={a._id}
+                        className="rounded-lg p-4 hover:bg-gray-50 hover:shadow-xl transition-all duration-300 group"
+                      >
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                          <div className="flex items-start gap-4">
+                            <div className="relative">
+                              <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
+                                {fotoAplikanteve[a.emailAplikantit] ? (
+                                  <img
+                                    src={fotoAplikanteve[a.emailAplikantit]}
+                                    alt={`${a.emriAplikantit} ${a.mbiemriAplikantit}`}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.target.style.display = "none";
+                                      const parent = e.target.parentElement;
+                                      parent.innerHTML = `<span class="text-blue-600">${a.emriAplikantit?.charAt(0)}${a.mbiemriAplikantit?.charAt(0)}</span>`;
+                                    }}
+                                  />
+                                ) : (
+                                  <span className="text-blue-600">
+                                    {a.emriAplikantit?.charAt(0)}
+                                    {a.mbiemriAplikantit?.charAt(0)}
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-gray-900 text-lg mb-1 truncate">
-                              {a.emriAplikantit} {a.mbiemriAplikantit}
-                            </h3>
-                            <div className="flex items-center gap-2 text-gray-600">
-                              <Mail
-                                size={16}
-                                className="text-secondary shrink-0"
-                              />
-                              <p className="text-sm truncate">
-                                {a.emailAplikantit}
-                              </p>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-bold text-gray-900 text-lg mb-1 truncate">
+                                {a.emriAplikantit} {a.mbiemriAplikantit}
+                              </h3>
+                              <div className="flex items-center gap-2 text-gray-600">
+                                <Mail
+                                  size={16}
+                                  className="text-secondary shrink-0"
+                                />
+                                <p className="text-sm truncate">
+                                  {a.emailAplikantit}
+                                </p>
+                              </div>
                             </div>
                           </div>
+                          <button
+                            type="button"
+                            className="grid place-self-center publikoPune ml-4 sm:ml-0 sm:mt-0 mt-3"
+                            onClick={() => hapAplikimin(a)}
+                          >
+                            Shiko Me Shume
+                          </button>
                         </div>
-                        <button
-                          type="button"
-                          className="grid place-self-center publikoPune ml-4 sm:ml-0 sm:mt-0 mt-3"
-                          onClick={() => hapAplikimin(a)}
-                        >
-                          Shiko Me Shume
-                        </button>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Popup for Accepted Applicants */}
+      {shfaqPopupPranuar && shpalljaZgjedhurPerAplikante && (
+        <div className="fixed bg-black/20 inset-0 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-5xl max-h-[90vh] overflow-y-auto shadow-xl">
+            <div>
+              <div className="bg-[#f8f8f9] p-6 sticky top-0 flex items-start justify-between">
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-2xl font-bold mb-2">
+                    {shpalljaZgjedhurPerAplikante.pozitaPunes} - Aplikantët e
+                    Pranuar
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-4 py-1.5 flex justify-between items-center gap-2 rounded-full text-sm font-semibold">
+                      <User size={16} />{" "}
+                      {aplikimet.filter((a) => a.status === "Pranuar").length}{" "}
+                      Aplikantë të Pranuar
+                    </span>
+                    <span className="px-4 py-1.5 rounded-full text-sm font-semibold">
+                      <FontAwesomeIcon icon={faLocationDot} />
+                      {shpalljaZgjedhurPerAplikante.lokacioniPunes}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={mbyllPopupPranuar}
+                  className="cursor-pointer text-xl hover:text-gray-700"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              {aplikimet.filter((a) => a.status === "Pranuar").length === 0 ? (
+                <p className="text-gray-500 text-center py-8 italic">
+                  Nuk ka aplikantë të pranuar për këtë pozitë
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {aplikimet
+                    .filter((a) => a.status === "Pranuar")
+                    .map((a) => (
+                      <div
+                        key={a._id}
+                        className="rounded-lg p-4 hover:bg-gray-50 hover:shadow-xl transition-all duration-300 group"
+                      >
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                          <div className="flex items-start gap-4">
+                            <div className="relative">
+                              <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
+                                {fotoAplikanteve[a.emailAplikantit] ? (
+                                  <img
+                                    src={fotoAplikanteve[a.emailAplikantit]}
+                                    alt={`${a.emriAplikantit} ${a.mbiemriAplikantit}`}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.target.style.display = "none";
+                                      const parent = e.target.parentElement;
+                                      parent.innerHTML = `<span class="text-blue-600">${a.emriAplikantit?.charAt(0)}${a.mbiemriAplikantit?.charAt(0)}</span>`;
+                                    }}
+                                  />
+                                ) : (
+                                  <span className="text-blue-600">
+                                    {a.emriAplikantit?.charAt(0)}
+                                    {a.mbiemriAplikantit?.charAt(0)}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-bold text-gray-900 text-lg mb-1 truncate">
+                                {a.emriAplikantit} {a.mbiemriAplikantit}
+                              </h3>
+                              <div className="flex items-center gap-2 text-gray-600">
+                                <Mail
+                                  size={16}
+                                  className="text-secondary shrink-0"
+                                />
+                                <p className="text-sm truncate">
+                                  {a.emailAplikantit}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className="grid place-self-center publikoPune ml-4 sm:ml-0 sm:mt-0 mt-3"
+                            onClick={() => hapAplikimin(a)}
+                          >
+                            Shiko Me Shume
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Popup for Rejected Applicants */}
+      {shfaqPopupRefuzuar && shpalljaZgjedhurPerAplikante && (
+        <div className="fixed bg-black/20 inset-0 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-5xl max-h-[90vh] overflow-y-auto shadow-xl">
+            <div>
+              <div className="bg-[#f8f8f9] p-6 sticky top-0 flex items-start justify-between">
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-2xl font-bold mb-2">
+                    {shpalljaZgjedhurPerAplikante.pozitaPunes} - Aplikantët e
+                    Refuzuar
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-4 py-1.5 flex justify-between items-center gap-2 rounded-full text-sm font-semibold">
+                      <User size={16} />{" "}
+                      {aplikimet.filter((a) => a.status === "Refuzuar").length}{" "}
+                      Aplikantë të Refuzuar
+                    </span>
+                    <span className="px-4 py-1.5 rounded-full text-sm font-semibold">
+                      <FontAwesomeIcon icon={faLocationDot} />
+                      {shpalljaZgjedhurPerAplikante.lokacioniPunes}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={mbyllPopupRefuzuar}
+                  className="cursor-pointer text-xl hover:text-gray-700"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+            </div>
+            <div className="p-6">
+              {aplikimet.filter((a) => a.status === "Refuzuar").length === 0 ? (
+                <p className="text-gray-500 text-center py-8 italic">
+                  Nuk ka aplikantë të refuzuar për këtë pozitë
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {aplikimet
+                    .filter((a) => a.status === "Refuzuar")
+                    .map((a) => (
+                      <div
+                        key={a._id}
+                        className="rounded-lg p-4 hover:bg-gray-50 hover:shadow-xl transition-all duration-300 group"
+                      >
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                          <div className="flex items-start gap-4">
+                            <div className="relative">
+                              <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center font-bold text-xl shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
+                                {fotoAplikanteve[a.emailAplikantit] ? (
+                                  <img
+                                    src={fotoAplikanteve[a.emailAplikantit]}
+                                    alt={`${a.emriAplikantit} ${a.mbiemriAplikantit}`}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.target.style.display = "none";
+                                      const parent = e.target.parentElement;
+                                      parent.innerHTML = `<span class="text-blue-600">${a.emriAplikantit?.charAt(0)}${a.mbiemriAplikantit?.charAt(0)}</span>`;
+                                    }}
+                                  />
+                                ) : (
+                                  <span className="text-blue-600">
+                                    {a.emriAplikantit?.charAt(0)}
+                                    {a.mbiemriAplikantit?.charAt(0)}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-bold text-gray-900 text-lg mb-1 truncate">
+                                {a.emriAplikantit} {a.mbiemriAplikantit}
+                              </h3>
+                              <div className="flex items-center gap-2 text-gray-600">
+                                <Mail
+                                  size={16}
+                                  className="text-secondary shrink-0"
+                                />
+                                <p className="text-sm truncate">
+                                  {a.emailAplikantit}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className="grid place-self-center publikoPune ml-4 sm:ml-0 sm:mt-0 mt-3"
+                            onClick={() => hapAplikimin(a)}
+                          >
+                            Shiko Me Shume
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               )}
             </div>
@@ -892,6 +1264,24 @@ function MenaxhoShpalljet() {
                   </p>
                 </div>
               </div>
+              {aplikimiKlikuar.aftesite.length > 0 && (
+                <div className="detajetAplikantit">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 flex items-center justify-center">
+                      <BriefcaseBusiness size={16} />
+                    </div>
+                    <span className="spanAplikanti">Aftesite</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {aplikimiKlikuar.aftesite.map((af) => (
+                      <p className="px-1.5 text-base font-medium text-gray-900">
+                        {af.toUpperCase()}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-8 h-8 flex items-center justify-center">
@@ -925,23 +1315,25 @@ function MenaxhoShpalljet() {
                 </div>
               </div>
               {aplikimiKlikuar.status === "Ne_Pritje" &&
-                shpalljaSkaduar(shpalljaZgjedhurPerAplikante.dataKrijimit) && (
-                  <select
-                    id="status"
-                    onChange={(e) =>
-                      setAplikimiKlikuar({
-                        ...aplikimiKlikuar,
-                        status: e.target.value,
-                      })
-                    }
-                  >
-                    <option value={`${aplikimiKlikuar.status}`} default hidden>
-                      {aplikimiKlikuar.status}
-                    </option>
-                    <option value="Pranuar">Prano</option>
-                    <option value="Refuzuar">Refuzo</option>
-                  </select>
-                )}
+              shpalljaZgjedhurPerAplikante.status === "skaduar" ? (
+                <select
+                  id="status"
+                  onChange={(e) =>
+                    setAplikimiKlikuar({
+                      ...aplikimiKlikuar,
+                      status: e.target.value,
+                    })
+                  }
+                >
+                  <option value={`${aplikimiKlikuar.status}`} default hidden>
+                    {aplikimiKlikuar.status}
+                  </option>
+                  <option value="Pranuar">Prano</option>
+                  <option value="Refuzuar">Refuzo</option>
+                </select>
+              ) : (
+                <p>{aplikimiKlikuar.status}</p>
+              )}
             </div>
 
             <div className="px-6 py-4 bg-white/80 backdrop-blur-lg border-t border-gray-100 rounded-b-2xl flex justify-end items-center gap-3">
@@ -960,10 +1352,8 @@ function MenaxhoShpalljet() {
             </div>
           </div>
         </div>
-        
       )}
     </div>
-
   );
 }
 

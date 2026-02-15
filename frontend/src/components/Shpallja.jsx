@@ -18,12 +18,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import Perdoruesi from "../PerdoruesiContext";
 
 function Shpallja() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [shpallja, setShpallja] = useState(null);
   const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [eshteRuajtur, setEshteRuajtur] = useState(false);
   const [duke_ngarkuar, setDuke_ngarkuar] = useState(false);
   const [fotoError, setFotoError] = useState(false);
+  const [kaAplikuar, setKaAplikuar] = useState(false);
 
   const handlePhotoError = () => setFotoError(true);
 
@@ -31,8 +33,6 @@ function Shpallja() {
     if (!shpallja?.emailKompanise) return "COMPANY";
     return shpallja.emailKompanise.split("@")[0].toUpperCase();
   };
-
-  const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +67,30 @@ function Shpallja() {
       }
     };
     kontrolloStatusin();
+  }, [id, perdoruesiData]);
+
+  useEffect(() => {
+    const kontrolloAplikimin = async () => {
+      if (
+        !perdoruesiData ||
+        perdoruesiData.tipiPerdoruesit === "punedhenes" ||
+        !id
+      ) {
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/shpallja/ka-aplikuar/${id}`,
+          { withCredentials: true },
+        );
+        setKaAplikuar(response.data.kaAplikuar);
+      } catch (error) {
+        console.error("Gabim gjatë kontrollit të aplikimit:", error);
+      }
+    };
+
+    kontrolloAplikimin();
   }, [id, perdoruesiData]);
 
   const ndryshoRuajtjen = async () => {
@@ -112,13 +136,40 @@ function Shpallja() {
     );
   }
 
+  const aplikoTani = (e) => {
+    e.preventDefault();
+
+    if (!perdoruesiData) {
+      navigate("/kycja");
+      return;
+    }
+
+    const aftesiteAplikantit = (perdoruesiData.aftesite || []).map((aftesia) =>
+      aftesia.toLowerCase().trim(),
+    );
+    const aftesiteDetyrueshme = shpallja.aftesitePrimare.map((aftesia) =>
+      aftesia.toLowerCase().trim(),
+    );
+
+    const iGatshem = aftesiteDetyrueshme.every((aftesia) =>
+      aftesiteAplikantit.includes(aftesia),
+    );
+
+    if (!iGatshem) {
+      alert("Nuk i keni të gjitha aftësitë e kërkuara për këtë pozitë.");
+      return;
+    }
+
+    navigate(`/${id}/aplikimi`);
+  };
+
   const hasPhoto =
     (shpallja.fotoProfili?.startsWith("http") ||
       shpallja.fotoProfili?.startsWith("data:")) &&
     !fotoError;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] ">
+    <div className="min-h-screen bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA]">
       <Header />
 
       <div className="max-w-6xl mx-auto px-4 py-8 md:px-8">
@@ -134,12 +185,12 @@ function Shpallja() {
           Kthehu tek punët
         </button>
 
-        {/* Main Content + Sidebar - Two Column Layout */}
+        {/* ✅ FIXED: Two column layout – sidebar is a sibling, not nested */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* ── Left Column: ONE BIG Card with Header + All Sections ── */}
+          {/* ── LEFT COLUMN: Job Details Card ── */}
           <div className="flex-1">
             <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg overflow-hidden">
-              {/* Job Header Inside Card */}
+              {/* Job Header */}
               <div className="p-6 md:p-8 border-b border-gray-200">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
                   {/* Logo + Company + Title */}
@@ -177,7 +228,11 @@ function Shpallja() {
                         eshteRuajtur
                           ? "text-blue-600"
                           : "text-gray-500 hover:text-gray-700"
-                      } ${duke_ngarkuar ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                      } ${
+                        duke_ngarkuar
+                          ? "opacity-50 cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
                     >
                       <FontAwesomeIcon
                         icon={
@@ -241,12 +296,12 @@ function Shpallja() {
                 </div>
               </div>
 
-              {/* Content Sections Inside Same Card */}
-              <div className="p-6 md:p-8">
-                {/* Job Description Section */}
-                <div className="mb-8">
+              {/* Content Sections – design from second version */}
+              <div className="p-6 md:p-8 space-y-6">
+                {/* Job Description */}
+                <div>
                   <h2 className="text-xl font-bold text-gray-900 mb-4">
-                    Pershkrimi i Punës
+                    Përshkrimi i Punës
                   </h2>
                   {shpallja.pershkrimiPunes ? (
                     <p className="text-gray-600 leading-relaxed whitespace-pre-line">
@@ -254,44 +309,23 @@ function Shpallja() {
                     </p>
                   ) : (
                     <p className="text-gray-400 italic text-sm">
-                      Nuk ka pershkrim të shtuar.
+                      Nuk ka përshkrim të shtuar.
                     </p>
                   )}
                 </div>
 
-                {/* Responsibilities Section */}
-                <div className="mb-8">
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">
-                    Aftesite
+                {/* Required Skills – White Card */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
+                  <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
+                    Aftësitë e Detyrueshme
                   </h2>
-                  {shpallja.pyetjet && shpallja.pyetjet.length > 0 ? (
+                  {shpallja.aftesitePrimare &&
+                  shpallja.aftesitePrimare.length > 0 ? (
                     <ul className="space-y-3">
-                      {shpallja.pyetjet.map((pyetja, index) => (
+                      {shpallja.aftesitePrimare.map((kerkesa, index) => (
                         <li key={index} className="flex items-start gap-3">
-                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>
-                          <span className="text-gray-600 leading-relaxed">
-                            {pyetja}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-400 italic text-sm">
-                      Nuk ka përgjegjësi të specifikuara.
-                    </p>
-                  )}
-                </div>
-
-                {/* Requirements Section */}
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">
-                    Kualifikimet e kërkuara
-                  </h2>
-                  {shpallja.kualifikimet && shpallja.kualifikimet.length > 0 ? (
-                    <ul className="space-y-3">
-                      {shpallja.kualifikimet.map((kerkesa, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>
+                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
                           <span className="text-gray-600 leading-relaxed">
                             {kerkesa}
                           </span>
@@ -300,7 +334,32 @@ function Shpallja() {
                     </ul>
                   ) : (
                     <p className="text-gray-400 italic text-sm">
-                      Nuk ka kualifikime të specifikuara.
+                      Nuk ka aftësi të specifikuara.
+                    </p>
+                  )}
+                </div>
+
+                {/* Optional Skills – White Card */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
+                  <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-primary rounded-full inline-block"></span>
+                    Aftësitë Opsionale
+                  </h2>
+                  {shpallja.aftesiteSekondare &&
+                  shpallja.aftesiteSekondare.length > 0 ? (
+                    <ul className="space-y-3">
+                      {shpallja.aftesiteSekondare.map((kerkesa, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
+                          <span className="text-gray-600 leading-relaxed">
+                            {kerkesa}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-400 italic text-sm">
+                      Nuk ka aftësi të specifikuara.
                     </p>
                   )}
                 </div>
@@ -308,10 +367,10 @@ function Shpallja() {
             </div>
           </div>
 
-          {/* ── Right Sidebar: Apply & Company Info ── */}
+          {/* ── RIGHT COLUMN: Sidebar – SIBLING, NOT NESTED ✅ */}
           <div className="lg:w-80 space-y-4">
-            {/* Apply Card */}
-            <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl  shadow-lg p-6 ">
+            {/* Apply Card – with the EXACT button from your second version */}
+            <div className="bg-white/70 border border-[#F7FBFC] rounded-2xl shadow-lg p-6">
               <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
                 Apliko tani
               </h3>
@@ -384,20 +443,26 @@ function Shpallja() {
                     </span>
                   </div>
                 )}
+
                 {perdoruesiData?.tipiPerdoruesit !== "punedhenes" && (
-                  <button
-                    onClick={() => {
-                      if (!perdoruesiData) {
-                        navigate("/kycja");
-                      } else {
-                        navigate(`/${id}/aplikimi`);
-                      }
-                    }}
-                    className="publikoPune w-full mt-3"
-                  >
-                    Apliko
-                    <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
-                  </button>
+                  <>
+                    {kaAplikuar ? (
+                      <div className="w-full mt-3 p-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-center font-medium">
+                        Keni aplikuar tashmë
+                      </div>
+                    ) : (
+                      <button
+                        onClick={aplikoTani}
+                        className="publikoPune w-full mt-3"
+                      >
+                        Apliko
+                        <FontAwesomeIcon
+                          icon={faArrowRight}
+                          className="text-sm"
+                        />
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -433,9 +498,11 @@ function Shpallja() {
               </div>
 
               {/* View Company Button */}
-              {shpallja.perdoruesiId && (
+              {shpallja.perdoruesiId._id && (
                 <button
-                  onClick={() => navigate(`/kompania/${shpallja.perdoruesiId}`)}
+                  onClick={() =>
+                    navigate(`/kompania/${shpallja.perdoruesiId._id}`)
+                  }
                   className="w-full px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
                 >
                   Shiko Kompaninë

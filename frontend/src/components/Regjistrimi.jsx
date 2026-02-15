@@ -2,8 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
 import { useState } from "react";
 import axios from "axios";
+import { useAlert } from "../contexts/AlertContext";
 
 function Regjistrimi() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [tipiPerdoruesit, setTipiPerdoruesit] = useState("");
 
@@ -29,11 +31,28 @@ function Regjistrimi() {
       let dataToSend;
 
       if (!tipiPerdoruesit) {
-        alert("Zgjedh tipin");
+        showAlert("Zgjedh tipin", "info");
         return;
       }
 
       if (tipiPerdoruesit === "aplikant") {
+        if (
+          dataAplikant.emri === "" ||
+          dataAplikant.mbiemri === "" ||
+          dataAplikant.email === "" ||
+          dataAplikant.fjalekalimi === "" ||
+          dataAplikant.konfirmoFjalekalimin === ""
+        ) {
+          showAlert("Plotesoni te gjitha fushat", "info");
+          return;
+        }
+        if (dataAplikant.fjalekalimi !== dataAplikant.konfirmoFjalekalimin) {
+          showAlert(
+            "Fushat fjalekalimi dhe konfirmo fjalekalimin nuk jane te njejta!",
+            "info",
+          );
+          return;
+        }
         dataToSend = {
           tipiPerdoruesit: "aplikant",
           emri: dataAplikant.emri,
@@ -42,6 +61,15 @@ function Regjistrimi() {
           fjalekalimi: dataAplikant.fjalekalimi,
         };
       } else if (tipiPerdoruesit === "punedhenes") {
+        if (
+          dataPunedhenesi.fjalekalimi !== dataPunedhenesi.konfirmoFjalekalimin
+        ) {
+          showAlert(
+            "Fushat fjalekalimi dhe konfirmo fjalekalimin nuk jane te njejta!",
+          );
+          return;
+        }
+
         dataToSend = {
           tipiPerdoruesit: "punedhenes",
           kompania: dataPunedhenesi.kompania,
@@ -56,7 +84,7 @@ function Regjistrimi() {
       );
 
       if (response.data.success) {
-        alert(response.data.message);
+        showAlert(response.data.message, "success");
 
         if (tipiPerdoruesit === "aplikant") {
           localStorage.setItem("emailForVerification", dataAplikant.email);
@@ -67,14 +95,14 @@ function Regjistrimi() {
       }
     } catch (err) {
       if (err.response.data.error.includes("ekziston")) {
-        alert("Perdoruesi ekziston!");
+        showAlert("Perdoruesi ekziston!", "error");
       }
       console.log("err: ", err);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4">
+    <div className="flex justify-center items-center min-h-screen p-4 bg-linear-to-br from-[#F7FBFC] to-[#B9D7EA] pb-10  shadow-[#0F4C75]">
       <div
         className="w-full max-w-162.5
                 bg-white rounded-lg shadow-2xl 
@@ -131,6 +159,7 @@ function Regjistrimi() {
             <form
               onSubmit={handleSubmit}
               className="grid grid-cols-1 gap-3 sm:gap-4"
+              autoComplete="off"
             >
               {[
                 {
@@ -255,23 +284,23 @@ function Regjistrimi() {
             </form>
           </div>
 
-          <div className="text-center text-sm sm:text-base">
-            <p className="inline">Keni Llogari? </p>
-            <Link
-              to="/kycja"
-              className="text-blue-600 underline hover:text-blue-800"
-            >
-              Kycuni
-            </Link>
-          </div>
-
-          <div className="text-center">
+          <div className="grid grid-cols-2 gap-3 items-end">
             <Link
               to="/"
-              className="text-blue-600 underline text-sm sm:text-base hover:text-blue-800"
+              className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
             >
-              Ballina
+              ← Ballina
             </Link>
+            
+            <div className="grid gap-1">
+               <p className="text-center text-sm  text-gray-600">Keni Llogari?</p>
+              <Link
+                to="/kycja"
+                className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
+              >
+                Kycuni
+              </Link>
+            </div>
           </div>
         </div>
       </div>

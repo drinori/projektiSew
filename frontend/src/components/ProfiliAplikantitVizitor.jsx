@@ -71,12 +71,22 @@ const ProfiliAplikantitVizitor = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center min-h-screen" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
+      <div
+        className="flex flex-col items-center min-h-screen"
+        style={{
+          background: "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
+        }}
+      >
         <Header />
         <div className="flex justify-center items-center h-64">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: '#D6E6F2' }}></div>
-            <p className="font-medium" style={{ color: '#5A7A99' }}>Duke ngarkuar profilin...</p>
+            <div
+              className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4"
+              style={{ borderColor: "#D6E6F2" }}
+            ></div>
+            <p className="font-medium" style={{ color: "#5A7A99" }}>
+              Duke ngarkuar profilin...
+            </p>
           </div>
         </div>
       </div>
@@ -85,7 +95,12 @@ const ProfiliAplikantitVizitor = () => {
 
   if (error || !profileData) {
     return (
-      <div className="flex flex-col items-center min-h-screen" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
+      <div
+        className="flex flex-col items-center min-h-screen"
+        style={{
+          background: "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
+        }}
+      >
         <Header />
         <div className="max-w-6xl mx-auto p-8">
           <div className="bg-white border border-red-200 rounded-lg p-4 text-red-700">
@@ -110,52 +125,73 @@ const ProfiliAplikantitVizitor = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center min-h-screen" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
+    <div className="flex flex-col items-center min-h-screen relative bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA]">
       <Header />
 
       <div className="w-full max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="h-40 relative overflow-visible">
-            <svg 
-              className="absolute inset-0 w-full h-full" 
-              viewBox="0 0 1440 320" 
+            <svg
+              className="absolute inset-0 w-full h-full"
+              viewBox="0 0 1440 320"
               preserveAspectRatio="xMidYMid slice"
               xmlns="http://www.w3.org/2000/svg"
               style={{ zIndex: 1 }}
             >
               <defs>
                 <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style={{ stopColor: '#3a3a3a', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#4a4a4a', stopOpacity: 1 }} />
+                  <stop
+                    offset="0%"
+                    style={{ stopColor: "#3a3a3a", stopOpacity: 1 }}
+                  />
+                  <stop
+                    offset="100%"
+                    style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
+                  />
                 </linearGradient>
                 <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style={{ stopColor: '#4a4a4a', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#5a5a5a', stopOpacity: 1 }} />
+                  <stop
+                    offset="0%"
+                    style={{ stopColor: "#4a4a4a", stopOpacity: 1 }}
+                  />
+                  <stop
+                    offset="100%"
+                    style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
+                  />
                 </linearGradient>
                 <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style={{ stopColor: '#5a5a5a', stopOpacity: 1 }} />
-                  <stop offset="100%" style={{ stopColor: '#6a6a6a', stopOpacity: 1 }} />
+                  <stop
+                    offset="0%"
+                    style={{ stopColor: "#5a5a5a", stopOpacity: 1 }}
+                  />
+                  <stop
+                    offset="100%"
+                    style={{ stopColor: "#6a6a6a", stopOpacity: 1 }}
+                  />
                 </linearGradient>
               </defs>
-              
-              <path 
-                fill="url(#grad1)" 
+
+              <path
+                fill="url(#grad1)"
                 d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,128C672,107,768,85,864,90.7C960,96,1056,128,1152,138.7C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
                 opacity="0.8"
               />
-              <path 
-                fill="url(#grad2)" 
+              <path
+                fill="url(#grad2)"
                 d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
                 opacity="0.6"
               />
-              <path 
-                fill="url(#grad3)" 
+              <path
+                fill="url(#grad3)"
                 d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,213.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
                 opacity="0.4"
               />
             </svg>
-            
-            <div className="absolute bottom-0 left-8 transform translate-y-1/2" style={{ zIndex: 50 }}>
+
+            <div
+              className="absolute bottom-0 left-8 transform translate-y-1/2"
+              style={{ zIndex: 50 }}
+            >
               <div className="w-24 h-24 rounded-2xl bg-white shadow-xl flex items-center justify-center overflow-hidden border-4 border-white">
                 {fotoProfile ? (
                   <img
@@ -164,7 +200,10 @@ const ProfiliAplikantitVizitor = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-2xl font-bold" style={{ color: '#5A7A99' }}>
+                  <span
+                    className="text-2xl font-bold"
+                    style={{ color: "#5A7A99" }}
+                  >
                     {merreShkronjatFillestare()}
                   </span>
                 )}
@@ -181,19 +220,19 @@ const ProfiliAplikantitVizitor = () => {
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600">
                 {profileData.email && (
                   <div className="flex items-center gap-2">
-                    <FaEnvelope size={14} style={{ color: '#5A7A99' }} />
+                    <FaEnvelope size={14} style={{ color: "#5A7A99" }} />
                     <span>{profileData.email}</span>
                   </div>
                 )}
                 {profileData.nrTelefonit && (
                   <div className="flex items-center gap-2">
-                    <FaPhone size={14} style={{ color: '#5A7A99' }} />
+                    <FaPhone size={14} style={{ color: "#5A7A99" }} />
                     <span>{profileData.nrTelefonit}</span>
                   </div>
                 )}
                 {eksperiencat.length > 0 && (
                   <div className="flex items-center gap-2">
-                    <FaBriefcase size={14} style={{ color: '#5A7A99' }} />
+                    <FaBriefcase size={14} style={{ color: "#5A7A99" }} />
                     <span>{eksperiencat.length} pervoja</span>
                   </div>
                 )}
@@ -215,7 +254,7 @@ const ProfiliAplikantitVizitor = () => {
                 >
                   {tab.label}
                   {activeTab === tab.key && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 transition-all duration-300" style={{ background: 'linear-gradient(90deg, #F7FBFC 0%, #D6E6F2 100%)' }}></div>
+                    <div className="absolute bottom-0 bg-primary left-0 right-0 h-0.5 transition-all duration-300"></div>
                   )}
                 </button>
               ))}
@@ -240,8 +279,17 @@ const ProfiliAplikantitVizitor = () => {
                         className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
                       >
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
-                            <FaBriefcase style={{ color: '#5A7A99' }} size={18} />
+                          <div
+                            className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0"
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
+                            }}
+                          >
+                            <FaBriefcase
+                              style={{ color: "#5A7A99" }}
+                              size={18}
+                            />
                           </div>
                           <div className="flex-1">
                             <h3 className="text-lg font-semibold text-gray-900">
@@ -288,9 +336,15 @@ const ProfiliAplikantitVizitor = () => {
                         className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
                       >
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
+                          <div
+                            className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0"
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
+                            }}
+                          >
                             <FaGraduationCap
-                              style={{ color: '#5A7A99' }}
+                              style={{ color: "#5A7A99" }}
                               size={18}
                             />
                           </div>
@@ -339,8 +393,14 @@ const ProfiliAplikantitVizitor = () => {
                         className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
                       >
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)' }}>
-                            <FaLink style={{ color: '#5A7A99' }} size={16} />
+                          <div
+                            className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0"
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #F7FBFC 0%, #D6E6F2 100%)",
+                            }}
+                          >
+                            <FaLink style={{ color: "#5A7A99" }} size={16} />
                           </div>
                           <div className="flex-1">
                             <h3 className="text-lg font-semibold text-gray-900">
@@ -365,7 +425,7 @@ const ProfiliAplikantitVizitor = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-block mt-3 font-medium text-sm hover:underline"
-                                style={{ color: '#5A7A99' }}
+                                style={{ color: "#5A7A99" }}
                               >
                                 Shiko projektin →
                               </a>
@@ -386,7 +446,10 @@ const ProfiliAplikantitVizitor = () => {
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-3">
-                    <FaEnvelope className="shrink-0 mt-1" style={{ color: '#5A7A99' }} />
+                    <FaEnvelope
+                      className="shrink-0 mt-1"
+                      style={{ color: "#5A7A99" }}
+                    />
                     <div>
                       <p className="text-sm text-gray-500 mb-1">Email</p>
                       <p className="text-gray-900 font-medium">
@@ -397,7 +460,10 @@ const ProfiliAplikantitVizitor = () => {
 
                   {profileData.nrTelefonit && (
                     <div className="flex items-start gap-3">
-                      <FaPhone className="shrink-0 mt-1" style={{ color: '#5A7A99' }} />
+                      <FaPhone
+                        className="shrink-0 mt-1"
+                        style={{ color: "#5A7A99" }}
+                      />
                       <div>
                         <p className="text-sm text-gray-500 mb-1">Telefon</p>
                         <p className="text-gray-900 font-medium">
@@ -408,7 +474,10 @@ const ProfiliAplikantitVizitor = () => {
                   )}
 
                   <div className="flex items-start gap-3">
-                    <FaCalendarAlt className="shrink-0 mt-1" style={{ color: '#5A7A99' }} />
+                    <FaCalendarAlt
+                      className="shrink-0 mt-1"
+                      style={{ color: "#5A7A99" }}
+                    />
                     <div>
                       <p className="text-sm text-gray-500 mb-1">
                         Anetar qe nga
@@ -434,7 +503,7 @@ const ProfiliAplikantitVizitor = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 hover:underline"
-                            style={{ color: '#5A7A99' }}
+                            style={{ color: "#5A7A99" }}
                           >
                             {socialLink.platforma} →
                           </a>
@@ -449,8 +518,11 @@ const ProfiliAplikantitVizitor = () => {
         </div>
 
         {eshteVetja && (
-          <div className="mt-4 bg-white border rounded-lg p-4 shadow-sm" style={{ borderColor: '#D6E6F2' }}>
-            <p className="text-center text-sm" style={{ color: '#5A7A99' }}>
+          <div
+            className="mt-4 bg-white border rounded-lg p-4 shadow-sm"
+            style={{ borderColor: "#D6E6F2" }}
+          >
+            <p className="text-center text-sm" style={{ color: "#5A7A99" }}>
               Ju jeni duke pare profilin tuaj. Per te ndryshuar te dhena, shkoni
               te faqja e profilit tuaj.
             </p>
@@ -462,3 +534,4 @@ const ProfiliAplikantitVizitor = () => {
 };
 
 export default ProfiliAplikantitVizitor;
+

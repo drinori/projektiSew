@@ -3,16 +3,27 @@ const router = express.Router();
 const upload = require("../upload");
 const Aplikimi = require("../models/aplikimiSchema");
 const Shpallja = require("../models/shpalljaSchema");
+const Perdorues = require("../models/perdoruesSchema");
 const dergoMesazhin = require("../emailservice");
 
 router.post("/:id/aplikimi", upload.single("cvFile"), async (req, res) => {
   try {
+    if (!req.session.perdoruesiId) {
+      return res.status(401).json({
+        success: false,
+        error: "Ju duhet të jeni të kyçur për të aplikuar.",
+      });
+    }
+    const userId = req.session.perdoruesiId;
+    const perdoruesi = await Perdorues.findById(userId);
+
     if (!req.file) {
       return res.status(400).json({
         success: false,
         message: "Ju lutem futni filen (PDF, DOC ose DOCX)",
       });
     }
+
     const {
       emailAplikantit,
       emriAplikantit,
@@ -28,7 +39,7 @@ router.post("/:id/aplikimi", upload.single("cvFile"), async (req, res) => {
 
     const aplikimiEkziston = await Aplikimi.findOne({
       shpalljaId: shpalljaId,
-      emailAplikantit: emailAplikantit,
+      aplikantiId: userId,
     });
 
     if (aplikimiEkziston) {
@@ -42,6 +53,7 @@ router.post("/:id/aplikimi", upload.single("cvFile"), async (req, res) => {
 
     const aplikimi = new Aplikimi({
       shpalljaId: shpallja._id,
+      aplikantiId: userId,
       emailAplikantit,
       emriAplikantit,
       mbiemriAplikantit,
@@ -51,8 +63,9 @@ router.post("/:id/aplikimi", upload.single("cvFile"), async (req, res) => {
       letraMotivuese,
       emriFileCv: req.file.originalname,
       mimetype: req.file.mimetype,
-      filesize: req.file.size,
+      size: req.file.size,
       data: req.file.buffer,
+      aftesite: perdoruesi.aftesite,
     });
 
     await aplikimi.save();
@@ -136,13 +149,25 @@ router.get("/:shpalljaId/aplikimet", async (req, res) => {
   }
 });
 
-router.put("/aplikimi/:id", async (req, res) => {
+router.put("/aplikimi/:id", upload.single("cvFile"), async (req, res) => {
   try {
     const aplikimiVjeter = await Aplikimi.findById(req.params.id);
-    const aplikimi = await Aplikimi.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const updateData = { ...req.body };
+
+    if (req.file) {
+      updateData.emriFileCv = req.file.originalname;
+      updateData.mimetype = req.file.mimetype;
+      updateData.size = req.file.size;
+      updateData.data = req.file.buffer;
+    }
+    const aplikimi = await Aplikimi.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
 
     if (
       aplikimiVjeter.status !== aplikimi.status &&
@@ -165,7 +190,7 @@ router.put("/aplikimi/:id", async (req, res) => {
     }
 
     return res.status(200).json({
-      status: true,
+      success: true,
       data: aplikimi,
     });
   } catch (error) {
@@ -174,6 +199,24 @@ router.put("/aplikimi/:id", async (req, res) => {
       success: false,
       error: "Gabim i brendshem",
     });
+  }
+});
+
+router.get("/ka-aplikuar/:shpalljaId", async (req, res) => {
+  try {
+    if (!req.session.perdoruesiId) {
+      return res.status(401).json({ error: "Ju duhet të jeni të kyçur." });
+    }
+
+    const shpalljaId = req.params.shpalljaId;
+    const aplikantiId = req.session.perdoruesiId;
+
+    const aplikimi = await Aplikimi.findOne({ shpalljaId, aplikantiId });
+
+    return res.json({ kaAplikuar: !!aplikimi });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Gabim i brendshëm i serverit" });
   }
 });
 
@@ -191,7 +234,7 @@ router.get("/:id/download", async (req, res) => {
     res.set({
       "Content-Type": aplikimi.mimetype,
       "Content-Disposition": `attachment; filename="${aplikimi.emriFileCv || "cv"}"`,
-      "Content-Length": aplikimi.filesize,
+      "Content-Length": aplikimi.size,
       "Cache-Control": "no-cache",
     });
 

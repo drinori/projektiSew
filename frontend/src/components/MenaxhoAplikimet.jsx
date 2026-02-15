@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   ArrowDownWideNarrow,
@@ -16,46 +15,31 @@ import {
   faPencil,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import Perdoruesi from "../PerdoruesiContext";
 
 function MenaxhoAplikimet() {
-  const [perdoruesiData, setPerdoruesiData] = useState({});
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
   const [shpalljaData, setShpalljaData] = useState([]);
   const [aplikimet, setAplikimet] = useState([]);
   const [aplikimiKlikuar, setAplikimiKlikuar] = useState(null);
-  const [filtrimiFaqes, setFiltrimiFaqes] = useState("Active");
+  const [filtrimiFaqes, setFiltrimiFaqes] = useState("Aktive");
   const [kerko, setKerko] = useState("");
   const [shfaqMeny, setShfaqMeny] = useState(null);
   const [menyRadhitjes, setMenyRadhitjes] = useState(false);
   const [sortimiDates, setSortimiDates] = useState("teRejat");
-
-  const { id } = useParams();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/profili/${id}`,
-        );
-        setPerdoruesiData(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (id) {
-      fetchData();
-    }
-  }, [id]);
+  const [cvFile, setCvFile] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!perdoruesiData || !perdoruesiData._id) return;
+
       try {
         const response = await axios.get(
           "http://localhost:3000/api/shpallja/aplikimet",
         );
         if (Array.isArray(response.data.data)) {
           const aplikimetFiltruara = response.data.data.filter((aplikimi) => {
-            return aplikimi.emailAplikantit === perdoruesiData.email;
+            return aplikimi.aplikantiId === perdoruesiData._id;
           });
           setAplikimet(aplikimetFiltruara);
         }
@@ -64,10 +48,8 @@ function MenaxhoAplikimet() {
       }
     };
 
-    if (perdoruesiData.email) {
-      fetchData();
-    }
-  }, [perdoruesiData.email]);
+    fetchData();
+  }, [perdoruesiData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,17 +86,33 @@ function MenaxhoAplikimet() {
   const ruajNdryshimet = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
+      const formData = new FormData();
+      formData.append("emriAplikantit", aplikimiKlikuar.emriAplikantit);
+      formData.append(
+        "mbiemriAplikantit",
+        aplikimiKlikuar.mbiemriAplikantit || "",
+      );
+      formData.append("emailAplikantit", aplikimiKlikuar.emailAplikantit || "");
+      formData.append("nrTelefonit", aplikimiKlikuar.nrTelefonit || "");
+      formData.append("eksperienca", aplikimiKlikuar.eksperienca || "");
+      formData.append("letraMotivuese", aplikimiKlikuar.letraMotivuese || "");
+      if (cvFile) {
+        formData.append("cvFile", cvFile);
+      }
+      const response = await axios.put(
         `http://localhost:3000/api/shpallja/aplikimi/${aplikimiKlikuar._id}`,
-        aplikimiKlikuar,
+        formData,
       );
-      setAplikimet(
-        aplikimet.map((sh) =>
-          sh._id === aplikimiKlikuar._id ? aplikimiKlikuar : sh,
-        ),
-      );
-      alert("Ndryshimet u ruajten");
-      setAplikimiKlikuar(null);
+      if (response.data.success) {
+        setAplikimet(
+          aplikimet.map((a) =>
+            a._id === aplikimiKlikuar._id ? response.data.data : a,
+          ),
+        );
+        alert("Ndryshimet u ruajten");
+        setAplikimiKlikuar(null);
+        setCvFile(null);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -141,8 +139,8 @@ function MenaxhoAplikimet() {
 
       const jobStatus = shpallja?.status?.toLowerCase();
       const matchesStatus =
-        (filtrimiFaqes === "Active" && jobStatus === "aktiv") ||
-        (filtrimiFaqes === "Expired" && jobStatus === "skaduar");
+        (filtrimiFaqes === "Aktive" && jobStatus === "aktiv") ||
+        (filtrimiFaqes === "Te Skaduara" && jobStatus === "skaduar");
 
       if (!matchesStatus) return false;
 
@@ -178,7 +176,7 @@ function MenaxhoAplikimet() {
 
         <div className="tabela">
           <div className="flex space-x-8 overflow-x-auto pb-2 lg:pb-4">
-            {["Active", "Expired"].map((faqja) => (
+            {["Aktive", "Te Skaduara"].map((faqja) => (
               <button
                 key={faqja}
                 onClick={() => setFiltrimiFaqes(faqja)}
@@ -269,7 +267,7 @@ function MenaxhoAplikimet() {
                   <th className="tableHead">Lokacioni</th>
                   <th className="tableHead text-center ">Orari</th>
                   <th className="tableHead">Statusi</th>
-                  {filtrimiFaqes === "Active" && (
+                  {filtrimiFaqes === "Aktive" && (
                     <th className="tableHead text-right">Veprime</th>
                   )}
                 </tr>
@@ -308,12 +306,21 @@ function MenaxhoAplikimet() {
                         </span>
                       </td>
                       <td className="tableData">
-                        {/* TODO: Statusin Ne pritje apo Refuzuar */}
-                        <span className="px-1 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                          Në pritje
-                        </span>
+                        {aplikimi.status === "Pranuar" ? (
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                            {aplikimi.status}
+                          </span>
+                        ) : aplikimi.status === "Ne_Pritje" ? (
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                            Ne Pritje
+                          </span>
+                        ) : (
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                            {aplikimi.status}
+                          </span>
+                        )}
                       </td>
-                      {filtrimiFaqes === "Active" && (
+                      {filtrimiFaqes === "Aktive" && (
                         <td className="tableData text-right">
                           <div className="relative">
                             <button
@@ -456,7 +463,10 @@ function MenaxhoAplikimet() {
             <div className="bg-[#f8f8f9] p-6 flex justify-between items-center">
               <h2 className="text-xl font-bold">Modifiko Aplikimin</h2>
               <button
-                onClick={() => setAplikimiKlikuar(null)}
+                onClick={() => {
+                  setAplikimiKlikuar(null);
+                  setCvFile(null);
+                }}
                 className="cursor-pointer text-xl hover:text-gray-700"
               >
                 <X size={24} />
@@ -567,6 +577,34 @@ function MenaxhoAplikimet() {
                     className="input-ShpalljaProfil"
                     placeholder="Shkruaj letrën motivuese..."
                   />
+                </div>
+                <div>
+                  <label
+                    htmlFor="cvFile"
+                    className="block text-sm font-medium text-gray-600 mb-2"
+                  >
+                    CV (lini bosh nëse nuk doni të ndryshoni)
+                  </label>
+                  <input
+                    id="cvFile"
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => setCvFile(e.target.files[0])}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                  {aplikimiKlikuar.emriFileCv && (
+                    <div className="text-sm text-gray-500 mt-1">
+                      CV aktuale:{" "}
+                      <a
+                        href={`http://localhost:3000/api/shpallja/${aplikimiKlikuar._id}/download`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        {aplikimiKlikuar.emriFileCv}
+                      </a>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-1 gap-6 w-full">

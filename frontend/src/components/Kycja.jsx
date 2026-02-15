@@ -6,8 +6,10 @@ import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-regular-svg-icons/faEyeSlash";
 import Perdoruesi from "../PerdoruesiContext";
 import axios from "axios";
+import { useAlert } from "../contexts/AlertContext";
 
 function Kycja() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { setPerdoruesiData } = Perdoruesi.usePerdoruesi();
@@ -24,6 +26,11 @@ function Kycja() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (data.email === "" || data.fjalekalimi === "") {
+      showAlert("Plotesoni te gjitha fushat", "info");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:3000/api/kycja/perdoruesi",
@@ -36,14 +43,15 @@ function Kycja() {
       navigate("/");
     } catch (err) {
       if (err.response.data.error.includes("nuk ekziston")) {
-        alert("Perdoruesi nuk ekziston");
+        showAlert("Perdoruesi nuk ekziston", "error");
+        return;
       }
       console.log(err);
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center p-4">
+    <div className="bg-linear-to-br from-[#F7FBFC] to-[#B9D7EA] pb-10  shadow-[#0F4C75] min-h-screen flex justify-center items-center p-4">
       <div
         className="w-full max-w-125
                 bg-white rounded-lg shadow-2xl 
@@ -55,7 +63,11 @@ function Kycja() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="grid gap-4 sm:gap-5">
+          <form
+            onSubmit={handleSubmit}
+            className="grid gap-4 sm:gap-5"
+            autoComplete="off"
+          >
             {/* Email Field */}
             <div className="grid gap-1">
               <label htmlFor="email" className="text-sm sm:text-base">
@@ -86,6 +98,7 @@ function Kycja() {
                   onChange={(e) =>
                     setData({ ...data, fjalekalimi: e.target.value })
                   }
+                  autoComplete="new-password"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
                   <FontAwesomeIcon
@@ -117,23 +130,23 @@ function Kycja() {
               </button>
             </div>
 
-            <div className="text-center text-sm sm:text-base">
-              <p className="inline">Nuk keni llogari? </p>
-              <Link
-                to="/regjistrimi"
-                className="text-blue-600 underline hover:text-blue-800"
-              >
-                Regjistrohuni
-              </Link>
-            </div>
-
-            <div className="text-center">
+            <div className="grid grid-cols-2 gap-3 items-end">
               <Link
                 to="/"
-                className="text-primary text-sm sm:text-base underline"
+                className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
               >
-                Kthehu Tek Ballina
+                ← Ballina
               </Link>
+              
+              <div className="grid gap-1 grid-cols-1 items-center">
+                <p className="text-center text-sm text-gray-600">Nuk jeni te regjistruar?</p>
+                <Link
+                  to="/regjistrimi"
+                  className="h-10 sm:h-12 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all flex items-center justify-center"
+                >
+                  Regjistrohu
+                </Link>
+              </div>
             </div>
           </form>
         </div>

@@ -11,8 +11,10 @@ import {
   FileText,
   CheckCircle2,
 } from "lucide-react";
+import { useAlert } from "../contexts/AlertContext";
 
 function Aplikimi() {
+  const { showAlert } = useAlert();
   const [shpallja, setShpallja] = useState(null);
   const [aplikimi, setAplikimi] = useState({
     emailKompanise: "",
@@ -56,7 +58,7 @@ function Aplikimi() {
     ) {
       setCvFile(file);
     } else {
-      alert("Ju lutem ngarkoni vetëm skedarë PDF");
+      showAlert("Ju lutem ngarkoni vetëm skedarë PDF", "info");
     }
   };
 
@@ -69,7 +71,7 @@ function Aplikimi() {
     if (cvFile) {
       formData.append("cvFile", cvFile);
     } else {
-      alert("Ju lutem ngarkoni cv-ne");
+      showAlert("Ju lutem ngarkoni cv-ne", "info");
       setIsSubmitting(false);
       return;
     }
@@ -106,10 +108,10 @@ function Aplikimi() {
           "Ju keni aplikuar tashme per kete pozite",
         )
       ) {
-        alert("Ju keni aplikuar tashme per kete pozite");
+        showAlert("Ju keni aplikuar tashme per kete pozite", "info");
         return;
       }
-      alert("Diçka shkoi keq. Ju lutem provoni përsëri.");
+      showAlert("Diçka shkoi keq. Ju lutem provoni përsëri.", "error");
     } finally {
       setIsSubmitting(false);
     }

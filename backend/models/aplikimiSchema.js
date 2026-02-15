@@ -6,6 +6,11 @@ const aplikimiSchema = new mongoose.Schema({
     ref: "Shpallja",
     required: true,
   },
+  aplikantiId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Perdorues",
+    required: true,
+  },
   emriFileCv: {
     type: String,
     required: false,
@@ -59,11 +64,16 @@ const aplikimiSchema = new mongoose.Schema({
     default: "Ne_Pritje",
     enum: ["Ne_Pritje", "Pranuar", "Refuzuar"],
   },
+  aftesite: {
+    type: [String],
+  },
   dataKrijimit: {
     type: Date,
     default: Date.now,
   },
 });
+
+aplikimiSchema.index({ shpalljaId: 1, aplikantiId: 1 }, { unique: true });
 
 const Aplikimi = mongoose.model("Aplikimi", aplikimiSchema, "aplikimet");
 module.exports = Aplikimi;

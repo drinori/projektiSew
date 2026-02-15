@@ -1,33 +1,15 @@
 import "../index.css";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Header from "./Header";
 import Perdoruesi from "../PerdoruesiContext";
 import ProfiliAplikantit from "./ProfiliAplikantit";
 import ProfiliKompanise from "./ProfiliKompanise";
 
 function Profili() {
-  const navigate = useNavigate();
-  const { perdoruesiData, setPerdoruesiData } = Perdoruesi.usePerdoruesi();
-
-  const handleCkycja = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/ckycja/perdoruesi",
-        {},
-      );
-      setPerdoruesiData(null);
-      console.log("Ckycja u be", response.data);
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      setPerdoruesiData(null);
-    }
-  };
+  const { perdoruesiData } = Perdoruesi.usePerdoruesi();
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header perdoruesiData={perdoruesiData} onCkycja={handleCkycja} />
+    <div className="relative overflow-hidden bg-linear-to-br from-[#F7FBFC] via-[#D6E6F2] to-[#B9D7EA] backdrop-blur-2xl">
+      <Header />
       {perdoruesiData?.tipiPerdoruesit === "aplikant" ? (
         <ProfiliAplikantit />
       ) : (
